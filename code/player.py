@@ -12,21 +12,23 @@ class Player(pygame.sprite.Sprite):
 
 		self.max_speed = 2
 
-		self.state = Idle(self, 'up')
+		self.state = Idle('up')
 
-
-		self.direction = {'left': False, 'right': False, 'up': False, 'down': False,}
-	
+		self.direction = {'left': False, 'right': False, 'up': False, 'down': False}
 
 		self.acc = pygame.math.Vector2()
-		self.friction = -0.5
+		self.friction = -0.25
 		self.vel = pygame.math.Vector2()
 	
-		self.image = pygame.Surface((16, 24))
+		self.image = pygame.Surface((24, 24))
 		self.image.fill(BLUE)
 		self.rect = self.image.get_rect(center = pos)
 		self.pos = pygame.math.Vector2(self.rect.center)
 		self.hitbox = self.rect.copy().inflate(-self.rect.width * 0.5, -self.rect.height * 0.75)
+
+	def get_direction(self):
+		for k, v in self.direction.items():
+			if v: return
 
 	def import_imgs(self):
 		self.animations = {'down_attack':[], 'up_attack':[], 'right_attack':[], 'left_attack':[],\
@@ -110,12 +112,9 @@ class Player(pygame.sprite.Sprite):
 		# if self.vel.magnitude() > self.max_speed:
 		# 	self.vel = self.vel.normalize() * self.max_speed
 
-
 		if self.vel.magnitude() > self.max_speed:
 			self.vel = self.vel.normalize() * self.max_speed
 
-		if self.acc.magnitude() < 0.1:
-			self.acc = pygame.math.Vector2()
 
 	def state_logic(self):
 		new_state = self.state.state_logic(self)
@@ -124,7 +123,7 @@ class Player(pygame.sprite.Sprite):
 
 	def update(self, dt):
 		self.state.update(dt, self)
-		self.state_logic()
+		if not self.zone.cutscene_running:
+			self.state_logic()
 
-		for j, i in enumerate(self.direction.values()):
-			print(j, i)
+		

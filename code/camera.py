@@ -20,12 +20,12 @@ class Camera(pygame.sprite.Group):
 		
 		self.game.screen.fill(LIGHT_GREY)
 
-		self.offset += (target.rect.center - self.offset - RES/2) * 0.01
-	
+		self.offset += (target.pos - self.offset - RES/2)
+
 		#self.screenshake()
 
-		#for layer in LAYERS.values():
-		for sprite in self.zone.rendered_sprites:
-			#if sprite.z == layer:
-			offset = sprite.rect.topleft - self.offset
-			self.game.screen.blit(sprite.image, offset)
+		for layer in LAYERS.values():
+			for sprite in sorted(self.zone.rendered_sprites, key = lambda sprite: sprite.rect.centery):
+				if sprite.z == layer:
+					offset = sprite.rect.topleft - self.offset
+					self.game.screen.blit(sprite.image, offset)

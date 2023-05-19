@@ -59,7 +59,8 @@ class Zone(State):
 		self.updated_sprites.update(dt)
 
 	def draw(self, screen):
-		screen.fill(BLACK)
-		self.rendered_sprites.offset_draw(self.target)
-		self.game.render_text(self.player.pos, WHITE, self.game.small_font, RES/2)
+		screen.fill(GREEN)
+		self.rendered_sprites.draw(screen)
+		#self.rendered_sprites.offset_draw(self.target)
+		self.game.render_text(self.player.acc, WHITE, self.game.small_font, RES/2)
 

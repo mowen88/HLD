@@ -9,7 +9,7 @@ class Game:
         pygame.init()
 
         self.clock = pygame.time.Clock()
-        self.screen = pygame.display.set_mode((RES))#, pygame.FULLSCREEN|pygame.SCALED)
+        self.screen = pygame.display.set_mode((RES), pygame.FULLSCREEN|pygame.SCALED)
         self.running = True
         self.keys = pygame.key.get_pressed()
 
@@ -52,7 +52,6 @@ class Game:
                     ACTIONS['backspace'] = True
 
             if event.type == pygame.KEYUP:
-
                 if event.key == pygame.K_UP:
                     ACTIONS['up'] = False
                 elif event.key == pygame.K_DOWN:
