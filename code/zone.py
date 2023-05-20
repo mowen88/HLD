@@ -64,6 +64,8 @@ class Zone(State):
 		return distance
 
 	def update(self, dt):
+		if ACTIONS['space']: 
+			self.game.screenshaking = True
 		
 		if ACTIONS['return']: 
 			self.exit_state()
@@ -71,9 +73,11 @@ class Zone(State):
 		self.updated_sprites.update(dt)
 
 	def draw(self, screen):
+
 		screen.fill(GREEN)
 		self.rendered_sprites.offset_draw(self.target)
 
 		self.game.render_text(str(round(self.game.clock.get_fps(), 2)), WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.1))
 		self.game.render_text(self.player.state, WHITE, self.game.small_font, RES/2)
 
+		print(self.game.screenshaking)

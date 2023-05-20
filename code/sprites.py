@@ -15,4 +15,4 @@ class Tree(Object):
 	def __init__(self, game, zone, groups, pos, z, surf):
 		super().__init__(game, zone, groups, pos, z, surf)
 
-		self.hitbox = self.rect.copy().inflate(-self.rect.width *0.1, -self.rect.height *0.2)
+		self.hitbox = self.rect.copy().inflate(-self.rect.width *0.1, -self.rect.height *0.3)

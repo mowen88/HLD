@@ -15,8 +15,11 @@ class Camera(pygame.sprite.Group):
 	def screenshake(self):
 		if self.game.screenshaking:
 			self.screenshake_timer += 1
-			if self.screenshake_timer < 120: self.offset += [random.randint(-1, 1), random.randint(-1, 1)]
-			else: self.game.screenshaking = False
+			if self.screenshake_timer < 120: 
+				self.offset += [random.randint(-1, 1), random.randint(-1, 1)]
+			else: 
+				self.game.screenshaking = False
+				self.screenshake_timer = 0
 
 	def offset_draw(self, target):
 		
@@ -26,13 +29,15 @@ class Camera(pygame.sprite.Group):
 
 		self.offset += (target.rect.center - self.offset - RES/2)
 
+		self.screenshake()
+
 		# limit offset to stop at edges
 		if self.offset[0] <= 0: self.offset[0] = 0
 		elif self.offset[0] >= self.zone.zone_size[0] - WIDTH: self.offset[0] = self.zone.zone_size[0] - WIDTH
 		if self.offset[1] <= 0: self.offset[1] = 0
 		elif self.offset[1] >= self.zone.zone_size[1] - HEIGHT: self.offset[1] = self.zone.zone_size[1] - HEIGHT
 
-		#self.screenshake()
+		
 
 		for layer in LAYERS.values():
 			for sprite in sorted(self.zone.rendered_sprites, key = lambda sprite: sprite.rect.centery):

@@ -94,7 +94,7 @@ class Player(pygame.sprite.Sprite):
 		self.acc.x += self.vel.x * self.friction
 		self.vel.x += self.acc.x * dt
 		self.pos.x += self.vel.x * dt + (0.5 * self.vel.x) * dt
-		if abs(self.vel.x) < 0.05: self.vel.x = 0 
+		if abs(self.vel.x) < 0.1: self.vel.x = 0 
 		self.hitbox.centerx = round(self.pos.x)
 		self.rect.centerx = self.hitbox.centerx
 		
@@ -102,7 +102,7 @@ class Player(pygame.sprite.Sprite):
 		self.acc.y += self.vel.y * self.friction
 		self.vel.y += self.acc.y * dt
 		self.pos.y += self.vel.y * dt + (0.5 * self.vel.y * dt) * dt
-		if abs(self.vel.y) < 0.05: self.vel.y = 0 
+		if abs(self.vel.y) < 0.1: self.vel.y = 0 
 		self.hitbox.centery = round(self.pos.y)
 		self.rect.centery = self.hitbox.centery
 

@@ -16,6 +16,7 @@ class Idle:
 	def update(self, dt, player):
 		player.physics(dt)
 
+
 class Move:
 	def __init__(self, direction):
 		self.direction = direction
