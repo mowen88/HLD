@@ -1,8 +1,9 @@
-import pygame, math
+import pygame, math, csv
 # from math import atan2, degrees, pi
 from os import walk
 from settings import *
 from pytmx.util_pygame import load_pygame
+from sprites import Object, Tree
 from camera import Camera
 from state import State
 from player import Player
@@ -21,25 +22,36 @@ class Zone(State):
 		self.enemy_sprites = pygame.sprite.Group()
 		self.gun_sprites = pygame.sprite.Group()
 
-		#self.create_map()
+		self.create_map()
+		self.zone_size = self.get_zone_size()
 
-		self.player = Player(self.game, self, [self.updated_sprites, self.rendered_sprites], (100, 100), LAYERS['player'])
-		self.target = self.player
+	def get_zone_size(self):
+		with open(f'../assets/zones/{self.game.current_zone}/{self.game.current_zone}.csv', newline='') as csvfile:
+		    reader = csv.reader(csvfile, delimiter=',')
+		    for row in reader:
+		        rows = (sum (1 for row in reader) + 1)
+		        cols = len(row)
+		return (cols * TILESIZE, rows * TILESIZE)
 
 	def create_map(self):
-		pass
-		# tmx_data = load_pygame(f'../zones/{self.game.current_zone}.tmx')
+		tmx_data = load_pygame(f'../assets/zones/{self.game.current_zone}/{self.game.current_zone}.tmx')
 
-		# # # add backgrounds
-		# # Object(self.game, self, [self.rendered_sprites, Z_LAYERS[1]], (0,0), pygame.image.load('../assets/bg.png').convert_alpha())
-		# # Object(self.game, self, [self.rendered_sprites, Z_LAYERS[2]], (0,TILESIZE), pygame.image.load('../zones/0.png').convert_alpha())
+		# add static image layers
+		Object(self.game, self, [self.rendered_sprites], (0,0), LAYERS['BG1'], pygame.image.load(f'../assets/zones/{self.game.current_zone}/static_bg.png').convert_alpha())
+		Object(self.game, self, [self.rendered_sprites], (0,0), LAYERS['floor'], pygame.image.load(f'../assets/zones/{self.game.current_zone}/floor.png').convert_alpha())
 
 		# # add the player
-		# for obj in tmx_data.get_layer_by_name('entities'):
-		# 	if obj.name == 'player': self.player = Player(self.game, self, obj.name, [self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'])
-		# 	if obj.name == 'guard': Enemy(self.game, self, obj.name, [self.enemy_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['NPCs'])
-		# 	if obj.name == 'sg_guard': Enemy(self.game, self, obj.name, [self.enemy_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['NPCs'])
-		# 	self.target = self.player
+		for obj in tmx_data.get_layer_by_name('entities'):
+			if obj.name == '0': self.player = Player(self.game, self, [self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'])
+			self.target = self.player
+
+		# add objects
+		for obj in tmx_data.get_layer_by_name('objects'):
+			if obj.name == 'big tree': Tree(self.game, self, [self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
+			if obj.name == 'medium tree': Tree(self.game, self, [self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
+			if obj.name == 'tall tree': Tree(self.game, self, [self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
+			if obj.name == 'red flower': Tree(self.game, self, [self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
+			if obj.name == 'blue flower': Tree(self.game, self, [self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
 			
 		# self.create_guns()
 
@@ -60,7 +72,8 @@ class Zone(State):
 
 	def draw(self, screen):
 		screen.fill(GREEN)
-		self.rendered_sprites.draw(screen)
-		#self.rendered_sprites.offset_draw(self.target)
-		self.game.render_text(self.player.acc, WHITE, self.game.small_font, RES/2)
+		self.rendered_sprites.offset_draw(self.target)
+
+		self.game.render_text(str(round(self.game.clock.get_fps(), 2)), WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.1))
+		self.game.render_text(self.player.state, WHITE, self.game.small_font, RES/2)
 

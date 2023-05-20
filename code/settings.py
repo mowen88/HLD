@@ -1,8 +1,8 @@
 import pygame
 
 FPS = 60
-TILESIZE = 20
-RES = WIDTH, HEIGHT = pygame.math.Vector2(480, 270)#(640, 360)#(960, 540) or... (512, 288)
+TILESIZE = 16
+RES = WIDTH, HEIGHT = pygame.math.Vector2(320, 180)#(360, 202.5)#(480, 270)#(640, 360)#(960, 540) or... (512, 288)
 HALF_WIDTH, HALF_HEIGHT = RES/2
 
 FONT = '../fonts/Pokemon Classic.ttf'
@@ -11,7 +11,7 @@ LAYERS = {
 	'BG0': 0,
 	'BG1': 1,
 	'BG2': 2,
-	'Water': 3,
+	'floor': 3,
 	'particles': 4,
 	'NPCs': 5,
 	'player':6,

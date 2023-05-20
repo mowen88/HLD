@@ -10,6 +10,8 @@ class Camera(pygame.sprite.Group):
 		self.offset = pygame.math.Vector2()
 		self.screenshake_timer = 0
 
+		self.BG0 = pygame.image.load(f'../assets/zones/{self.game.current_zone}/bg.png').convert_alpha()
+
 	def screenshake(self):
 		if self.game.screenshaking:
 			self.screenshake_timer += 1
@@ -18,9 +20,17 @@ class Camera(pygame.sprite.Group):
 
 	def offset_draw(self, target):
 		
+		# draw parralax backgrounds
 		self.game.screen.fill(LIGHT_GREY)
+		self.game.screen.blit(self.BG0, (0 - self.offset[0] * 0.3, 0 - self.offset[1] * 0.3))
 
-		self.offset += (target.pos - self.offset - RES/2)
+		self.offset += (target.rect.center - self.offset - RES/2)
+
+		# limit offset to stop at edges
+		if self.offset[0] <= 0: self.offset[0] = 0
+		elif self.offset[0] >= self.zone.zone_size[0] - WIDTH: self.offset[0] = self.zone.zone_size[0] - WIDTH
+		if self.offset[1] <= 0: self.offset[1] = 0
+		elif self.offset[1] >= self.zone.zone_size[1] - HEIGHT: self.offset[1] = self.zone.zone_size[1] - HEIGHT
 
 		#self.screenshake()
 

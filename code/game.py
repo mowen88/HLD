@@ -14,9 +14,8 @@ class Game:
         self.keys = pygame.key.get_pressed()
 
         #font
-        self.big_font = pygame.font.Font(FONT, round(HEIGHT * 0.1))
-        self.medium_font = pygame.font.Font(FONT, round(HEIGHT * 0.05))
-        self.small_font = pygame.font.Font(FONT, round(HEIGHT * 0.03))
+        self.big_font = pygame.font.Font(FONT, round(HEIGHT * 0.12))
+        self.small_font = pygame.font.Font(FONT, round(HEIGHT * 0.05))
 
         # states
         self.stack = []

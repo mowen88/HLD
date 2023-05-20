@@ -10,7 +10,7 @@ class Player(pygame.sprite.Sprite):
 		self.zone = zone
 		self.z = z
 
-		self.max_speed = 2
+		self.max_speed = 1
 
 		self.state = Idle('up')
 
@@ -20,15 +20,12 @@ class Player(pygame.sprite.Sprite):
 		self.friction = -0.25
 		self.vel = pygame.math.Vector2()
 	
-		self.image = pygame.Surface((24, 24))
+		self.image = pygame.Surface((16, 16))
 		self.image.fill(BLUE)
 		self.rect = self.image.get_rect(center = pos)
 		self.pos = pygame.math.Vector2(self.rect.center)
 		self.hitbox = self.rect.copy().inflate(-self.rect.width * 0.5, -self.rect.height * 0.75)
 
-	def get_direction(self):
-		for k, v in self.direction.items():
-			if v: return
 
 	def import_imgs(self):
 		self.animations = {'down_attack':[], 'up_attack':[], 'right_attack':[], 'left_attack':[],\
@@ -108,9 +105,6 @@ class Player(pygame.sprite.Sprite):
 		if abs(self.vel.y) < 0.05: self.vel.y = 0 
 		self.hitbox.centery = round(self.pos.y)
 		self.rect.centery = self.hitbox.centery
-		
-		# if self.vel.magnitude() > self.max_speed:
-		# 	self.vel = self.vel.normalize() * self.max_speed
 
 		if self.vel.magnitude() > self.max_speed:
 			self.vel = self.vel.normalize() * self.max_speed
