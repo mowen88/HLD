@@ -22,7 +22,6 @@ class Game:
         self.screenshaking = False
         self.current_zone = 0
         self.load_states()
-        
 
     def get_events(self):
         for event in pygame.event.get(): 

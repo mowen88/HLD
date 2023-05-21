@@ -10,7 +10,7 @@ class Player(pygame.sprite.Sprite):
 		self.zone = zone
 		self.z = z
 
-		self.state = Idle('up')
+		self.state = Idle('down')
 		self.alive = True
 		self.direction = {'up': False, 'down': False, 'left': False, 'right': False}
 

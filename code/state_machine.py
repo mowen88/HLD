@@ -134,24 +134,25 @@ class FallDeath:
 	def __init__(self, direction):
 		self.frame_index = 0
 		self.direction = direction
-		self.timer = 100
+		self.timer = 70
 
 	def state_logic(self, player):
-		if self.timer < 0: 
+		if self.timer <= 0: 
+			player.game.screenshaking = False
+			player.z = LAYERS['player']
+			player.alive = True
+			player.pos.x = player.respawn_location[0]
+			player.pos.y = player.respawn_location[1]
 			return Idle(self.direction)
 
 	def update(self, dt, player):
 		self.timer -= dt
 		if self.timer > 0:
+			if self.timer > 26 and self.timer < 30: player.game.screenshaking = True
 			player.z = LAYERS['BG2']
 			player.vel.y += 0.1 * dt
 			player.pos += player.vel
 			player.hitbox.center = round(player.pos)
-			player.rect.center = player.hitbox.center
-		else:
-			player.z = LAYERS['player']
-			player.alive = True
-			player.hitbox.center = player.respawn_location
 			player.rect.center = player.hitbox.center
 
 		player.animate(self.direction + '_fall', 0.2 * dt, 'end')
