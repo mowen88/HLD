@@ -10,14 +10,15 @@ class Player(pygame.sprite.Sprite):
 		self.zone = zone
 		self.z = z
 
-	
 		self.state = Idle('up')
+		self.alive = True
 		self.direction = {'up': False, 'down': False, 'left': False, 'right': False}
 
 		self.acc = pygame.math.Vector2()
-		self.friction = -0.25
+		self.friction = -0.2
 		self.vel = pygame.math.Vector2()
 		self.max_speed = 4
+		self.dashing = False
 	
 		self.import_imgs()
 		self.animation_type = 'loop'
@@ -25,9 +26,10 @@ class Player(pygame.sprite.Sprite):
 		self.image = self.animations['down'][self.frame_index]
 		self.rect = self.image.get_rect(center = pos)
 		self.pos = pygame.math.Vector2(self.rect.center)
-		self.hitbox = self.rect.copy().inflate(-self.rect.width * 0.7, -self.rect.height * 0.7)
+		self.hitbox = self.rect.copy().inflate(-self.rect.width * 0.6, -self.rect.height * 0.7)
 
 		self.angle = 0
+		self.respawn_location = pygame.math.Vector2()
 
 	def get_direction(self):
 		if 45 < self.angle < 135: direction = 'right'
@@ -38,7 +40,7 @@ class Player(pygame.sprite.Sprite):
 
 	def import_imgs(self):
 		self.animations = {'up':[], 'down':[], 'left':[], 'right':[], 'up_idle':[], 'down_idle':[], 'left_idle':[], 'right_idle':[],
-							'up_dash':[], 'down_dash':[], 'left_dash':[], 'right_dash':[]}
+							'up_dash':[], 'down_dash':[], 'left_dash':[], 'right_dash':[], 'up_fall':[], 'down_fall':[], 'left_fall':[], 'right_fall':[]}
 
 		for animation in self.animations.keys():
 			full_path = '../assets/characters/player/' + animation
@@ -50,23 +52,25 @@ class Player(pygame.sprite.Sprite):
 		else: self.frame_index = self.frame_index % len(self.animations[state])
 		self.image = self.animations[state][int(self.frame_index)]
 
-	def collisions(self, direction):
+	def collisions(self, direction, group):
 		
-		for sprite in self.zone.block_sprites:
+		for sprite in group:
 			if hasattr(sprite, 'hitbox'):
 				if sprite.hitbox.colliderect(self.hitbox):
-					
 					if direction == 'x':
 						if self.vel.x >= 0: self.hitbox.right = sprite.hitbox.left
 						if self.vel.x <= 0: self.hitbox.left = sprite.hitbox.right
 						self.rect.centerx = self.hitbox.centerx
 						self.pos.x = self.hitbox.centerx
-				
 					if direction == 'y':			
 						if self.vel.y >= 0: self.hitbox.bottom = sprite.hitbox.top	
 						if self.vel.y <= 0: self.hitbox.top = sprite.hitbox.bottom
 						self.rect.centery = self.hitbox.centery
 						self.pos.y = self.hitbox.centery
+
+	def in_void(self):
+		if pygame.sprite.spritecollide(self, self.zone.void_sprites, False, pygame.sprite.collide_rect_ratio(0.4)):
+			return True
 
 	def input(self):
 		if not self.zone.cutscene_running:
@@ -90,7 +94,8 @@ class Player(pygame.sprite.Sprite):
 		self.vel.x += self.acc.x * dt
 		self.pos.x += self.vel.x * dt + (0.5 * self.vel.x) * dt
 		self.hitbox.centerx = round(self.pos.x)
-		self.collisions('x')
+		self.collisions('x', self.zone.block_sprites)
+		if not self.dashing: self.collisions('x', self.zone.void_sprites)
 		self.rect.centerx = self.hitbox.centerx
 		
 		#y direction
@@ -98,7 +103,8 @@ class Player(pygame.sprite.Sprite):
 		self.vel.y += self.acc.y * dt
 		self.pos.y += self.vel.y * dt + (0.5 * self.vel.y * dt) * dt
 		self.hitbox.centery = round(self.pos.y)
-		self.collisions('y')
+		self.collisions('y', self.zone.block_sprites)
+		if not self.dashing: self.collisions('y', self.zone.void_sprites)
 		self.rect.centery = self.hitbox.centery
 
 		# limits top speed and normalises diagonal movement

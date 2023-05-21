@@ -3,9 +3,10 @@ from math import atan2, degrees, pi
 from os import walk
 from settings import *
 from pytmx.util_pygame import load_pygame
-from sprites import Object, Tree
+from sprites import Object, Void, Tree
 from camera import Camera
 from state import State
+from particles import Particle, Shadow
 from player import Player
 
 class Zone(State):
@@ -19,6 +20,7 @@ class Zone(State):
 		self.rendered_sprites = Camera(self.game, self)
 		self.updated_sprites = pygame.sprite.Group()
 		self.block_sprites = pygame.sprite.Group()
+		self.void_sprites = pygame.sprite.Group()
 		self.enemy_sprites = pygame.sprite.Group()
 		self.gun_sprites = pygame.sprite.Group()
 
@@ -46,8 +48,11 @@ class Zone(State):
 			if obj.name == '0': self.player = Player(self.game, self, [self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'])
 			self.target = self.player
 
-		for x, y, surf in tmx_data.get_layer_by_name('blocks').tiles():
+		for x, y, surf in tmx_data.get_layer_by_name('walls').tiles():
 			Object(self.game, self, [self.block_sprites, self.updated_sprites, self.rendered_sprites], (x * TILESIZE, y * TILESIZE), surf)
+
+		for x, y, surf in tmx_data.get_layer_by_name('void').tiles():
+			Void(self.game, self, [self.void_sprites, self.updated_sprites, self.rendered_sprites], (x * TILESIZE, y * TILESIZE), surf)
 
 		for obj in tmx_data.get_layer_by_name('objects'):
 			if obj.name == 'big tree': Tree(self.game, self, [self.block_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
@@ -58,8 +63,8 @@ class Zone(State):
 			
 		# self.create_guns()
 
-		# for x, y, surf in tmx_data.get_layer_by_name('blocks').tiles():
-		# 	Tile(self.game, self, [self.block_sprites, self.updated_sprites, self.rendered_sprites], (x * TILESIZE, y * TILESIZE), surf)
+		# create shadows
+		Shadow(self.game, self, [self.updated_sprites, self.rendered_sprites], (self.player.hitbox.midbottom), LAYERS['particles'], self.player)
 	
 	def get_distance_direction_and_angle(self, point_1, point_2):
 		pos_1 = pygame.math.Vector2(point_1 - self.rendered_sprites.offset)
@@ -95,8 +100,7 @@ class Zone(State):
 		self.rendered_sprites.offset_draw(self.target)
 		if not self.cutscene_running: self.custom_cursor(screen)
 
+		# debugging on screen text
 		self.game.render_text(str(round(self.game.clock.get_fps(), 2)), WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.1))
-		self.game.render_text(self.player.angle, WHITE, self.game.small_font, 	RES/2)
+		self.game.render_text(self.player.respawn_location, WHITE, self.game.small_font, 	RES/2)
 		self.game.render_text(self.player.state, WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.9))
-
-		print(self.game.screenshaking)
