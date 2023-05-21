@@ -27,15 +27,16 @@ class Camera(pygame.sprite.Group):
 		self.game.screen.fill(LIGHT_GREY)
 		self.game.screen.blit(self.BG0, (0 - self.offset[0] * 0.3, 0 - self.offset[1] * 0.3))
 
-		self.offset += (target.rect.center - self.offset - RES/2)
 
-		self.screenshake()
+		self.offset += (target.rect.center - self.offset - RES/2)
 
 		# limit offset to stop at edges
 		if self.offset[0] <= 0: self.offset[0] = 0
 		elif self.offset[0] >= self.zone.zone_size[0] - WIDTH: self.offset[0] = self.zone.zone_size[0] - WIDTH
 		if self.offset[1] <= 0: self.offset[1] = 0
 		elif self.offset[1] >= self.zone.zone_size[1] - HEIGHT: self.offset[1] = self.zone.zone_size[1] - HEIGHT
+
+		self.screenshake()
 
 		
 

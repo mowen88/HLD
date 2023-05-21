@@ -1,5 +1,5 @@
 import pygame, math, csv
-# from math import atan2, degrees, pi
+from math import atan2, degrees, pi
 from os import walk
 from settings import *
 from pytmx.util_pygame import load_pygame
@@ -37,33 +37,51 @@ class Zone(State):
 		tmx_data = load_pygame(f'../assets/zones/{self.game.current_zone}/{self.game.current_zone}.tmx')
 
 		# add static image layers
-		Object(self.game, self, [self.rendered_sprites], (0,0), LAYERS['BG1'], pygame.image.load(f'../assets/zones/{self.game.current_zone}/static_bg.png').convert_alpha())
-		Object(self.game, self, [self.rendered_sprites], (0,0), LAYERS['floor'], pygame.image.load(f'../assets/zones/{self.game.current_zone}/floor.png').convert_alpha())
+		Object(self.game, self, [self.rendered_sprites], (0,-8), LAYERS['BG1'], pygame.image.load(f'../assets/zones/{self.game.current_zone}/static_bg.png').convert_alpha())
+		Object(self.game, self, [self.rendered_sprites], (0,-8), LAYERS['floor'], pygame.image.load(f'../assets/zones/{self.game.current_zone}/floor.png').convert_alpha())
+		Object(self.game, self, [self.rendered_sprites], (0,0), LAYERS['floor'], pygame.image.load(f'../assets/zones/{self.game.current_zone}/rocks.png').convert_alpha())
 
 		# # add the player
 		for obj in tmx_data.get_layer_by_name('entities'):
 			if obj.name == '0': self.player = Player(self.game, self, [self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'])
 			self.target = self.player
 
-		# add objects
+		for x, y, surf in tmx_data.get_layer_by_name('blocks').tiles():
+			Object(self.game, self, [self.block_sprites, self.updated_sprites, self.rendered_sprites], (x * TILESIZE, y * TILESIZE), surf)
+
 		for obj in tmx_data.get_layer_by_name('objects'):
-			if obj.name == 'big tree': Tree(self.game, self, [self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
-			if obj.name == 'medium tree': Tree(self.game, self, [self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
-			if obj.name == 'tall tree': Tree(self.game, self, [self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
-			if obj.name == 'red flower': Tree(self.game, self, [self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
-			if obj.name == 'blue flower': Tree(self.game, self, [self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
+			if obj.name == 'big tree': Tree(self.game, self, [self.block_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
+			if obj.name == 'medium tree': Tree(self.game, self, [self.block_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
+			if obj.name == 'tall tree': Tree(self.game, self, [self.block_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
+			if obj.name == 'red flower': Tree(self.game, self, [self.block_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
+			if obj.name == 'blue flower': Tree(self.game, self, [self.block_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
 			
 		# self.create_guns()
 
 		# for x, y, surf in tmx_data.get_layer_by_name('blocks').tiles():
 		# 	Tile(self.game, self, [self.block_sprites, self.updated_sprites, self.rendered_sprites], (x * TILESIZE, y * TILESIZE), surf)
-			
+	
+	def get_distance_direction_and_angle(self, point_1, point_2):
+		pos_1 = pygame.math.Vector2(point_1 - self.rendered_sprites.offset)
+		pos_2 = pygame.math.Vector2(point_2)
+		distance = (pos_2 - pos_1).magnitude()
+		if (pos_2 - pos_1).magnitude() != 0: direction = (pos_2 - pos_1).normalize()
+		else: direction = pygame.math.Vector2(0.1,0.1)
+		radians = atan2(-(point_1[0] - (pos_2.x + self.rendered_sprites.offset.x)), (point_1[1] - (pos_2.y + self.rendered_sprites.offset.y)))
+		radians %= 2*pi
+		angle = int(degrees(radians))
 
-	def get_distance(self, point_1, point_2):
-		distance = (pygame.math.Vector2(point_2) - pygame.math.Vector2(point_1))
-		return distance
+		return(distance, direction, angle)
+
+	def custom_cursor(self, screen): 
+		pygame.mouse.set_visible(False)
+		cursor_img = pygame.image.load('../assets/cursor.png').convert_alpha()
+		cursor_img.set_alpha(150)
+		cursor_rect = cursor_img.get_rect()
+		screen.blit(cursor_img, pygame.mouse.get_pos())
 
 	def update(self, dt):
+
 		if ACTIONS['space']: 
 			self.game.screenshaking = True
 		
@@ -73,11 +91,12 @@ class Zone(State):
 		self.updated_sprites.update(dt)
 
 	def draw(self, screen):
-
 		screen.fill(GREEN)
 		self.rendered_sprites.offset_draw(self.target)
+		if not self.cutscene_running: self.custom_cursor(screen)
 
 		self.game.render_text(str(round(self.game.clock.get_fps(), 2)), WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.1))
-		self.game.render_text(self.player.state, WHITE, self.game.small_font, RES/2)
+		self.game.render_text(self.player.angle, WHITE, self.game.small_font, 	RES/2)
+		self.game.render_text(self.player.state, WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.9))
 
 		print(self.game.screenshaking)

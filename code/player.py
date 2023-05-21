@@ -10,66 +10,61 @@ class Player(pygame.sprite.Sprite):
 		self.zone = zone
 		self.z = z
 
-		self.max_speed = 1
-
+	
 		self.state = Idle('up')
-
-		self.direction = {'left': False, 'right': False, 'up': False, 'down': False}
+		self.direction = {'up': False, 'down': False, 'left': False, 'right': False}
 
 		self.acc = pygame.math.Vector2()
 		self.friction = -0.25
 		self.vel = pygame.math.Vector2()
+		self.max_speed = 4
 	
-		self.image = pygame.Surface((16, 16))
-		self.image.fill(BLUE)
+		self.import_imgs()
+		self.animation_type = 'loop'
+		self.frame_index = 0
+		self.image = self.animations['down'][self.frame_index]
 		self.rect = self.image.get_rect(center = pos)
 		self.pos = pygame.math.Vector2(self.rect.center)
-		self.hitbox = self.rect.copy().inflate(-self.rect.width * 0.5, -self.rect.height * 0.75)
+		self.hitbox = self.rect.copy().inflate(-self.rect.width * 0.7, -self.rect.height * 0.7)
 
+		self.angle = 0
+
+	def get_direction(self):
+		if 45 < self.angle < 135: direction = 'right'
+		elif 135 < self.angle < 225: direction = 'down'
+		elif 225 < self.angle < 315: direction = 'left'
+		else: direction = 'up'
+		return direction
 
 	def import_imgs(self):
-		self.animations = {'down_attack':[], 'up_attack':[], 'right_attack':[], 'left_attack':[],\
-		'up':[], 'down':[], 'left':[], 'right':[], 'up_idle':[], 'down_idle':[], 'left_idle':[], 'right_idle':[]}
+		self.animations = {'up':[], 'down':[], 'left':[], 'right':[], 'up_idle':[], 'down_idle':[], 'left_idle':[], 'right_idle':[],
+							'up_dash':[], 'down_dash':[], 'left_dash':[], 'right_dash':[]}
 
 		for animation in self.animations.keys():
-			full_path = '../assets/player/' + animation
-			self.animations[animation] = self.game.import_folder(full_path)
+			full_path = '../assets/characters/player/' + animation
+			self.animations[animation] = self.game.get_folder_images(full_path)
 
 	def animate(self, state, animation_speed, anmimation_type):
 		self.frame_index += animation_speed
-		if anmimation_type == 'end' and self.frame_index >= len(self.animations[state])-1:
-			self.frame_index = len(self.animations[state])-1
-		else:
-			self.frame_index = self.frame_index % len(self.animations[state])
+		if anmimation_type == 'end' and self.frame_index >= len(self.animations[state])-1: self.frame_index = len(self.animations[state])-1
+		else: self.frame_index = self.frame_index % len(self.animations[state])
 		self.image = self.animations[state][int(self.frame_index)]
 
-	def object_collisions(self, direction):
+	def collisions(self, direction):
 		
-		for sprite in self.zone.collidable_sprites:
+		for sprite in self.zone.block_sprites:
 			if hasattr(sprite, 'hitbox'):
 				if sprite.hitbox.colliderect(self.hitbox):
 					
 					if direction == 'x':
-						if self.vel.x > 0:
-							self.hitbox.right = sprite.hitbox.left
-							self.acc.x = 0
-							
-						if self.vel.x < 0:
-							self.hitbox.left = sprite.hitbox.right
-							self.acc.x = 0
-
+						if self.vel.x >= 0: self.hitbox.right = sprite.hitbox.left
+						if self.vel.x <= 0: self.hitbox.left = sprite.hitbox.right
 						self.rect.centerx = self.hitbox.centerx
 						self.pos.x = self.hitbox.centerx
 				
 					if direction == 'y':			
-						if self.vel.y > 0:
-							self.hitbox.bottom = sprite.hitbox.top	
-							self.acc.y = 0	
-							
-						if self.vel.y < 0:
-							self.hitbox.top = sprite.hitbox.bottom
-							self.acc.y = 0
-						
+						if self.vel.y >= 0: self.hitbox.bottom = sprite.hitbox.top	
+						if self.vel.y <= 0: self.hitbox.top = sprite.hitbox.bottom
 						self.rect.centery = self.hitbox.centery
 						self.pos.y = self.hitbox.centery
 
@@ -94,21 +89,21 @@ class Player(pygame.sprite.Sprite):
 		self.acc.x += self.vel.x * self.friction
 		self.vel.x += self.acc.x * dt
 		self.pos.x += self.vel.x * dt + (0.5 * self.vel.x) * dt
-		if abs(self.vel.x) < 0.1: self.vel.x = 0 
 		self.hitbox.centerx = round(self.pos.x)
+		self.collisions('x')
 		self.rect.centerx = self.hitbox.centerx
 		
 		#y direction
 		self.acc.y += self.vel.y * self.friction
 		self.vel.y += self.acc.y * dt
 		self.pos.y += self.vel.y * dt + (0.5 * self.vel.y * dt) * dt
-		if abs(self.vel.y) < 0.1: self.vel.y = 0 
 		self.hitbox.centery = round(self.pos.y)
+		self.collisions('y')
 		self.rect.centery = self.hitbox.centery
 
+		# limits top speed and normalises diagonal movement
 		if self.vel.magnitude() > self.max_speed:
 			self.vel = self.vel.normalize() * self.max_speed
-
 
 	def state_logic(self):
 		new_state = self.state.state_logic(self)
