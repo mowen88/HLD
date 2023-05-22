@@ -52,25 +52,42 @@ class Player(pygame.sprite.Sprite):
 		else: self.frame_index = self.frame_index % len(self.animations[state])
 		self.image = self.animations[state][int(self.frame_index)]
 
-	def collisions(self, direction, group):
+	def block_collision(self, direction):
 		
-		for sprite in group:
-			if hasattr(sprite, 'hitbox'):
-				if sprite.hitbox.colliderect(self.hitbox):
-					if direction == 'x':
-						if self.vel.x >= 0: self.hitbox.right = sprite.hitbox.left
-						if self.vel.x <= 0: self.hitbox.left = sprite.hitbox.right
-						self.rect.centerx = self.hitbox.centerx
-						self.pos.x = self.hitbox.centerx
-					if direction == 'y':			
-						if self.vel.y >= 0: self.hitbox.bottom = sprite.hitbox.top	
-						if self.vel.y <= 0: self.hitbox.top = sprite.hitbox.bottom
-						self.rect.centery = self.hitbox.centery
-						self.pos.y = self.hitbox.centery
+		hitlist = self.collide(self.zone.block_sprites)
+		for sprite in hitlist:
+			if direction == 'x':
+				if self.vel.x >= 0: self.hitbox.right = sprite.hitbox.left
+				if self.vel.x <= 0: self.hitbox.left = sprite.hitbox.right
+				self.rect.centerx = self.hitbox.centerx
+				self.pos.x = self.hitbox.centerx
+			if direction == 'y':			
+				if self.vel.y >= 0: self.hitbox.bottom = sprite.hitbox.top	
+				if self.vel.y <= 0: self.hitbox.top = sprite.hitbox.bottom
+				self.rect.centery = self.hitbox.centery
+				self.pos.y = self.hitbox.centery
 
-	def in_void(self):
-		if pygame.sprite.spritecollide(self, self.zone.void_sprites, False, pygame.sprite.collide_rect_ratio(0.4)):
-			return True
+	def void_collision(self, direction):
+		hitlist = self.collide(self.zone.void_sprites)
+		for sprite in hitlist:
+			if not self.dashing:
+				if direction == 'x':
+					if self.vel.x >= 0: self.hitbox.right = sprite.hitbox.left
+					if self.vel.x <= 0: self.hitbox.left = sprite.hitbox.right
+					self.rect.centerx = self.hitbox.centerx
+					self.pos.x = self.hitbox.centerx
+				if direction == 'y':		
+					if self.vel.y >= 0: self.hitbox.bottom = sprite.hitbox.top	
+					if self.vel.y <= 0: self.hitbox.top = sprite.hitbox.bottom
+					self.rect.centery = self.hitbox.centery
+					self.pos.y = self.hitbox.centery
+
+
+	def collide(self, group): 
+		hitlist = []
+		for sprite in group:
+			if sprite.hitbox.colliderect(self.hitbox): hitlist.append(sprite)
+		return hitlist
 
 	def input(self):
 		if not self.zone.cutscene_running:
@@ -94,8 +111,8 @@ class Player(pygame.sprite.Sprite):
 		self.vel.x += self.acc.x * dt
 		self.pos.x += self.vel.x * dt + (0.5 * self.vel.x) * dt
 		self.hitbox.centerx = round(self.pos.x)
-		self.collisions('x', self.zone.block_sprites)
-		if not self.dashing: self.collisions('x', self.zone.void_sprites)
+		self.block_collision('x')
+		self.void_collision('x')
 		self.rect.centerx = self.hitbox.centerx
 		
 		#y direction
@@ -103,8 +120,8 @@ class Player(pygame.sprite.Sprite):
 		self.vel.y += self.acc.y * dt
 		self.pos.y += self.vel.y * dt + (0.5 * self.vel.y * dt) * dt
 		self.hitbox.centery = round(self.pos.y)
-		self.collisions('y', self.zone.block_sprites)
-		if not self.dashing: self.collisions('y', self.zone.void_sprites)
+		self.block_collision('y')
+		self.void_collision('y')
 		self.rect.centery = self.hitbox.centery
 
 		# limits top speed and normalises diagonal movement

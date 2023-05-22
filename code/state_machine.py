@@ -21,7 +21,7 @@ class Idle:
 
 	def update(self, dt, player):
 		player.vel = pygame.math.Vector2()
-		player.physics(dt)
+		
 		player.animate(self.direction + '_idle', 0.2 * dt, 'loop')
 
 class Move:
@@ -64,6 +64,7 @@ class Move:
 class Dash:
 	def __init__(self, player, direction):
 		
+		self.timer = 30
 		player.dashing = True
 		player.respawn_location = player.rect.center
 
@@ -78,26 +79,22 @@ class Dash:
 
 	def state_logic(self, player):
 
-		if player.vel.magnitude() < 0.05:
-			if not player.in_void():
-				player.dashing = False
-				return Idle(self.direction)
-			else: 
+		if self.timer < 0:
+			if player.collide(player.zone.void_sprites):
 				player.dashing = False
 				player.alive = False
 				return FallDeath(self.direction)
-
-		if ACTIONS['right_click']:
-			return Dash(player, self.direction)
+			else: 
+				player.dashing = False
+				return Idle(self.direction)
 
 	def update(self, dt, player):
+		self.timer -= dt
 
 		player.acc = pygame.math.Vector2()
-
-		self.lunge_speed -= 0.1 * dt
-		self.lunge_speed *= 0.99
-
-		player.vel = player.vel.normalize() * self.lunge_speed
+		self.lunge_speed -= 0.3 * dt
+		if player.vel.magnitude() != 0: player.vel = player.vel.normalize() * self.lunge_speed
+		if player.vel.magnitude() < 0.1: player.vel = pygame.math.Vector2()
 
 		player.physics(dt)
 		player.animate(self.direction + '_dash', 0.2 * dt, 'end')
@@ -107,6 +104,7 @@ class Attack:
 		
 		ACTIONS['left_click'] = False
 
+		self.timer = 25
 		self.frame_index = 0
 		self.lunge_speed = 1
 		self.get_current_direction = pygame.mouse.get_pos()
@@ -116,16 +114,17 @@ class Attack:
 
 	def state_logic(self, player):
 
-		if player.vel.magnitude() < 0.05:
-				return Idle(self.direction)
+		if self.timer < 0:
+		# if player.vel.magnitude() < 0.05:
+			return Idle(self.direction)
 
 	def update(self, dt, player):
+		self.timer -= dt
 
 		player.acc = pygame.math.Vector2()
-
 		self.lunge_speed -= 0.1 * dt
-
-		player.vel = player.vel.normalize() * self.lunge_speed
+		if player.vel.magnitude() != 0: player.vel = player.vel.normalize() * self.lunge_speed
+		if player.vel.magnitude() < 0.1: player.vel = pygame.math.Vector2()
 
 		player.physics(dt)
 		player.animate(self.direction + '_dash', 0.2 * dt, 'end')
@@ -148,12 +147,12 @@ class FallDeath:
 	def update(self, dt, player):
 		self.timer -= dt
 		if self.timer > 0:
-			if self.timer > 26 and self.timer < 30: player.game.screenshaking = True
+			if self.timer > 28 and self.timer < 30: player.game.screenshaking = True
 			player.z = LAYERS['BG2']
-			player.vel.y += 0.1 * dt
+			player.vel.y += 0.15 * dt
 			player.pos += player.vel
-			player.hitbox.center = round(player.pos)
-			player.rect.center = player.hitbox.center
+			player.hitbox.centery = player.pos.y
+			player.rect.centery = player.hitbox.centery
 
 		player.animate(self.direction + '_fall', 0.2 * dt, 'end')
 

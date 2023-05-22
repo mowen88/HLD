@@ -117,12 +117,6 @@ class Game:
         rect = surf.get_rect(center = pos)
         return(surf, rect)
 
-    def create_sprite(self, image, pos):
-        sprite = pygame.sprite.Sprite()
-        sprite.image = image.convert_alpha()
-        sprite.rect = sprite.image.get_rect(center = pos)
-        return sprite
-
     def render_text(self, text, colour, font, pos):
         surf = font.render(str(text), False, colour)
         rect = surf.get_rect(center = pos)
