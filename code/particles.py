@@ -20,7 +20,7 @@ class Shadow(Particle):
 		self.rect = self.image.get_rect(center = pos)
 
 	def update(self, dt):
-		if self.sprite.collide(self.zone.void_sprites) or not self.sprite.alive:
+		if self.sprite.get_collide_list(self.zone.void_sprites) or not self.sprite.alive:
 			self.image.set_alpha(0)
 		else:
 			self.image.set_alpha(80)

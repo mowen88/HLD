@@ -3,7 +3,7 @@ from math import atan2, degrees, pi
 from os import walk
 from settings import *
 from pytmx.util_pygame import load_pygame
-from sprites import Object, Void, Tree
+from sprites import Object, Void, Sword, Tree
 from camera import Camera
 from state import State
 from particles import Particle, Shadow
@@ -16,6 +16,8 @@ class Zone(State):
 		self.game = game
 		self.cutscene_running = False
 
+		#sprites
+		self.melee_sprite = pygame.sprite.GroupSingle()
 		# sprite groups
 		self.rendered_sprites = Camera(self.game, self)
 		self.updated_sprites = pygame.sprite.Group()
@@ -65,6 +67,9 @@ class Zone(State):
 
 		# create shadows
 		Shadow(self.game, self, [self.updated_sprites, self.rendered_sprites], (self.player.hitbox.midbottom), LAYERS['particles'], self.player)
+
+	def create_melee(self, direction):
+		self.melee_sprite = Sword(self.game, self, [self.updated_sprites, self.rendered_sprites], self.player.hitbox.center, LAYERS['player'], '../assets/weapons/sword_1/')
 	
 	def get_distance_direction_and_angle(self, point_1, point_2):
 		pos_1 = pygame.math.Vector2(point_1 - self.rendered_sprites.offset)
@@ -102,5 +107,5 @@ class Zone(State):
 
 		# debugging on screen text
 		self.game.render_text(str(round(self.game.clock.get_fps(), 2)), WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.1))
-		self.game.render_text(self.player.dashing, WHITE, self.game.small_font, RES/2)
+		self.game.render_text(self.player.vel, WHITE, self.game.small_font, RES/2)
 		self.game.render_text(self.player.state, WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.9))

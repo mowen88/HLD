@@ -21,7 +21,7 @@ class Idle:
 
 	def update(self, dt, player):
 		player.vel = pygame.math.Vector2()
-		
+		player.physics(dt)
 		player.animate(self.direction + '_idle', 0.2 * dt, 'loop')
 
 class Move:
@@ -80,7 +80,7 @@ class Dash:
 	def state_logic(self, player):
 
 		if self.timer < 0:
-			if player.collide(player.zone.void_sprites):
+			if player.get_collide_list(player.zone.void_sprites):
 				player.dashing = False
 				player.alive = False
 				return FallDeath(self.direction)
@@ -101,7 +101,7 @@ class Dash:
 
 class Attack:
 	def __init__(self, player, direction):
-		
+
 		ACTIONS['left_click'] = False
 
 		self.timer = 25
@@ -112,7 +112,14 @@ class Attack:
 		player.angle = player.zone.get_distance_direction_and_angle(player.hitbox.center, self.get_current_direction)[2]
 		self.direction = player.get_direction()
 
+		player.zone.create_melee(self.direction)
+
 	def state_logic(self, player):
+
+		if ACTIONS['right_click']:
+			player.zone.melee_sprite.kill()
+			return Dash(player, self.direction)
+
 
 		if self.timer < 0:
 		# if player.vel.magnitude() < 0.05:
@@ -127,7 +134,7 @@ class Attack:
 		if player.vel.magnitude() < 0.1: player.vel = pygame.math.Vector2()
 
 		player.physics(dt)
-		player.animate(self.direction + '_dash', 0.2 * dt, 'end')
+		player.animate(self.direction + '_dash', 0.25 * dt, 'end')
 
 class FallDeath:
 	def __init__(self, direction):
