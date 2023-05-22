@@ -116,8 +116,9 @@ class Player(pygame.sprite.Sprite):
 		else: self.state
 
 	def update(self, dt):
-		self.state.update(dt, self)
 		if not self.zone.cutscene_running:
 			self.state_logic()
+		self.state.update(dt, self)
+		
 
 		

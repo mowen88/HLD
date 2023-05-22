@@ -20,8 +20,7 @@ class Idle:
 				return Move(self.direction)
 
 	def update(self, dt, player):
-		player.vel = pygame.math.Vector2()
-		player.physics(dt)
+		
 		player.animate(self.direction + '_idle', 0.2 * dt, 'loop')
 
 class Move:
@@ -147,8 +146,12 @@ class FallDeath:
 			player.game.screenshaking = False
 			player.z = LAYERS['player']
 			player.alive = True
+			player.vel.y = 0
 			player.pos.x = player.respawn_location[0]
 			player.pos.y = player.respawn_location[1]
+			player.hitbox.center = (player.pos.x, player.pos.y)
+			player.rect.center = player.hitbox.center
+			
 			return Idle(self.direction)
 
 	def update(self, dt, player):
