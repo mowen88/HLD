@@ -11,7 +11,6 @@ class Game:
         self.clock = pygame.time.Clock()
         self.screen = pygame.display.set_mode((RES), pygame.FULLSCREEN|pygame.SCALED)
         self.running = True
-        self.keys = pygame.key.get_pressed()
 
         #font
         self.big_font = pygame.font.Font(FONT, round(HEIGHT * 0.12))
@@ -44,6 +43,8 @@ class Game:
                     ACTIONS['left'] = True
                 elif event.key == pygame.K_SPACE:
                     ACTIONS['space'] = True
+                elif event.key == pygame.K_RCTRL:
+                    ACTIONS['right_ctrl'] = True
                 elif event.key == pygame.K_RETURN:
                     ACTIONS['return'] = True
                 elif event.key == pygame.K_BACKSPACE:
@@ -112,6 +113,12 @@ class Game:
 
         return surf_list
 
+    def custom_cursor(self, screen): 
+        pygame.mouse.set_visible(False)
+        cursor = self.get_image('../assets/cursor.png', pygame.mouse.get_pos())
+        cursor[0].set_alpha(150)
+        screen.blit(cursor[0], cursor[1])
+
     def get_image(self, path, pos):
         surf = pygame.image.load(path).convert_alpha()
         rect = surf.get_rect(center = pos)
@@ -127,7 +134,9 @@ class Game:
         self.stack[-1].update(dt)
 
     def draw(self, screen):
+
         self.stack[-1].draw(screen)
+        self.custom_cursor(screen)
         pygame.display.flip()
 
     def main_loop(self):

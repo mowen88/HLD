@@ -3,7 +3,7 @@ from math import atan2, degrees, pi
 from os import walk
 from settings import *
 from pytmx.util_pygame import load_pygame
-from sprites import Object, Void, Sword, Tree
+from sprites import Object, Void, Gun, Sword, Tree
 from camera import Camera
 from state import State
 from particles import Particle, Shadow
@@ -18,6 +18,7 @@ class Zone(State):
 
 		#sprites
 		self.melee_sprite = pygame.sprite.GroupSingle()
+		self.gun_sprite = pygame.sprite.GroupSingle()
 		# sprite groups
 		self.rendered_sprites = Camera(self.game, self)
 		self.updated_sprites = pygame.sprite.Group()
@@ -68,8 +69,11 @@ class Zone(State):
 		# create shadows
 		Shadow(self.game, self, [self.updated_sprites, self.rendered_sprites], (self.player.hitbox.midbottom), LAYERS['particles'], self.player)
 
-	def create_melee(self, direction):
+	def create_melee(self):
 		self.melee_sprite = Sword(self.game, self, [self.updated_sprites, self.rendered_sprites], self.player.hitbox.center, LAYERS['player'], '../assets/weapons/sword_1/')
+	
+	def create_gun(self):
+		self.gun_sprite = Gun(self.game, self, [self.updated_sprites, self.rendered_sprites], self.player.hitbox.center, LAYERS['player'], pygame.image.load('../assets/weapons/gun.png').convert_alpha())
 	
 	def get_distance_direction_and_angle(self, point_1, point_2):
 		pos_1 = pygame.math.Vector2(point_1 - self.rendered_sprites.offset)
@@ -83,17 +87,8 @@ class Zone(State):
 
 		return(distance, direction, angle)
 
-	def custom_cursor(self, screen): 
-		pygame.mouse.set_visible(False)
-		cursor_img = pygame.image.load('../assets/cursor.png').convert_alpha()
-		cursor_img.set_alpha(150)
-		cursor_rect = cursor_img.get_rect()
-		screen.blit(cursor_img, pygame.mouse.get_pos())
 
 	def update(self, dt):
-
-		if ACTIONS['space']: 
-			self.game.screenshaking = True
 		
 		if ACTIONS['return']: 
 			self.exit_state()
@@ -103,9 +98,8 @@ class Zone(State):
 	def draw(self, screen):
 		screen.fill(GREEN)
 		self.rendered_sprites.offset_draw(self.target)
-		if not self.cutscene_running: self.custom_cursor(screen)
 
 		# debugging on screen text
 		self.game.render_text(str(round(self.game.clock.get_fps(), 2)), WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.1))
-		self.game.render_text(self.player.vel, WHITE, self.game.small_font, RES/2)
+		self.game.render_text(self.player.angle, WHITE, self.game.small_font, RES/2)
 		self.game.render_text(self.player.state, WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.9))

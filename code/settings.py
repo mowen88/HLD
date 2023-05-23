@@ -24,7 +24,7 @@ LAYERS = {
 
 # key events
 ACTIONS = {'escape': False, 'space': False, 'up': False, 'down': False, 'left': False,
-			'right': False, 'return': False, 'backspace': False, 'left_click': False, 
+			'right': False, 'return': False, 'right_ctrl': False, 'backspace': False, 'left_click': False, 
 			'right_click': False, 'scroll_up': False, 'scroll_down': False}
 
 # game colours

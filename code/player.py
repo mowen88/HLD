@@ -1,6 +1,6 @@
 import math
 from settings import *
-from state_machine import Idle
+from player_fsm import Idle
 
 class Player(pygame.sprite.Sprite):
 	def __init__(self, game, zone, groups, pos, z):
@@ -71,20 +71,6 @@ class Player(pygame.sprite.Sprite):
 			if sprite.hitbox.colliderect(self.hitbox): hitlist.append(sprite)
 		return hitlist
 
-	def input(self):
-		if not self.zone.cutscene_running:
-			keys = pygame.key.get_pressed()
-
-			if keys[pygame.K_RIGHT]:
-				self.direction['right'] = True
-			elif keys[pygame.K_LEFT]:
-				self.direction['left'] = True
-
-			if keys[pygame.K_DOWN]:
-				self.direction['down'] = True
-			elif keys[pygame.K_UP]:
-				self.direction['up'] = True
-
 		
 	def physics(self, dt):
 		
@@ -116,8 +102,7 @@ class Player(pygame.sprite.Sprite):
 		else: self.state
 
 	def update(self, dt):
-		if not self.zone.cutscene_running:
-			self.state_logic()
+		if not self.zone.cutscene_running: self.state_logic()
 		self.state.update(dt, self)
 		
 
