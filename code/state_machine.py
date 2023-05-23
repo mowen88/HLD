@@ -6,11 +6,7 @@ class Idle:
 		self.frame_index = 0
 		self.direction = direction
 
-
 	def state_logic(self, player):
-
-		if ACTIONS['right_ctrl']:
-			return Shoot(player, self.direction)
 
 		if ACTIONS['right_click']:
 			return Dash(player, self.direction)
@@ -24,6 +20,7 @@ class Idle:
 				return Move(self.direction)
 
 	def update(self, dt, player):
+		
 		player.animate(self.direction + '_idle', 0.2 * dt, 'loop')
 
 class Move:
@@ -32,9 +29,6 @@ class Move:
 		self.direction = direction
 
 	def state_logic(self, player):
-
-		if ACTIONS['right_ctrl']:
-			return Shoot(player, self.direction)
 
 		if ACTIONS['right_click']:
 			return Dash(player, self.direction)
@@ -87,24 +81,23 @@ class Dash:
 		if self.timer < 0:
 			if player.get_collide_list(player.zone.void_sprites):
 				player.dashing = False
-				player.alive = False
+				player.on_ground = False
 				return FallDeath(self.direction)
 			else: 
 				player.dashing = False
 				return Idle(self.direction)
 
 	def update(self, dt, player):
-		ACTIONS['right_ctrl'] = False
-		player.physics(dt)
-		player.animate(self.direction + '_dash', 0.2 * dt, 'end')
-		
 		self.timer -= dt
 
 		player.acc = pygame.math.Vector2()
 		self.lunge_speed -= 0.3 * dt
 		if player.vel.magnitude() != 0: player.vel = player.vel.normalize() * self.lunge_speed
-		if player.vel.magnitude() < 0.1: player.vel = pygame.math.Vector2()	
-		
+		if player.vel.magnitude() < 0.1: player.vel = pygame.math.Vector2()
+
+		player.physics(dt)
+		player.animate(self.direction + '_dash', 0.2 * dt, 'end')
+
 class Attack:
 	def __init__(self, player, direction):
 
@@ -118,7 +111,7 @@ class Attack:
 		player.angle = player.zone.get_distance_direction_and_angle(player.hitbox.center, self.get_current_direction)[2]
 		self.direction = player.get_direction()
 
-		player.zone.create_melee()
+		player.zone.create_melee(self.direction)
 
 	def state_logic(self, player):
 
@@ -126,73 +119,33 @@ class Attack:
 			player.zone.melee_sprite.kill()
 			return Dash(player, self.direction)
 
+
 		if self.timer < 0:
 		# if player.vel.magnitude() < 0.05:
 			return Idle(self.direction)
 
 	def update(self, dt, player):
-		ACTIONS['right_ctrl'] = False
-		player.physics(dt)
-		player.animate(self.direction + '_dash', 0.2 * dt, 'end')
-		
 		self.timer -= dt
+
 		player.acc = pygame.math.Vector2()
 		self.lunge_speed -= 0.1 * dt
 		if player.vel.magnitude() != 0: player.vel = player.vel.normalize() * self.lunge_speed
 		if player.vel.magnitude() < 0.1: player.vel = pygame.math.Vector2()
 
-class Shoot:
-	def __init__(self, player, direction):
-
-		self.timer = 50
-		self.frame_index = 0
-		self.lunge_speed = 1
-		self.get_current_direction = pygame.mouse.get_pos()
-		player.vel = player.zone.get_distance_direction_and_angle(player.hitbox.center, self.get_current_direction)[1] * self.lunge_speed * -1
-		player.angle = player.zone.get_distance_direction_and_angle(player.hitbox.center, self.get_current_direction)[2]
-		self.direction = player.get_direction()
-
-		player.zone.create_gun()
-
-	def state_logic(self, player):
-
-		if ACTIONS['right_click']:
-			player.zone.gun_sprite.kill()
-			return Dash(player, self.direction)
-
-		if self.timer < 0:
-			player.zone.gun_sprite.kill()
-			return Idle(self.direction)
-
-	def get_direction(self, player):
-		if 45 < player.zone.gun_sprite.angle < 135: self.direction = 'right'
-		elif 135 < player.zone.gun_sprite.angle < 225: self.direction = 'down'
-		elif 225 < player.zone.gun_sprite.angle < 315: self.direction = 'left'
-		else: self.direction = 'up'
-
-	def update(self, dt, player):
-		ACTIONS['right_ctrl'] = False
-		self.get_direction(player)
 		player.physics(dt)
-		player.animate(self.direction + '_dash', 0.2 * dt, 'end')
-		
-		self.timer -= dt
-		player.acc = pygame.math.Vector2()
-		self.lunge_speed -= 0.1 * dt
-		if player.vel.magnitude() != 0: player.vel = player.vel.normalize() * self.lunge_speed
-		if player.vel.magnitude() < 0.1: player.vel = pygame.math.Vector2()
+		player.animate(self.direction + '_dash', 0.25 * dt, 'end')
 
 class FallDeath:
 	def __init__(self, direction):
 		self.frame_index = 0
 		self.direction = direction
-		self.timer = 55
+		self.timer = 70
 
 	def state_logic(self, player):
 		if self.timer <= 0: 
 			player.game.screenshaking = False
 			player.z = LAYERS['player']
-			player.alive = True
+			player.on_ground = True
 			player.vel.y = 0
 			player.pos.x = player.respawn_location[0]
 			player.pos.y = player.respawn_location[1]
@@ -202,17 +155,14 @@ class FallDeath:
 			return Idle(self.direction)
 
 	def update(self, dt, player):
-		ACTIONS['right_ctrl'] = False
-		player.animate(self.direction + '_fall', 0.2 * dt, 'end')
-
 		self.timer -= dt
 		if self.timer > 0:
-			if self.timer < 15: player.game.screenshaking = True
+			if self.timer > 28 and self.timer < 30: player.game.screenshaking = True
 			player.z = LAYERS['BG2']
 			player.vel.y += 0.15 * dt
 			player.pos += player.vel
 			player.hitbox.centery = player.pos.y
 			player.rect.centery = player.hitbox.centery
 
-		
+		player.animate(self.direction + '_fall', 0.2 * dt, 'end')
 

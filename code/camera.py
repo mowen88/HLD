@@ -25,7 +25,7 @@ class Camera(pygame.sprite.Group):
 		
 		# draw parralax backgrounds
 		self.game.screen.fill(LIGHT_GREY)
-		self.game.screen.blit(self.BG0, (0 - self.offset[0] * 0.3, 0 - self.offset[1] * 0.3))
+		self.game.screen.blit(self.BG0, (0 - self.offset[0] * 0.2, 0 - self.offset[1] * 0.2))
 
 
 		self.offset += (target.rect.center - self.offset - RES/2)

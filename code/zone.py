@@ -8,6 +8,7 @@ from camera import Camera
 from state import State
 from particles import Particle, Shadow
 from player import Player
+from enemy import Grunt
 
 class Zone(State):
 	def __init__(self, game):
@@ -48,7 +49,8 @@ class Zone(State):
 
 		# # add the player
 		for obj in tmx_data.get_layer_by_name('entities'):
-			if obj.name == '0': self.player = Player(self.game, self, [self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'])
+			if obj.name == '0': self.player = Player(self.game, self, [self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], 'player')
+			if obj.name == 'grunt': Grunt(self.game, self, [self.enemy_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.name)
 			self.target = self.player
 
 		for x, y, surf in tmx_data.get_layer_by_name('walls').tiles():
@@ -66,8 +68,10 @@ class Zone(State):
 			
 		# self.create_guns()
 
-		# create shadows
+		# create shadows for player and NPCs
 		Shadow(self.game, self, [self.updated_sprites, self.rendered_sprites], (self.player.hitbox.midbottom), LAYERS['particles'], self.player)
+		for sprite in self.enemy_sprites:
+			Shadow(self.game, self, [self.updated_sprites, self.rendered_sprites], (sprite.hitbox.midbottom), LAYERS['particles'], sprite)
 
 	def create_melee(self):
 		self.melee_sprite = Sword(self.game, self, [self.updated_sprites, self.rendered_sprites], self.player.hitbox.center, LAYERS['player'], '../assets/weapons/sword_1/')
@@ -101,5 +105,5 @@ class Zone(State):
 
 		# debugging on screen text
 		self.game.render_text(str(round(self.game.clock.get_fps(), 2)), WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.1))
-		self.game.render_text(self.player.angle, WHITE, self.game.small_font, RES/2)
+		self.game.render_text(self.player.angle, PINK, self.game.small_font, RES/2)
 		self.game.render_text(self.player.state, WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.9))

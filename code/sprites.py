@@ -9,7 +9,7 @@ class Object(pygame.sprite.Sprite):
 		self.z = z
 		self.image = surf
 		self.rect = self.image.get_rect(topleft = pos)
-		self.hitbox = self.rect.copy().inflate(0, 0)
+		self.hitbox = self.rect.copy().inflate(-self.rect.width *0.1, -self.rect.height *0.4)
 
 class Void(Object):
 	def __init__(self, game, zone, groups, pos, z, surf = pygame.Surface((TILESIZE, TILESIZE))):
@@ -57,7 +57,6 @@ class Sword(pygame.sprite.Sprite):
 		self.frame_index = 0
 		self.image = self.frames[self.frame_index]
 		self.rect = self.image.get_rect(center = pos)
-
 
 	def animate(self, animation_speed):
 		self.frame_index += animation_speed
