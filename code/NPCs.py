@@ -3,7 +3,7 @@ from settings import *
 from enemy_fsm import Idle
 
 class NPC(pygame.sprite.Sprite):
-	def __init__(self, game, zone, groups, pos, z, name = ''):
+	def __init__(self, game, zone, groups, pos, z, name):
 		super().__init__(groups)
 		self.game = game
 		self.zone = zone
@@ -11,10 +11,9 @@ class NPC(pygame.sprite.Sprite):
 		self.name = name
 
 		self.state = Idle()
-		self.direction = {'up': False, 'down': False, 'left': False, 'right': False}
 		self.animations = {'idle':[]}
 
-		if self.name: self.import_imgs(self.name)
+		if self.name: self.import_imgs()
 		self.animation_type = 'loop'
 		self.frame_index = 0
 		self.image = pygame.Surface((TILESIZE, TILESIZE))
@@ -30,9 +29,9 @@ class NPC(pygame.sprite.Sprite):
 		self.on_ground = True
 		self.angle = 0
 
-	def import_imgs(self, name):
+	def import_imgs(self):
 		for animation in self.animations.keys():
-			full_path = f'../assets/characters/{name}/' + animation
+			full_path = f'../assets/characters/{self.name}/' + animation
 			self.animations[animation] = self.game.get_folder_images(full_path)
 
 	def get_direction(self):
@@ -42,9 +41,9 @@ class NPC(pygame.sprite.Sprite):
 		else: direction = 'up'
 		return direction
 
-	def animate(self, state, animation_speed, animation_type):
+	def animate(self, state, animation_speed, anmimation_type):
 		self.frame_index += animation_speed
-		if animation_type == 'end' and self.frame_index >= len(self.animations[state])-1: self.frame_index = len(self.animations[state])-1
+		if anmimation_type == 'end' and self.frame_index >= len(self.animations[state])-1: self.frame_index = len(self.animations[state])-1
 		else: self.frame_index = self.frame_index % len(self.animations[state])
 		self.image = self.animations[state][int(self.frame_index)]
 
@@ -70,27 +69,24 @@ class NPC(pygame.sprite.Sprite):
 
 	def physics(self, dt):
 		
-		# x direction
-		self.acc.x += self.vel.x * self.friction
-		self.vel.x += self.acc.x * dt
-		self.pos.x += self.vel.x * dt + (0.5 * self.vel.x) * dt
-		self.hitbox.centerx = round(self.pos.x)
-		self.collisions('x', self.zone.block_sprites)
-		if not self.dashing: self.collisions('x', self.zone.void_sprites)
-		self.rect.centerx = self.hitbox.centerx
-		
-		#y direction
-		self.acc.y += self.vel.y * self.friction
-		self.vel.y += self.acc.y * dt
-		self.pos.y += self.vel.y * dt + (0.5 * self.vel.y * dt) * dt
-		self.hitbox.centery = round(self.pos.y)
-		self.collisions('y', self.zone.block_sprites)
-		if not self.dashing: self.collisions('y', self.zone.void_sprites)
-		self.rect.centery = self.hitbox.centery
+			# x direction
+			self.acc.x += self.vel.x * self.friction
+			self.vel.x += self.acc.x * dt
+			self.pos.x += self.vel.x * dt + (0.5 * self.vel.x) * dt
+			self.hitbox.centerx = round(self.pos.x)
+			self.collisions('x', self.zone.block_sprites)
+			if not self.dashing: self.collisions('x', self.zone.void_sprites)
+			self.rect.centerx = self.hitbox.centerx
+			
+			#y direction
+			self.acc.y += self.vel.y * self.friction
+			self.vel.y += self.acc.y * dt
+			self.pos.y += self.vel.y * dt + (0.5 * self.vel.y * dt) * dt
+			self.hitbox.centery = round(self.pos.y)
+			self.collisions('y', self.zone.block_sprites)
+			if not self.dashing: self.collisions('y', self.zone.void_sprites)
+			self.rect.centery = self.hitbox.centery
 
-		# normalise diagonal movement
-		if self.vel.magnitude() > 1:
-			self.vel = self.vel.normalize()
 
 	def state_logic(self):
 		new_state = self.state.state_logic(self)
@@ -100,3 +96,7 @@ class NPC(pygame.sprite.Sprite):
 	def update(self, dt):
 		self.state_logic()
 		self.state.update(dt, self)
+
+
+
+		

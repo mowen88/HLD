@@ -8,7 +8,7 @@ from camera import Camera
 from state import State
 from particles import Particle, Shadow
 from player import Player
-from enemy import Grunt
+from enemy import Grunt, Bullet
 
 class Zone(State):
 	def __init__(self, game):
@@ -49,8 +49,8 @@ class Zone(State):
 
 		# # add the player
 		for obj in tmx_data.get_layer_by_name('entities'):
-			if obj.name == '0': self.player = Player(self.game, self, [self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], 'player')
-			if obj.name == 'grunt': Grunt(self.game, self, [self.enemy_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.name)
+			if obj.name == '0': self.player = Player(self.game, self, [self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'])
+			if obj.name == 'grunt': self.grunt = Grunt(self.game, self, [self.enemy_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.name)
 			self.target = self.player
 
 		for x, y, surf in tmx_data.get_layer_by_name('walls').tiles():
@@ -78,6 +78,12 @@ class Zone(State):
 	
 	def create_gun(self):
 		self.gun_sprite = Gun(self.game, self, [self.updated_sprites, self.rendered_sprites], self.player.hitbox.center, LAYERS['player'], pygame.image.load('../assets/weapons/gun.png').convert_alpha())
+	
+	def enemy_shoot_test(self, angle):
+		for x in range(12):
+			self.bullet = Bullet(self.game, self, [self.updated_sprites, self.rendered_sprites], self.grunt.hitbox.center, LAYERS['player'], angle)
+			angle += 30
+			
 	
 	def get_distance_direction_and_angle(self, point_1, point_2):
 		pos_1 = pygame.math.Vector2(point_1 - self.rendered_sprites.offset)

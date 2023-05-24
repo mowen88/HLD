@@ -87,7 +87,7 @@ class Dash:
 		if self.timer < 0:
 			if player.get_collide_list(player.zone.void_sprites):
 				player.dashing = False
-				player.alive = False
+				player.on_ground = False
 				return FallDeath(self.direction)
 			else: 
 				player.dashing = False
@@ -192,7 +192,7 @@ class FallDeath:
 		if self.timer <= 0: 
 			player.game.screenshaking = False
 			player.z = LAYERS['player']
-			player.alive = True
+			player.on_ground = True
 			player.vel.y = 0
 			player.pos.x = player.respawn_location[0]
 			player.pos.y = player.respawn_location[1]
