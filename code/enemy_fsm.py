@@ -27,5 +27,3 @@ class Move:
 		if enemy.vel.magnitude() > 0.5:
 			enemy.vel = enemy.vel.normalize() * 0.5
 		enemy.animate('idle', 0.2 * dt, 'loop')
-
-		enemy.zone.enemy_shoot_test(5)

@@ -79,10 +79,14 @@ class Zone(State):
 	def create_gun(self):
 		self.gun_sprite = Gun(self.game, self, [self.updated_sprites, self.rendered_sprites], self.player.hitbox.center, LAYERS['player'], pygame.image.load('../assets/weapons/gun.png').convert_alpha())
 	
-	def enemy_shoot_test(self, angle):
-		for x in range(12):
-			self.bullet = Bullet(self.game, self, [self.updated_sprites, self.rendered_sprites], self.grunt.hitbox.center, LAYERS['player'], angle)
-			angle += 30
+	def enemy_view_test(self):
+		angle = 0
+		line_count = 30
+		for x in range(360//line_count):
+			angle += line_count
+			start_point = self.grunt.rect.center - self.rendered_sprites.offset
+			end_point = self.grunt.rect.centerx, self.grunt.rect.centery - 8
+			pygame.draw.line(self.game.screen, WHITE, (pygame.math.Vector2(start_point)), (pygame.math.Vector2(end_point).rotate(angle).normalize() * 30))
 			
 	
 	def get_distance_direction_and_angle(self, point_1, point_2):
@@ -108,7 +112,7 @@ class Zone(State):
 	def draw(self, screen):
 		screen.fill(GREEN)
 		self.rendered_sprites.offset_draw(self.target)
-
+		self.enemy_view_test()
 		# debugging on screen text
 		self.game.render_text(str(round(self.game.clock.get_fps(), 2)), WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.1))
 		self.game.render_text(self.player.angle, PINK, self.game.small_font, RES/2)
