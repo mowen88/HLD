@@ -80,13 +80,31 @@ class Zone(State):
 		self.gun_sprite = Gun(self.game, self, [self.updated_sprites, self.rendered_sprites], self.player.hitbox.center, LAYERS['player'], pygame.image.load('../assets/weapons/gun.png').convert_alpha())
 	
 	def enemy_view_test(self):
+		lines = []
+		dot_products = []
 		angle = 0
 		line_count = 30
-		for x in range(360//line_count):
+		optimum_direction = (pygame.math.Vector2(self.grunt.rect.center - self.rendered_sprites.offset), pygame.math.Vector2(self.player.rect.center - self.rendered_sprites.offset))
+		pygame.draw.line(self.game.screen, PINK, optimum_direction[0], optimum_direction[1])
+
+		for i in range((360//line_count)):
 			angle += line_count
 			start_point = self.grunt.rect.center - self.rendered_sprites.offset
-			end_point = self.grunt.rect.centerx, self.grunt.rect.centery - 8
-			pygame.draw.line(self.game.screen, WHITE, (pygame.math.Vector2(start_point)), (pygame.math.Vector2(end_point).rotate(angle).normalize() * 30))
+			end_point = pygame.math.Vector2(0, -16).rotate(angle).normalize()
+			line = (pygame.math.Vector2(start_point)), (pygame.math.Vector2(start_point) + end_point)
+			#pygame.draw.line(self.game.screen, WHITE, line[0], line[1])
+			dot_product = pygame.math.Vector2(line[0] - line[1]) * pygame.math.Vector2(optimum_direction[0] - optimum_direction[1])
+
+			lines.append(line)
+			dot_products.append(dot_product)
+
+			if dot_product == min(dot_products):
+				pygame.draw.line(self.game.screen, BLUE, (start_point),(end_point - self.rendered_sprites.offset * dot_product))
+
+
+			print(max(dot_products))
+
+			# got the optimum vector from 
 			
 	
 	def get_distance_direction_and_angle(self, point_1, point_2):
