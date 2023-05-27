@@ -84,7 +84,7 @@ class Dash:
 
 	def state_logic(self, player):
 
-		if self.timer < 0:
+		if self.timer <= 0:
 			if player.get_collide_list(player.zone.void_sprites):
 				player.dashing = False
 				player.on_ground = False

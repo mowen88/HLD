@@ -7,6 +7,10 @@ class Grunt(NPC):
 	def __init__(self, game, zone, groups, pos, z, name):
 		super().__init__(game, zone, groups, pos, z, name)
 
+		self.pursue_radius = 90
+		self.attack_radius = 30
+		self.telegraphing_time = 40
+		self.speed = 0.5
 
 class Bullet(pygame.sprite.Sprite):
 	def __init__(self, game, zone, groups, pos, z, angle):

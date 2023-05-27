@@ -1,4 +1,4 @@
-import pygame, math, csv
+import pygame, math, csv, random
 from math import atan2, degrees, pi
 from os import walk
 from settings import *
@@ -53,19 +53,18 @@ class Zone(State):
 			if obj.name == 'grunt': self.grunt = Grunt(self.game, self, [self.enemy_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.name)
 			self.target = self.player
 
-		for x, y, surf in tmx_data.get_layer_by_name('walls').tiles():
-			Object(self.game, self, [self.block_sprites, self.updated_sprites, self.rendered_sprites], (x * TILESIZE, y * TILESIZE), surf)
-
-		for x, y, surf in tmx_data.get_layer_by_name('void').tiles():
-			Void(self.game, self, [self.void_sprites, self.updated_sprites, self.rendered_sprites], (x * TILESIZE, y * TILESIZE), surf)
-
 		for obj in tmx_data.get_layer_by_name('objects'):
 			if obj.name == 'big tree': Tree(self.game, self, [self.block_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
 			if obj.name == 'medium tree': Tree(self.game, self, [self.block_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
 			if obj.name == 'tall tree': Tree(self.game, self, [self.block_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
 			if obj.name == 'red flower': Tree(self.game, self, [self.block_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
 			if obj.name == 'blue flower': Tree(self.game, self, [self.block_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
-			
+		
+		for x, y, surf in tmx_data.get_layer_by_name('walls').tiles():
+			Object(self.game, self, [self.block_sprites, self.updated_sprites], (x * TILESIZE, y * TILESIZE), LAYERS['player'], surf)
+
+		for x, y, surf in tmx_data.get_layer_by_name('void').tiles():
+			Void(self.game, self, [self.void_sprites, self.updated_sprites], (x * TILESIZE, y * TILESIZE), LAYERS['player'], surf)
 		# self.create_guns()
 
 		# create shadows for player and NPCs
@@ -78,35 +77,7 @@ class Zone(State):
 	
 	def create_gun(self):
 		self.gun_sprite = Gun(self.game, self, [self.updated_sprites, self.rendered_sprites], self.player.hitbox.center, LAYERS['player'], pygame.image.load('../assets/weapons/gun.png').convert_alpha())
-	
-	def enemy_view_test(self):
-		lines = []
-		dot_products = []
-		angle = 0
-		line_count = 30
-		optimum_direction = (pygame.math.Vector2(self.grunt.rect.center - self.rendered_sprites.offset), pygame.math.Vector2(self.player.rect.center - self.rendered_sprites.offset))
-		pygame.draw.line(self.game.screen, PINK, optimum_direction[0], optimum_direction[1])
 
-		for i in range((360//line_count)):
-			angle += line_count
-			start_point = self.grunt.rect.center - self.rendered_sprites.offset
-			end_point = pygame.math.Vector2(0, -16).rotate(angle).normalize()
-			line = (pygame.math.Vector2(start_point)), (pygame.math.Vector2(start_point) + end_point)
-			#pygame.draw.line(self.game.screen, WHITE, line[0], line[1])
-			dot_product = pygame.math.Vector2(line[0] - line[1]) * pygame.math.Vector2(optimum_direction[0] - optimum_direction[1])
-
-			lines.append(line)
-			dot_products.append(dot_product)
-
-			if dot_product == min(dot_products):
-				pygame.draw.line(self.game.screen, BLUE, (start_point),(end_point - self.rendered_sprites.offset * dot_product))
-
-
-			print(max(dot_products))
-
-			# got the optimum vector from 
-			
-	
 	def get_distance_direction_and_angle(self, point_1, point_2):
 		pos_1 = pygame.math.Vector2(point_1 - self.rendered_sprites.offset)
 		pos_2 = pygame.math.Vector2(point_2)
@@ -119,7 +90,6 @@ class Zone(State):
 
 		return(distance, direction, angle)
 
-
 	def update(self, dt):
 		
 		if ACTIONS['return']: 
@@ -130,8 +100,6 @@ class Zone(State):
 	def draw(self, screen):
 		screen.fill(GREEN)
 		self.rendered_sprites.offset_draw(self.target)
-		self.enemy_view_test()
-		# debugging on screen text
 		self.game.render_text(str(round(self.game.clock.get_fps(), 2)), WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.1))
-		self.game.render_text(self.player.angle, PINK, self.game.small_font, RES/2)
+		self.game.render_text(self.grunt.alive, PINK, self.game.small_font, RES/2)
 		self.game.render_text(self.player.state, WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.9))

@@ -11,7 +11,8 @@ class NPC(pygame.sprite.Sprite):
 		self.name = name
 
 		self.state = Idle()
-		self.animations = {'idle':[]}
+		self.alive = True
+		self.animations = {'idle':[], 'telegraphing':[]}
 
 		if self.name: self.import_imgs()
 		self.animation_type = 'loop'
