@@ -84,7 +84,7 @@ class Dash:
 
 	def state_logic(self, player):
 
-		if self.timer <= 0:
+		if self.timer < 0:
 			if player.get_collide_list(player.zone.void_sprites):
 				player.dashing = False
 				player.on_ground = False
@@ -144,7 +144,7 @@ class Attack:
 class Shoot:
 	def __init__(self, player, direction):
 
-		self.timer = 50
+		self.timer = 30
 		self.frame_index = 0
 		self.lunge_speed = 1
 		self.get_current_direction = pygame.mouse.get_pos()

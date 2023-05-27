@@ -1,4 +1,4 @@
-import pygame, random
+import pygame
 from settings import *
 
 class Idle:
@@ -10,7 +10,6 @@ class Idle:
 			return Move(enemy)
 
 	def update(self, dt, enemy):
-		
 		enemy.animate('idle', 0.2 * dt, 'loop')
 
 class Move:
@@ -25,50 +24,50 @@ class Move:
 			return Telegraphing(enemy)
 
 	def update(self, dt, enemy):
-		enemy.acc = enemy.zone.get_distance_direction_and_angle(enemy.hitbox.center, enemy.zone.player.hitbox.center - enemy.zone.rendered_sprites.offset)[1] * enemy.speed
-		
-		# if enemy.zone.player.rect.centery > enemy.rect.centery:
-		# 	enemy.acc.x += random.randint(-1, 1)
+		enemy.acc = pygame.math.Vector2()
+		enemy.acc += enemy.zone.get_distance_direction_and_angle(enemy.hitbox.center, enemy.zone.player.hitbox.center - enemy.zone.rendered_sprites.offset)[1] * enemy.speed
 
 		enemy.physics(dt)
-		if enemy.vel.magnitude() > 0.5:
-			enemy.vel = enemy.vel.normalize() * 0.5
 		enemy.animate('idle', 0.2 * dt, 'loop')
+		enemy.direction = enemy.get_direction()
+		print(enemy.get_direction())
 
 
 class Telegraphing:
 	def __init__(self, enemy):
 		self.frame_index = 0
 		self.timer = enemy.telegraphing_time
+		self.attack_direction = pygame.math.Vector2(enemy.zone.player.rect.center - enemy.zone.rendered_sprites.offset)
 
 	def state_logic(self, enemy):
 		if enemy.zone.get_distance_direction_and_angle(enemy.hitbox.center, enemy.zone.player.hitbox.center - enemy.zone.rendered_sprites.offset)[0] > enemy.pursue_radius:
 			return Move(enemy)
 
-		if self.timer < 0:
-			return Attack(enemy)
+		if self.timer > enemy.telegraphing_time/2:
+			self.attack_direction = pygame.math.Vector2(enemy.zone.player.rect.center - enemy.zone.rendered_sprites.offset)
+		elif self.timer < 0 and enemy.zone.player.dashing:
+			return Idle()
+		elif self.timer < 0:
+			return Attack(enemy, self.attack_direction)
 
 	def update(self, dt, enemy):
 		self.timer -= dt
 		enemy.animate('telegraphing', 0.4 * dt, 'loop')
 
 class Attack:
-	def __init__(self, enemy):
-		self.timer = 50
+	def __init__(self, enemy, attack_direction):
+		self.timer = 40
 		enemy.dashing = True
 		self.frame_index = 0
-		self.lunge_speed = 3
-		self.get_current_direction = enemy.zone.player.rect.center - enemy.zone.rendered_sprites.offset
+		self.lunge_speed = 2
+		self.get_current_direction = attack_direction #enemy.zone.player.rect.center - enemy.zone.rendered_sprites.offset
 		enemy.vel = enemy.zone.get_distance_direction_and_angle(enemy.hitbox.center, self.get_current_direction)[1] * self.lunge_speed
 		enemy.angle = enemy.zone.get_distance_direction_and_angle(enemy.hitbox.center, self.get_current_direction)[2]
-		self.direction = enemy.get_direction()
-
+		
 
 	def state_logic(self, enemy):
-		if enemy.zone.get_distance_direction_and_angle(enemy.hitbox.center, enemy.zone.player.hitbox.center - enemy.zone.rendered_sprites.offset)[0] > enemy.pursue_radius:
-			return Move(enemy)
 
-		if self.timer <= 0:
+		if self.timer < 0:
 			if enemy.get_collide_list(enemy.zone.void_sprites):
 				enemy.dashing = False
 				enemy.on_ground = False
@@ -77,15 +76,19 @@ class Attack:
 				enemy.dashing = False
 				return Idle()
 
+		elif enemy.zone.get_distance_direction_and_angle(enemy.hitbox.center, enemy.zone.player.hitbox.center - enemy.zone.rendered_sprites.offset)[0] > enemy.pursue_radius:
+			return Move(enemy)
+
 	def update(self, dt, enemy):
 		
 		enemy.physics(dt)
+		
 		enemy.animate('idle', 0.2 * dt, 'loop')
 
 		self.timer -= dt
 
 		enemy.acc = pygame.math.Vector2()
-		self.lunge_speed -= 0.1 * dt
+		self.lunge_speed -= 0.075 * dt
 		if enemy.vel.magnitude() != 0: enemy.vel = enemy.vel.normalize() * self.lunge_speed
 		if enemy.vel.magnitude() < 0.1: enemy.vel = pygame.math.Vector2()
 

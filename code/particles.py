@@ -25,4 +25,4 @@ class Shadow(Particle):
 		else:
 			self.image.set_alpha(80)
 			self.rect = self.image.get_rect(center = (self.sprite.hitbox.midbottom[0], self.sprite.hitbox.midbottom[1] + self.rect.height))
-	
+		

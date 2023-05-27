@@ -10,7 +10,12 @@ class Grunt(NPC):
 		self.pursue_radius = 90
 		self.attack_radius = 30
 		self.telegraphing_time = 40
-		self.speed = 0.5
+		self.speed = 0.1
+
+	def update(self, dt):
+		if not self.zone.cutscene_running: self.state_logic()
+		self.state.update(dt, self)
+		if self.vel.x > 0: self.image = pygame.transform.flip(self.image, True, False)
 
 class Bullet(pygame.sprite.Sprite):
 	def __init__(self, game, zone, groups, pos, z, angle):

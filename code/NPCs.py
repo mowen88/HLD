@@ -14,10 +14,11 @@ class NPC(pygame.sprite.Sprite):
 		self.alive = True
 		self.animations = {'idle':[], 'telegraphing':[]}
 
+
 		if self.name: self.import_imgs()
 		self.animation_type = 'loop'
 		self.frame_index = 0
-		self.image = pygame.Surface((TILESIZE, TILESIZE))
+		self.image = pygame.Surface((24, 24))
 		self.rect = self.image.get_rect(center = pos)
 		self.pos = pygame.math.Vector2(self.rect.center)
 		self.hitbox = self.rect.copy().inflate(-self.rect.width * 0.6, -self.rect.height * 0.7)

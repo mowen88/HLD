@@ -32,7 +32,7 @@ class Zone(State):
 		self.zone_size = self.get_zone_size()
 
 	def get_zone_size(self):
-		with open(f'../assets/zones/{self.game.current_zone}/{self.game.current_zone}.csv', newline='') as csvfile:
+		with open(f'../assets/zones/{self.game.current_zone}/{self.game.current_zone}_walls.csv', newline='') as csvfile:
 		    reader = csv.reader(csvfile, delimiter=',')
 		    for row in reader:
 		        rows = (sum (1 for row in reader) + 1)
@@ -45,7 +45,7 @@ class Zone(State):
 		# add static image layers
 		Object(self.game, self, [self.rendered_sprites], (0,-8), LAYERS['BG1'], pygame.image.load(f'../assets/zones/{self.game.current_zone}/static_bg.png').convert_alpha())
 		Object(self.game, self, [self.rendered_sprites], (0,-8), LAYERS['floor'], pygame.image.load(f'../assets/zones/{self.game.current_zone}/floor.png').convert_alpha())
-		Object(self.game, self, [self.rendered_sprites], (0,0), LAYERS['floor'], pygame.image.load(f'../assets/zones/{self.game.current_zone}/rocks.png').convert_alpha())
+		Object(self.game, self, [self.rendered_sprites], (0, 0), LAYERS['floor'], pygame.image.load(f'../assets/zones/{self.game.current_zone}/rocks.png').convert_alpha())
 
 		# # add the player
 		for obj in tmx_data.get_layer_by_name('entities'):
@@ -69,6 +69,7 @@ class Zone(State):
 
 		# create shadows for player and NPCs
 		Shadow(self.game, self, [self.updated_sprites, self.rendered_sprites], (self.player.hitbox.midbottom), LAYERS['particles'], self.player)
+
 		for sprite in self.enemy_sprites:
 			Shadow(self.game, self, [self.updated_sprites, self.rendered_sprites], (sprite.hitbox.midbottom), LAYERS['particles'], sprite)
 
@@ -101,5 +102,5 @@ class Zone(State):
 		screen.fill(GREEN)
 		self.rendered_sprites.offset_draw(self.target)
 		self.game.render_text(str(round(self.game.clock.get_fps(), 2)), WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.1))
-		self.game.render_text(self.grunt.alive, PINK, self.game.small_font, RES/2)
+		self.game.render_text(self.grunt.vel, PINK, self.game.small_font, RES/2)
 		self.game.render_text(self.player.state, WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.9))
