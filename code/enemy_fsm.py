@@ -80,9 +80,9 @@ class Attack:
 			return Move(enemy)
 
 	def update(self, dt, enemy):
+		enemy.zone.enemy_attack_logic()
 		
 		enemy.physics(dt)
-		
 		enemy.animate('idle', 0.2 * dt, 'loop')
 
 		self.timer -= dt

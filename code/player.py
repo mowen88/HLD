@@ -13,7 +13,8 @@ class Player(NPC):
 
 		self.state = Idle('down')
 		self.animations = {'up':[], 'down':[], 'left':[], 'right':[], 'up_idle':[], 'down_idle':[], 'left_idle':[], 'right_idle':[],
-							'up_dash':[], 'down_dash':[], 'left_dash':[], 'right_dash':[], 'up_fall':[], 'down_fall':[], 'left_fall':[], 'right_fall':[]}
+							'up_dash':[], 'down_dash':[], 'left_dash':[], 'right_dash':[], 'up_fall':[], 'down_fall':[], 'left_fall':[], 'right_fall':[],
+							'up_attack':[], 'down_attack':[], 'left_attack':[], 'right_attack':[]}
 	
 		self.direction = {'up': False, 'down': False, 'left': False, 'right': False}
 	
@@ -25,11 +26,26 @@ class Player(NPC):
 		self.pos = pygame.math.Vector2(self.rect.center)
 		self.hitbox = self.rect.copy().inflate(-self.rect.width * 0.6, -self.rect.height * 0.7)
 
-
 		self.respawn_location = pygame.math.Vector2()
 
+		# attacking
+		self.attack_count = 0
+		self.attack_timer_running = False
+		self.attack_timer = 0
+		self.attack_cooldown = 100
+
+	def attack_logic(self, dt):
+		if self.attack_timer_running: 
+			self.attack_timer += 1 *dt
+		if self.attack_timer >= self.attack_cooldown: 
+			self.attack_timer_running = False
+			self.attack_count = 0
+			self.attack_timer = 0
+
 	def update(self, dt):
-		if not self.zone.cutscene_running and self.zone.alpha < 100: self.state_logic()
+		self.invibility(dt)
+		self.attack_logic(dt)
+		if not self.zone.cutscene_running: self.state_logic()
 		self.state.update(dt, self)
 		
 

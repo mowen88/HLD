@@ -23,6 +23,10 @@ class Game:
         self.entry_point = '0'
         self.load_states()
 
+        #stats
+        self.current_health = PLAYER_DATA['max_health']
+        self.current_bullets = PLAYER_DATA['max_bullets']
+
     def get_events(self):
         for event in pygame.event.get(): 
             if event.type == pygame.QUIT:

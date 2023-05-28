@@ -10,7 +10,15 @@ class Grunt(NPC):
 		self.pursue_radius = 90
 		self.attack_radius = 30
 		self.telegraphing_time = 40
-		self.speed = 0.1
+
+		self.data = ENEMY_DATA[name]
+
+		self.speed = self.data['speed']
+		self.health = self.data['health']
+		self.damage = self.data['damage']
+		self.attack_radius = self.data['attack_radius']
+		self.pursue_radius = self.data['pursue_radius']
+		self.telegraphing_time = self.data['telegraphing_time']
 
 	def update(self, dt):
 		if not self.zone.cutscene_running: self.state_logic()

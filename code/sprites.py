@@ -63,6 +63,7 @@ class Sword(pygame.sprite.Sprite):
 		self.zone = zone
 		self.z = z
 		self.frames = self.game.get_folder_images(path)
+		self.opposite_frames = self.game.get_folder_images(path +'_2')
 		self.frame_index = 0
 		self.image = self.frames[self.frame_index]
 		self.rect = self.image.get_rect(center = pos)
@@ -70,8 +71,9 @@ class Sword(pygame.sprite.Sprite):
 	def animate(self, animation_speed):
 		self.frame_index += animation_speed
 		if self.frame_index >= len(self.frames)-1: self.kill()
-		else: self.frame_index = self.frame_index % len(self.frames)
-		self.image = self.frames[int(self.frame_index)]
+		
+		if self.zone.player.attack_count % 2 == 0: self.image = self.opposite_frames[int(self.frame_index)]
+		else: self.image = self.frames[int(self.frame_index)]
 
 	def update(self, dt):
 		self.animate(0.25 * dt)

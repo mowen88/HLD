@@ -8,29 +8,24 @@ from camera import Camera
 from state import State
 from particles import Particle, Shadow
 from player import Player
+from NPCs import Warrior
 from enemy import Grunt, Bullet
 
 class Zone(State):
-	def __init__(self, game, zone_name, entry_point):
+	def __init__(self, game, name, entry_point):
 		State.__init__(self, game)
 
 		
 		self.game = game
-		self.zone_name = zone_name
+		self.name = name
 		self.entry_point = entry_point
 		self.cutscene_running = False
-		self.exiting = False
 		self.entering = True
 		self.new_zone = None
 
 		self.fade_surf = pygame.Surface((RES))
 		self.fade_surf.fill(BLACK)
 		self.alpha = 255
-
-		self.cutscene_running = False
-		self.dialog_running = False
-		self.npc_collided = False
-		self.fade_timer = 0
 
 		#sprites
 		self.melee_sprite = pygame.sprite.GroupSingle()
@@ -47,9 +42,8 @@ class Zone(State):
 		self.create_map()
 		self.zone_size = self.get_zone_size()
 
-
 	def get_zone_size(self):
-		with open(f'../zones/{self.zone_name}/{self.zone_name}_walls.csv', newline='') as csvfile:
+		with open(f'../zones/{self.name}/{self.name}_walls.csv', newline='') as csvfile:
 		    reader = csv.reader(csvfile, delimiter=',')
 		    for row in reader:
 		        rows = (sum (1 for row in reader) + 1)
@@ -57,17 +51,16 @@ class Zone(State):
 		return (cols * TILESIZE, rows * TILESIZE)
 
 	def create_map(self):
-		tmx_data = load_pygame(f'../zones/{self.zone_name}/{self.zone_name}.tmx')
+		tmx_data = load_pygame(f'../zones/{self.name}/{self.name}.tmx')
 
 		# add static image layers
-		Object(self.game, self, [self.rendered_sprites], (0,-8), LAYERS['BG1'], pygame.image.load(f'../zones/{self.zone_name}/static_bg.png').convert_alpha())
-		Object(self.game, self, [self.rendered_sprites], (0,-8), LAYERS['floor'], pygame.image.load(f'../zones/{self.zone_name}/floor.png').convert_alpha())
-		Object(self.game, self, [self.rendered_sprites], (0, 0), LAYERS['floor'], pygame.image.load(f'../zones/{self.zone_name}/rocks.png').convert_alpha())
+		Object(self.game, self, [self.rendered_sprites], (0,-8), LAYERS['BG1'], pygame.image.load(f'../zones/{self.name}/static_bg.png').convert_alpha())
+		Object(self.game, self, [self.rendered_sprites], (0,-8), LAYERS['floor'], pygame.image.load(f'../zones/{self.name}/floor.png').convert_alpha())
+		Object(self.game, self, [self.rendered_sprites], (0, 0), LAYERS['floor'], pygame.image.load(f'../zones/{self.name}/rocks.png').convert_alpha())
 
 		# # add the player
 		for obj in tmx_data.get_layer_by_name('entries'):
 			if obj.name == self.entry_point: self.player = Player(self.game, self, [self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'])
-			
 
 		for obj in tmx_data.get_layer_by_name('exits'):
 			if obj.name == '1': Exit([self.exit_sprites, self.updated_sprites], (obj.x, obj.y ), obj.name)
@@ -75,6 +68,7 @@ class Zone(State):
 
 		for obj in tmx_data.get_layer_by_name('entities'):
 			if obj.name == 'grunt': self.grunt = Grunt(self.game, self, [self.enemy_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.name)
+			if obj.name == 'warrior': self.warrior = Warrior(self.game, self, [self.enemy_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.name)
 
 		for obj in tmx_data.get_layer_by_name('objects'):
 			if obj.name == 'big tree': Tree(self.game, self, [self.block_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
@@ -97,10 +91,27 @@ class Zone(State):
 			Shadow(self.game, self, [self.updated_sprites, self.rendered_sprites], (sprite.hitbox.midbottom), LAYERS['particles'], sprite)
 
 	def create_melee(self):
-		self.melee_sprite = Sword(self.game, self, [self.updated_sprites, self.rendered_sprites], self.player.hitbox.center, LAYERS['player'], '../assets/weapons/sword_1/')
+		self.melee_sprite = Sword(self.game, self, [self.updated_sprites, self.rendered_sprites], self.player.hitbox.center, LAYERS['player'], '../assets/weapons/sword')
 	
 	def create_gun(self):
 		self.gun_sprite = Gun(self.game, self, [self.updated_sprites, self.rendered_sprites], self.player.hitbox.center, LAYERS['player'], pygame.image.load('../assets/weapons/gun.png').convert_alpha())
+
+	def enemy_attack_logic(self):
+		if not self.player.dashing:
+			for sprite in self.enemy_sprites:
+				if not self.player.invincible and self.player.alive and sprite.dashing:
+					if sprite.hitbox.colliderect(self.player.hitbox):
+						self.reduce_health(sprite.damage)
+						self.player.invincible = True
+						
+	def reduce_health(self, amount):
+		if not self.player.invincible:
+			self.game.current_health -= amount
+			if self.game.current_health <= 0:
+				self.player.alive = False
+				self.game.current_health = PLAYER_DATA['max_health']
+				self.exit_state()
+				Zone(self.game, self.name, self.entry_point).enter_state()
 
 	def get_distance_direction_and_angle(self, point_1, point_2):
 		pos_1 = pygame.math.Vector2(point_1 - self.rendered_sprites.offset)
@@ -118,12 +129,11 @@ class Zone(State):
 		for sprite in self.exit_sprites:
 			if sprite.rect.colliderect(self.player.hitbox):
 				self.cutscene_running = True
-				self.new_zone = ZONE_DATA[self.zone_name][sprite.name]
+				self.new_zone = ZONE_DATA[self.name][sprite.name]
 				self.entry_point = sprite.name
-				self.exiting = True
-
+				
 	def fade_update(self, dt):
-		if self.exiting:
+		if self.cutscene_running:
 			self.alpha += 4 * dt
 			if self.alpha >= 255: 
 				self.alpha = 255
@@ -141,19 +151,21 @@ class Zone(State):
 		screen.blit(self.fade_surf, (0,0))
 
 	def update(self, dt):
-		self.exit_zone()
-		self.fade_update(dt)
-		
+
 		if ACTIONS['return']: 
 			self.exit_state()
 			self.game.reset_keys()
 		self.updated_sprites.update(dt)
 
+		self.exit_zone()
+		self.fade_update(dt)
+
 	def draw(self, screen):
 		screen.fill(GREEN)
 		self.rendered_sprites.offset_draw(self.player)
 		self.fade_draw(screen)
+
 		self.game.render_text(str(round(self.game.clock.get_fps(), 2)), WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.1))
-		self.game.render_text(self.zone_name, PINK, self.game.small_font, RES/2)
-		self.game.render_text(self.player.state, WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.9))
+		self.game.render_text(self.game.current_health, PINK, self.game.small_font, RES/2)
+		self.game.render_text(self.player.invincible, WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.9))
 		

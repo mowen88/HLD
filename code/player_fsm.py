@@ -6,7 +6,6 @@ class Idle:
 		self.frame_index = 0
 		self.direction = direction
 
-
 	def state_logic(self, player):
 
 		if ACTIONS['right_ctrl']:
@@ -15,7 +14,7 @@ class Idle:
 		if ACTIONS['right_click']:
 			return Dash(player, self.direction)
 
-		if ACTIONS['left_click']:
+		if ACTIONS['left_click'] and player.attack_count < 3:
 			return Attack(player, self.direction)
 
 		for k, v in player.direction.items():
@@ -39,7 +38,7 @@ class Move:
 		if ACTIONS['right_click']:
 			return Dash(player, self.direction)
 
-		if ACTIONS['left_click']:
+		if ACTIONS['left_click'] and player.attack_count < 3:
 			return Attack(player, self.direction)
 	
 		for k, v in player.direction.items():
@@ -110,13 +109,16 @@ class Attack:
 
 		ACTIONS['left_click'] = False
 
+		player.attack_count += 1
+		player.attack_timer_running = True
+		self.direction = player.get_direction()
+
 		self.timer = 25
 		self.frame_index = 0
 		self.lunge_speed = 1
 		self.get_current_direction = pygame.mouse.get_pos()
 		player.vel = player.zone.get_distance_direction_and_angle(player.hitbox.center, self.get_current_direction)[1] * self.lunge_speed
 		player.angle = player.zone.get_distance_direction_and_angle(player.hitbox.center, self.get_current_direction)[2]
-		self.direction = player.get_direction()
 
 		player.zone.create_melee()
 
@@ -133,7 +135,7 @@ class Attack:
 	def update(self, dt, player):
 		ACTIONS['right_ctrl'] = False
 		player.physics(dt)
-		player.animate(self.direction + '_dash', 0.2 * dt, 'end')
+		player.animate(self.direction + '_attack', 0.2 * dt, 'loop')
 		
 		self.timer -= dt
 		player.acc = pygame.math.Vector2()
@@ -198,7 +200,7 @@ class FallDeath:
 			player.pos.y = player.respawn_location[1]
 			player.hitbox.center = (player.pos.x, player.pos.y)
 			player.rect.center = player.hitbox.center
-			
+			player.zone.reduce_health(1)
 			return Idle(self.direction)
 
 	def update(self, dt, player):

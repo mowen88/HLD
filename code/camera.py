@@ -10,7 +10,7 @@ class Camera(pygame.sprite.Group):
 		self.offset = pygame.math.Vector2()
 		self.screenshake_timer = 0
 
-		self.BG0 = pygame.image.load(f'../zones/{self.game.current_zone}/bg.png').convert_alpha()
+		self.BG0 = pygame.image.load(f'../zones/{self.zone.name}/bg.png').convert_alpha()
 
 	def screenshake(self):
 		if self.game.screenshaking:

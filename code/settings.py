@@ -7,6 +7,12 @@ HALF_WIDTH, HALF_HEIGHT = RES/2
 
 FONT = '../fonts/Pokemon Classic.ttf'
 
+PLAYER_DATA = {'max_health': 6, 'max_bullets': 6}
+
+ENEMY_DATA = {
+	'grunt':{'speed': 0.1, 'damage': 1, 'health': 3, 'telegraphing_time': 40, 'attack_radius': 30, 'pursue_radius': 90}
+}
+
 ZONE_DATA = {
 	'garden':{'1': 'dungeon', '2': 'dungeon'},
 	'dungeon':{'1':'garden', '2':'garden'},

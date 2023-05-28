@@ -11,6 +11,8 @@ class NPC(pygame.sprite.Sprite):
 		self.name = name
 
 		self.state = Idle()
+		self.invincible = False
+		self.invincibility_timer = 0
 		self.alive = True
 		self.animations = {'idle':[], 'telegraphing':[]}
 
@@ -89,6 +91,12 @@ class NPC(pygame.sprite.Sprite):
 			if not self.dashing: self.collisions('y', self.zone.void_sprites)
 			self.rect.centery = self.hitbox.centery
 
+	def invibility(self, dt):
+		if self.invincible:
+			self.invincibility_timer += dt
+			if self.invincibility_timer >= 20:
+				self.invincible = False
+				self.invincibility_timer = 0
 
 	def state_logic(self):
 		new_state = self.state.state_logic(self)
@@ -102,3 +110,11 @@ class NPC(pygame.sprite.Sprite):
 
 
 		
+
+class Warrior(NPC):
+	def __init__(self, game, zone, groups, pos, z, name):
+		super().__init__(game, zone, groups, pos, z, name)
+
+
+	def update(self, dt):
+		self.animate('idle', 0.4 * dt, 'loop')
