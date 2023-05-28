@@ -8,9 +8,8 @@ HALF_WIDTH, HALF_HEIGHT = RES/2
 FONT = '../fonts/Pokemon Classic.ttf'
 
 ZONE_DATA = {
-	'garden':{1: 'abyss', 2: 'dungeon'},
-	'dungeon':{1:'garden', 2:'garden'},
-	'abyss':{1:'garden', 2: 'garden'}
+	'garden':{'1': 'dungeon', '2': 'dungeon'},
+	'dungeon':{'1':'garden', '2':'garden'},
 }
 
 LAYERS = {

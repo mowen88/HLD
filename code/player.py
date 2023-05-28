@@ -29,7 +29,7 @@ class Player(NPC):
 		self.respawn_location = pygame.math.Vector2()
 
 	def update(self, dt):
-		if not self.zone.cutscene_running: self.state_logic()
+		if not self.zone.cutscene_running and self.zone.alpha < 100: self.state_logic()
 		self.state.update(dt, self)
 		
 

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="32" height="27" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="41">
+<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="32" height="27" tilewidth="16" tileheight="16" infinite="0" nextlayerid="12" nextobjectid="51">
  <editorsettings>
   <export target="garden.csv" format="csv"/>
  </editorsettings>
- <tileset firstgid="1" source="objects.tsx"/>
+ <tileset firstgid="1" source="../../objects.tsx"/>
  <tileset firstgid="7" source="../../tileset.tsx"/>
  <imagelayer id="2" name="bg">
   <image source="bg.png" width="512" height="432"/>
@@ -88,6 +88,16 @@
   <object id="40" name="0" x="128.466" y="392.74">
    <point/>
   </object>
+  <object id="43" name="1" x="37.9282" y="400.081">
+   <point/>
+  </object>
+  <object id="44" name="2" x="485.114" y="370.717">
+   <point/>
+  </object>
+ </objectgroup>
+ <objectgroup id="11" name="exits">
+  <object id="41" name="2" x="497.349" y="364.6" width="24.4698" height="11.6232"/>
+  <object id="42" name="1" x="-13.4584" y="389.682" width="33.646" height="18.3524"/>
  </objectgroup>
  <objectgroup id="4" name="objects">
   <object id="3" x="157.218" y="308.931" visible="0"/>
@@ -110,5 +120,10 @@
   <object id="24" name="tall tree" gid="6" x="256.274" y="412.411" width="16" height="32"/>
   <object id="25" name="tall tree" gid="6" x="277.073" y="400.788" width="16" height="32"/>
   <object id="26" name="tall tree" gid="6" x="266.062" y="395.282" width="16" height="32"/>
+  <object id="45" name="big tree" gid="1" x="-17.8825" y="389.212" width="48" height="48"/>
+  <object id="46" name="big tree" gid="1" x="46.3507" y="392.271" width="48" height="48"/>
+  <object id="47" name="medium tree" gid="3" x="24.3752" y="397.729" width="32" height="32"/>
+  <object id="48" name="medium tree" gid="3" x="35.3866" y="367.753" width="32" height="32"/>
+  <object id="49" name="small tree" gid="5" x="14.6346" y="395.846" width="16" height="16"/>
  </objectgroup>
 </map>

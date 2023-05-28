@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="48" height="18" tilewidth="16" tileheight="16" infinite="0" nextlayerid="8" nextobjectid="4">
+<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="48" height="18" tilewidth="16" tileheight="16" infinite="0" nextlayerid="12" nextobjectid="14">
  <editorsettings>
-  <export target="1.csv" format="csv"/>
+  <export target="dungeon.csv" format="csv"/>
  </editorsettings>
  <tileset firstgid="1" source="../../tileset.tsx"/>
+ <tileset firstgid="3" source="../../objects.tsx"/>
  <imagelayer id="2" name="bg">
   <image source="bg.png" width="768" height="288"/>
  </imagelayer>
- <imagelayer id="3" name="floor" offsetx="0" offsety="-8">
+ <imagelayer id="10" name="floor" offsetx="0" offsety="-8">
   <image source="floor.png" width="768" height="288"/>
  </imagelayer>
  <layer id="4" name="walls" width="48" height="18">
@@ -44,9 +45,9 @@
 2,2,2,2,2,2,2,2,2,2,0,0,0,0,0,0,0,2,2,2,2,2,0,0,0,0,0,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
 2,2,2,2,2,2,2,2,2,2,0,0,0,0,0,0,0,2,2,2,2,2,0,0,0,0,0,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
 2,2,2,2,2,2,2,2,2,2,0,0,0,0,0,0,0,2,2,2,2,2,0,0,0,0,0,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
-2,2,2,2,2,2,2,2,2,2,0,0,0,0,0,0,0,2,2,2,2,2,0,0,0,0,0,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
-2,2,2,2,2,2,2,2,2,2,0,0,0,0,0,0,0,2,2,2,2,2,0,0,0,0,0,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
-2,2,2,2,2,2,2,2,2,2,0,0,0,0,0,0,0,2,2,2,2,2,0,0,0,0,0,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,2,2,2,0,0,0,0,0,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,2,2,2,0,0,0,0,0,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,2,2,2,0,0,0,0,0,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
 2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
 2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
 2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
@@ -55,12 +56,27 @@
 </data>
  </layer>
  <objectgroup id="6" name="entities">
-  <object id="1" name="0" x="409.257" y="178.935">
-   <point/>
-  </object>
   <object id="3" name="grunt" x="327" y="60">
    <point/>
   </object>
  </objectgroup>
- <objectgroup id="7" name="objects"/>
+ <objectgroup id="8" name="entries">
+  <object id="4" name="0" x="209.217" y="173.43">
+   <point/>
+  </object>
+  <object id="5" name="2" x="38.5399" y="185.359">
+   <point/>
+  </object>
+  <object id="12" name="1" x="431.28" y="175.265">
+   <point/>
+  </object>
+ </objectgroup>
+ <objectgroup id="9" name="exits">
+  <object id="6" name="2" x="-17.4347" y="174.348" width="37.6223" height="23.8581"/>
+  <object id="13" name="1" x="450.55" y="173.43" width="40.3752" height="39.4576"/>
+ </objectgroup>
+ <objectgroup id="7" name="objects">
+  <object id="7" name="medium tree" gid="5" x="235.427" y="197.688" width="32" height="32"/>
+  <object id="8" name="tall tree" gid="8" x="230.581" y="207.782" width="16" height="32"/>
+ </objectgroup>
 </map>
