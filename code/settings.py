@@ -7,6 +7,12 @@ HALF_WIDTH, HALF_HEIGHT = RES/2
 
 FONT = '../fonts/Pokemon Classic.ttf'
 
+ZONE_DATA = {
+	'garden':{1: 'abyss', 2: 'dungeon'},
+	'dungeon':{1:'garden', 2:'garden'},
+	'abyss':{1:'garden', 2: 'garden'}
+}
+
 LAYERS = {
 	'BG0': 0,
 	'BG1': 1,
@@ -20,7 +26,6 @@ LAYERS = {
 	'explosions': 9,
 	'foreground': 10
 }
-
 
 # key events
 ACTIONS = {'escape': False, 'space': False, 'up': False, 'down': False, 'left': False,

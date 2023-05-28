@@ -32,7 +32,7 @@ class Zone(State):
 		self.zone_size = self.get_zone_size()
 
 	def get_zone_size(self):
-		with open(f'../assets/zones/{self.game.current_zone}/{self.game.current_zone}_walls.csv', newline='') as csvfile:
+		with open(f'../zones/{self.game.current_zone}/{self.game.current_zone}_walls.csv', newline='') as csvfile:
 		    reader = csv.reader(csvfile, delimiter=',')
 		    for row in reader:
 		        rows = (sum (1 for row in reader) + 1)
@@ -40,18 +40,19 @@ class Zone(State):
 		return (cols * TILESIZE, rows * TILESIZE)
 
 	def create_map(self):
-		tmx_data = load_pygame(f'../assets/zones/{self.game.current_zone}/{self.game.current_zone}.tmx')
+		tmx_data = load_pygame(f'../zones/{self.game.current_zone}/{self.game.current_zone}.tmx')
 
 		# add static image layers
-		Object(self.game, self, [self.rendered_sprites], (0,-8), LAYERS['BG1'], pygame.image.load(f'../assets/zones/{self.game.current_zone}/static_bg.png').convert_alpha())
-		Object(self.game, self, [self.rendered_sprites], (0,-8), LAYERS['floor'], pygame.image.load(f'../assets/zones/{self.game.current_zone}/floor.png').convert_alpha())
-		Object(self.game, self, [self.rendered_sprites], (0, 0), LAYERS['floor'], pygame.image.load(f'../assets/zones/{self.game.current_zone}/rocks.png').convert_alpha())
+		Object(self.game, self, [self.rendered_sprites], (0,-8), LAYERS['BG1'], pygame.image.load(f'../zones/{self.game.current_zone}/static_bg.png').convert_alpha())
+		Object(self.game, self, [self.rendered_sprites], (0,-8), LAYERS['floor'], pygame.image.load(f'../zones/{self.game.current_zone}/floor.png').convert_alpha())
+		Object(self.game, self, [self.rendered_sprites], (0, 0), LAYERS['floor'], pygame.image.load(f'../zones/{self.game.current_zone}/rocks.png').convert_alpha())
 
 		# # add the player
-		for obj in tmx_data.get_layer_by_name('entities'):
+		for obj in tmx_data.get_layer_by_name('entries'):
 			if obj.name == '0': self.player = Player(self.game, self, [self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'])
-			if obj.name == 'grunt': self.grunt = Grunt(self.game, self, [self.enemy_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.name)
 			self.target = self.player
+		for obj in tmx_data.get_layer_by_name('entities'):
+			if obj.name == 'grunt': self.grunt = Grunt(self.game, self, [self.enemy_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.name)
 
 		for obj in tmx_data.get_layer_by_name('objects'):
 			if obj.name == 'big tree': Tree(self.game, self, [self.block_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)

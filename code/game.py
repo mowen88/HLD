@@ -19,7 +19,7 @@ class Game:
         # states
         self.stack = []
         self.screenshaking = False
-        self.current_zone = 0
+        self.current_zone = 'garden'
         self.load_states()
 
     def get_events(self):
