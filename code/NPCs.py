@@ -111,7 +111,7 @@ class NPC(pygame.sprite.Sprite):
 	def invincibility(self, dt):
 		if self.invincible:
 			self.invincibility_timer += dt
-			if self.invincibility_timer >= 20:
+			if self.invincibility_timer >= 15:
 				self.invincible = False
 				self.invincibility_timer = 0
 

@@ -19,8 +19,7 @@ class Game:
         # states
         self.stack = []
         self.screenshaking = False
-        self.current_zone = 'garden'
-        self.entry_point = '0'
+      
         self.load_states()
 
         #stats

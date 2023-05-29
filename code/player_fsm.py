@@ -4,12 +4,12 @@ from settings import *
 class Idle:
 	def __init__(self, player, direction):
 		player.frame_index = 0
-		self.direction = player.get_direction()
+		self.direction = direction
 
 	def state_logic(self, player):
-		
+		keys = pygame.key.get_pressed()
 
-		if player.keys[pygame.K_RCTRL]:
+		if keys[pygame.K_RCTRL]:
 			return Shoot(player, self.direction)
 
 		if ACTIONS['right_click'] and player.dash_count < 3:

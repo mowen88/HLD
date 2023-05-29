@@ -11,9 +11,8 @@ class Player(NPC):
 		self.zone = zone
 		self.z = z
 
-		self.keys = pygame.key.get_pressed()
+		self.state = Idle(self, self.zone.start_direction)
 
-		self.state = Idle(self, 'down')
 		self.animations = {'up':[], 'down':[], 'left':[], 'right':[], 'up_idle':[], 'down_idle':[], 'left_idle':[], 'right_idle':[],
 							'up_dash':[], 'down_dash':[], 'left_dash':[], 'right_dash':[], 'up_fall':[], 'down_fall':[], 'left_fall':[], 'right_fall':[],
 							'up_attack':[], 'down_attack':[], 'left_attack':[], 'right_attack':[]}
@@ -41,6 +40,7 @@ class Player(NPC):
 		self.dash_timer_running = False
 		self.dash_timer = 0
 		self.dash_cooldown = 100
+
 
 	def attack_logic(self, dt):
 		if self.attack_timer_running: 

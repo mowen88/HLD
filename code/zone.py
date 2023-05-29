@@ -35,8 +35,8 @@ class Zone(State):
 		self.enemy_sprites = pygame.sprite.Group()
 		self.gun_sprites = pygame.sprite.Group()
 
-		self.create_map()
 		self.zone_size = self.get_zone_size()
+		self.create_map()
 
 		self.fade_surf = FadeSurf(self, [self.updated_sprites, self.rendered_sprites], (0,0))
 
@@ -53,8 +53,16 @@ class Zone(State):
 	
 		# # add the player
 		for obj in tmx_data.get_layer_by_name('entries'):
-			if obj.name == self.entry_point: self.player = Player(self.game, self, [self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'])
+			if obj.name == self.entry_point:
 
+				if obj.x > self.zone_size[0] - (self.zone_size[0]/5): self.start_direction = 'left'
+				elif obj.x < self.zone_size[0]/5: self.start_direction = 'right'
+				elif obj.y < self.zone_size[1]/2: self.start_direction = 'down'
+
+				else: self.start_direction = 'up'
+
+				self.player = Player(self.game, self, [self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'])
+				
 
 		for obj in tmx_data.get_layer_by_name('exits'):
 			if obj.name == '1': Exit([self.exit_sprites, self.updated_sprites], (obj.x, obj.y ), obj.name)
@@ -118,7 +126,7 @@ class Zone(State):
 	def player_attacking_logic(self):
 		if self.melee_sprite:
 			for target in self.enemy_sprites:
-				if self.melee_sprite.rect.colliderect(target.hitbox):
+				if self.melee_sprite.rect.colliderect(target.hitbox) and self.melee_sprite.frame_index < 1:
 					if not target.invincible and target.alive:
 						target.invincible = True
 						target.health -= 1
@@ -129,7 +137,7 @@ class Zone(State):
 
 	def enemy_attacking_logic(self):
 		for sprite in self.enemy_sprites:
-			if not self.player.invincible and self.player.alive and sprite.dashing:
+			if not self.player.invincible and not sprite.invincible and self.player.alive and sprite.dashing:
 				if sprite.hitbox.colliderect(self.player.hitbox):
 					self.reduce_health(sprite.damage)
 					self.game.screenshaking = True
