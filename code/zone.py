@@ -3,7 +3,7 @@ from math import atan2, degrees, pi
 from os import walk
 from settings import *
 from pytmx.util_pygame import load_pygame
-from sprites import FadeSurf, Exit, Object, Void, Gun, Sword, Tree
+from sprites import FadeSurf, Exit, Object, Void, Gun, Sword, Bullet, Tree
 from camera import Camera
 from state import State
 from particles import Particle, Shadow
@@ -101,6 +101,9 @@ class Zone(State):
 	
 	def create_gun(self):
 		self.gun_sprite = Gun(self.game, self, [self.updated_sprites, self.rendered_sprites], self.player.hitbox.center, LAYERS['player'], pygame.image.load('../assets/weapons/gun.png').convert_alpha())
+
+	def create_bullet(self):
+		self.bulllet = Bullet(self.game, self, [self.updated_sprites, self.rendered_sprites], self.player.hitbox.center, LAYERS['particles'], '../assets/weapons/bullet')
 
 	# def enemy_enemy_collisions(self):
 	# 	enemies = []

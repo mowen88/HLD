@@ -118,6 +118,30 @@ class Sword(pygame.sprite.Sprite):
 		else:
 			self.rect = self.image.get_rect(midbottom = self.zone.player.hitbox.center)
 
+class Bullet(pygame.sprite.Sprite):
+	def __init__(self, game, zone, groups, pos, z, path):
+		super().__init__(groups)
+
+		self.game = game
+		self.zone = zone
+		self.z = z
+		self.frames = self.game.get_folder_images(path)
+		self.frame_index = 0
+		self.image = self.frames[self.frame_index]
+		self.rect = self.image.get_rect(center = pos)
+
+		self.vel = self.zone.get_distance_direction_and_angle(self.rect.center, pygame.mouse.get_pos())[1]
+		self.pos = pygame.math.Vector2(self.rect.center)
+
+	def animate(self, animation_speed):
+		self.frame_index += animation_speed
+		self.frame_index = self.frame_index % len(self.frames)
+		self.image = self.frames[int(self.frame_index)]
+
+	def update(self, dt):
+		self.animate(0.25 * dt)
+		self.pos += self.vel
+		self.rect.center = self.pos
 
 			
 
