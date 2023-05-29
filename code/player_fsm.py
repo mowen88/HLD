@@ -7,9 +7,9 @@ class Idle:
 		self.direction = player.get_direction()
 
 	def state_logic(self, player):
+		
 
-		if ACTIONS['right_ctrl']:
-			player.game.reset_keys()
+		if player.keys[pygame.K_RCTRL]:
 			return Shoot(player, self.direction)
 
 		if ACTIONS['right_click'] and player.dash_count < 3:
@@ -32,8 +32,9 @@ class Move:
 		self.direction = direction
 
 	def state_logic(self, player):
+		keys = pygame.key.get_pressed()
 
-		if ACTIONS['right_ctrl']:
+		if keys[pygame.K_RCTRL]:
 			return Shoot(player, self.direction)
 
 		if ACTIONS['right_click'] and player.dash_count < 3:
@@ -98,7 +99,6 @@ class Dash:
 
 	def update(self, dt, player):
 
-		ACTIONS['right_ctrl'] = False
 		self.timer -= dt
 
 		player.physics(dt)
@@ -139,7 +139,6 @@ class Attack:
 
 	def update(self, dt, player):
 		if self.timer > 10: player.zone.player_attacking_logic()
-		ACTIONS['right_ctrl'] = False
 		player.physics(dt)
 		player.animate(self.direction + '_attack', 0.2 * dt, 'loop')
 		

@@ -11,6 +11,8 @@ class Player(NPC):
 		self.zone = zone
 		self.z = z
 
+		self.keys = pygame.key.get_pressed()
+
 		self.state = Idle(self, 'down')
 		self.animations = {'up':[], 'down':[], 'left':[], 'right':[], 'up_idle':[], 'down_idle':[], 'left_idle':[], 'right_idle':[],
 							'up_dash':[], 'down_dash':[], 'left_dash':[], 'right_dash':[], 'up_fall':[], 'down_fall':[], 'left_fall':[], 'right_fall':[],
