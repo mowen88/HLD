@@ -43,10 +43,11 @@ class Player(NPC):
 			self.attack_timer = 0
 
 	def update(self, dt):
-		self.invibility(dt)
+		self.invincibility(dt)
 		self.attack_logic(dt)
 		if not self.zone.cutscene_running: self.state_logic()
 		self.state.update(dt, self)
 		
+
 
 		

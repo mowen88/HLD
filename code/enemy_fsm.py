@@ -51,7 +51,8 @@ class Telegraphing:
 			return Attack(enemy, self.attack_direction)
 
 	def update(self, dt, enemy):
-		self.timer -= dt
+		if not enemy.invincible:
+			self.timer -= dt
 		enemy.animate('telegraphing', 0.4 * dt, 'loop')
 
 class Attack:
@@ -59,11 +60,10 @@ class Attack:
 		self.timer = 40
 		enemy.dashing = True
 		self.frame_index = 0
-		self.lunge_speed = 2
+		self.lunge_speed = enemy.lunge_speed
 		self.get_current_direction = attack_direction #enemy.zone.player.rect.center - enemy.zone.rendered_sprites.offset
 		enemy.vel = enemy.zone.get_distance_direction_and_angle(enemy.hitbox.center, self.get_current_direction)[1] * self.lunge_speed
 		enemy.angle = enemy.zone.get_distance_direction_and_angle(enemy.hitbox.center, self.get_current_direction)[2]
-		
 
 	def state_logic(self, enemy):
 
@@ -80,10 +80,10 @@ class Attack:
 			return Move(enemy)
 
 	def update(self, dt, enemy):
-		enemy.zone.enemy_attack_logic()
+		if enemy.vel.magnitude() > 0.5: enemy.zone.enemy_attacking_logic()
 		
 		enemy.physics(dt)
-		enemy.animate('idle', 0.2 * dt, 'loop')
+		enemy.animate('idle', 0.2 * dt, 'end')
 
 		self.timer -= dt
 

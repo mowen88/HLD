@@ -68,14 +68,14 @@ class Move:
 class Dash:
 	def __init__(self, player, direction):
 		
-		self.timer = 30
+		self.timer = 20
 		player.dashing = True
 		player.respawn_location = player.rect.center
 
 		ACTIONS['right_click'] = False
 
 		self.frame_index = 0
-		self.lunge_speed = 5
+		self.lunge_speed = 6
 		self.get_current_direction = pygame.mouse.get_pos()
 		player.vel = player.zone.get_distance_direction_and_angle(player.hitbox.center, self.get_current_direction)[1] * self.lunge_speed
 		player.angle = player.zone.get_distance_direction_and_angle(player.hitbox.center, self.get_current_direction)[2]
@@ -100,7 +100,7 @@ class Dash:
 		self.timer -= dt
 
 		player.acc = pygame.math.Vector2()
-		self.lunge_speed -= 0.3 * dt
+		self.lunge_speed -= 0.4 * dt
 		if player.vel.magnitude() != 0: player.vel = player.vel.normalize() * self.lunge_speed
 		if player.vel.magnitude() < 0.1: player.vel = pygame.math.Vector2()	
 		
@@ -133,6 +133,7 @@ class Attack:
 			return Idle(self.direction)
 
 	def update(self, dt, player):
+		if self.timer > 10: player.zone.player_attacking_logic()
 		ACTIONS['right_ctrl'] = False
 		player.physics(dt)
 		player.animate(self.direction + '_attack', 0.2 * dt, 'loop')

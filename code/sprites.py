@@ -1,6 +1,34 @@
 import pygame
 from settings import *
 
+class FadeSurf(pygame.sprite.Sprite):
+	def __init__(self, zone, groups, pos, alpha = 255, z = LAYERS['foreground']):
+		super().__init__(groups)
+
+		self.zone = zone
+		self.image = pygame.Surface((self.zone.zone_size))
+		self.alpha = alpha
+		self.z = z
+		self.rect = self.image.get_rect(topleft = pos)
+
+	def update(self, dt):
+		if self.zone.cutscene_running:
+			self.alpha += 4 * dt
+			if self.alpha >= 255: 
+				self.alpha = 255
+				self.zone.exit_state()
+				self.zone.create_zone(self.zone.new_zone)
+			
+		elif self.zone.entering:
+			self.alpha -= 4 * dt
+			if self.alpha <= 0:
+				self.alpha = 0
+				self.zone.entering = False
+
+	def draw(self, screen):
+		self.image.set_alpha(self.alpha)
+		screen.blit(self.image, (0,0))
+
 class Exit(pygame.sprite.Sprite):
 	def __init__(self, groups, pos, name, surf = pygame.Surface((TILESIZE, TILESIZE))):
 		super().__init__(groups)
@@ -67,6 +95,7 @@ class Sword(pygame.sprite.Sprite):
 		self.frame_index = 0
 		self.image = self.frames[self.frame_index]
 		self.rect = self.image.get_rect(center = pos)
+		self.hitbox = self.rect.copy().inflate(0, 0)
 
 	def animate(self, animation_speed):
 		self.frame_index += animation_speed
@@ -80,15 +109,15 @@ class Sword(pygame.sprite.Sprite):
 
 		if 45 < self.zone.player.angle < 135:
 			self.image = pygame.transform.rotate(self.image, 270)
-			self.rect = self.image.get_rect(midleft = self.zone.player.hitbox.midright)
+			self.rect = self.image.get_rect(midleft = self.zone.player.hitbox.center)
 		elif 135 < self.zone.player.angle < 225:
 			self.image = pygame.transform.rotate(self.image, 180)
-			self.rect = self.image.get_rect(midtop = self.zone.player.hitbox.midbottom)
+			self.rect = self.image.get_rect(midtop = self.zone.player.hitbox.center)
 		elif 225 < self.zone.player.angle < 315:
 			self.image = pygame.transform.rotate(self.image, 90)
-			self.rect = self.image.get_rect(midright = self.zone.player.hitbox.midleft)
+			self.rect = self.image.get_rect(midright = self.zone.player.hitbox.center)
 		else:
-			self.rect = self.image.get_rect(midbottom = self.zone.player.hitbox.midtop)
+			self.rect = self.image.get_rect(midbottom = self.zone.player.hitbox.center)
 
 
 			

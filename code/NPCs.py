@@ -21,6 +21,12 @@ class NPC(pygame.sprite.Sprite):
 		self.animation_type = 'loop'
 		self.frame_index = 0
 		self.image = pygame.Surface((24, 24))
+		
+		self.mask = pygame.mask.from_surface(self.image)
+		self.mask_image = self.mask.to_surface()
+		self.mask_image.set_colorkey((0, 0, 0))
+
+
 		self.rect = self.image.get_rect(center = pos)
 		self.pos = pygame.math.Vector2(self.rect.center)
 		self.hitbox = self.rect.copy().inflate(-self.rect.width * 0.6, -self.rect.height * 0.7)
@@ -50,6 +56,14 @@ class NPC(pygame.sprite.Sprite):
 		if anmimation_type == 'end' and self.frame_index >= len(self.animations[state])-1: self.frame_index = len(self.animations[state])-1
 		else: self.frame_index = self.frame_index % len(self.animations[state])
 		self.image = self.animations[state][int(self.frame_index)]
+
+		self.mask = pygame.mask.from_surface(self.image)
+		self.mask_image = self.mask.to_surface()
+		self.mask_image.set_colorkey((0, 0, 0))
+
+		if self.invincible: 
+			self.image = self.mask_image
+			self.vel = pygame.math.Vector2()
 
 	def collisions(self, direction, group):
 		hitlist = self.get_collide_list(group)
@@ -91,7 +105,7 @@ class NPC(pygame.sprite.Sprite):
 			if not self.dashing: self.collisions('y', self.zone.void_sprites)
 			self.rect.centery = self.hitbox.centery
 
-	def invibility(self, dt):
+	def invincibility(self, dt):
 		if self.invincible:
 			self.invincibility_timer += dt
 			if self.invincibility_timer >= 20:
@@ -107,13 +121,13 @@ class NPC(pygame.sprite.Sprite):
 		self.state_logic()
 		self.state.update(dt, self)
 
-
-
-		
-
 class Warrior(NPC):
 	def __init__(self, game, zone, groups, pos, z, name):
 		super().__init__(game, zone, groups, pos, z, name)
+
+		self.mask = pygame.mask.from_surface(self.image)
+		self.mask_image = self.mask.to_surface()
+		self.mask_image.set_colorkey((0, 0, 0))
 
 
 	def update(self, dt):
