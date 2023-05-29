@@ -95,7 +95,6 @@ class Sword(pygame.sprite.Sprite):
 		self.frame_index = 0
 		self.image = self.frames[self.frame_index]
 		self.rect = self.image.get_rect(center = pos)
-		self.hitbox = self.rect.copy().inflate(0, 0)
 
 	def animate(self, animation_speed):
 		self.frame_index += animation_speed

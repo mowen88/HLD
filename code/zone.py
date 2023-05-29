@@ -102,25 +102,27 @@ class Zone(State):
 	def create_gun(self):
 		self.gun_sprite = Gun(self.game, self, [self.updated_sprites, self.rendered_sprites], self.player.hitbox.center, LAYERS['player'], pygame.image.load('../assets/weapons/gun.png').convert_alpha())
 
-	def enemy_enemy_collisions(self):
-		enemies = []
-		for sprite in self.enemy_sprites:
-			enemies.append(sprite)
-		for i, enemy1 in enumerate(enemies):
-		    for enemy2 in enemies[i+1:]:
-		        if enemy1.hitbox.colliderect(enemy2.hitbox) and not enemy1.dashing and enemy2.alive:
-		        		if enemy1.vel.magnitude() != 0: enemy1.vel = pygame.math.Vector2()
+	# def enemy_enemy_collisions(self):
+	# 	enemies = []
+	# 	for sprite in self.enemy_sprites:
+	# 		enemies.append(sprite)
+	# 	for i, enemy1 in enumerate(enemies):
+	# 	    for enemy2 in enemies[i+1:]:
+	# 	        if enemy1.hitbox.colliderect(enemy2.hitbox) and not enemy1.dashing and enemy2.alive:
+	# 	        		if enemy1.vel.x != 0: enemy1.vel.x = 0
+	# 	        		if enemy1.vel.y != 0:enemy1.vel.y = 0
 
 	def player_attacking_logic(self):
-		for target in self.enemy_sprites:
-			if self.melee_sprite:
-				if self.melee_sprite.hitbox.colliderect(target.hitbox):
+		if self.melee_sprite:
+			for target in self.enemy_sprites:
+				if self.melee_sprite.rect.colliderect(target.hitbox):
 					if not target.invincible and target.alive:
 						target.invincible = True
 						target.health -= 1
 						if target.health <= 0:
+							target.invincible = False
 							target.alive = False
-							target.kill()
+							
 
 	def enemy_attacking_logic(self):
 		for sprite in self.enemy_sprites:
@@ -129,6 +131,7 @@ class Zone(State):
 					self.reduce_health(sprite.damage)
 					self.game.screenshaking = True
 					self.player.invincible = True
+					if self.melee_sprite: self.melee_sprite.kill()
 						
 	def reduce_health(self, amount):
 		if not self.player.invincible:
@@ -160,7 +163,7 @@ class Zone(State):
 
 	def update(self, dt):
 		self.exiting()
-		self.enemy_enemy_collisions()
+		# self.enemy_enemy_collisions()
 		self.fade_surf.update(dt)
 
 		if ACTIONS['return']: 
@@ -172,7 +175,7 @@ class Zone(State):
 		screen.fill(GREEN)
 		self.rendered_sprites.offset_draw(self.player)
 		self.fade_surf.draw(screen)
-		self.game.render_text(str(round(self.game.clock.get_fps(), 2)), WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.1))
-		self.game.render_text(self.grunt.alive, PINK, self.game.small_font, RES/2)
-		self.game.render_text(self.player.invincible, WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.9))
+		# self.game.render_text(str(round(self.game.clock.get_fps(), 2)), WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.1))
+		# self.game.render_text(self.grunt.state, PINK, self.game.small_font, RES/2)
+		# self.game.render_text(self.player.invincible, WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.9))
 		

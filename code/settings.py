@@ -10,8 +10,8 @@ FONT = '../fonts/Pokemon Classic.ttf'
 PLAYER_DATA = {'max_health': 6, 'max_bullets': 6}
 
 ENEMY_DATA = {
-	'grunt':{'speed': 0.1, 'lunge_speed': 2, 'damage': 1, 'health': 3, 'telegraphing_time': 40, 'attack_radius': 30, 'pursue_radius': 90},
-	'hound':{'speed': 0.2, 'lunge_speed': 3, 'damage': 1, 'health': 2, 'telegraphing_time': 20, 'attack_radius': 60, 'pursue_radius': 90}
+	'grunt':{'speed': 0.1, 'lunge_speed': 2, 'knockback_speed': 1, 'damage': 1, 'health': 3, 'telegraphing_time': 30, 'attack_radius': 30, 'pursue_radius': 90},
+	'hound':{'speed': 0.2, 'lunge_speed': 3, 'knockback_speed': 2, 'damage': 1, 'health': 2, 'telegraphing_time': 15, 'attack_radius': 60, 'pursue_radius': 90}
 }
 
 ZONE_DATA = {

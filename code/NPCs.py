@@ -1,6 +1,6 @@
 import math
 from settings import *
-from enemy_fsm import Idle
+from enemy_fsm import Idle, Knockback
 
 class NPC(pygame.sprite.Sprite):
 	def __init__(self, game, zone, groups, pos, z, name):
@@ -14,7 +14,7 @@ class NPC(pygame.sprite.Sprite):
 		self.invincible = False
 		self.invincibility_timer = 0
 		self.alive = True
-		self.animations = {'idle':[], 'telegraphing':[]}
+		self.animations = {'idle':[], 'telegraphing':[], 'death':[]}
 
 
 		if self.name: self.import_imgs()
@@ -51,9 +51,9 @@ class NPC(pygame.sprite.Sprite):
 		else: direction = 'up'
 		return direction
 
-	def animate(self, state, animation_speed, anmimation_type):
+	def animate(self, state, animation_speed, animation_type):
 		self.frame_index += animation_speed
-		if anmimation_type == 'end' and self.frame_index >= len(self.animations[state])-1: self.frame_index = len(self.animations[state])-1
+		if animation_type == 'end' and self.frame_index >= len(self.animations[state])-1: self.frame_index = len(self.animations[state])-1
 		else: self.frame_index = self.frame_index % len(self.animations[state])
 		self.image = self.animations[state][int(self.frame_index)]
 
@@ -64,6 +64,9 @@ class NPC(pygame.sprite.Sprite):
 		if self.invincible: 
 			self.image = self.mask_image
 			self.vel = pygame.math.Vector2()
+
+	def knockback(self, other_sprite):
+		self.zone.get_distance_direction_and_angle(other_sprite.rect.center, self.rect.center)[1]
 
 	def collisions(self, direction, group):
 		hitlist = self.get_collide_list(group)
