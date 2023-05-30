@@ -25,7 +25,6 @@ class Player(NPC):
 		self.image = self.animations['down'][self.frame_index]
 		self.rect = self.image.get_rect(center = pos)
 		self.pos = pygame.math.Vector2(self.rect.center)
-		self.hitbox = self.rect.copy().inflate(-self.rect.width * 0.6, -self.rect.height * 0.7)
 
 		self.respawn_location = pygame.math.Vector2()
 
@@ -64,6 +63,7 @@ class Player(NPC):
 		self.dash_logic(dt)
 		if not self.zone.cutscene_running: self.state_logic()
 		self.state.update(dt, self)
+		
 		
 
 

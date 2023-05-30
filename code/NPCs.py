@@ -10,7 +10,7 @@ class NPC(pygame.sprite.Sprite):
 		self.z = z
 		self.name = name
 
-		self.state = Idle()
+		self.state = Idle('idle')
 		self.invincible = False
 		self.invincibility_timer = 0
 		self.alive = True
@@ -29,7 +29,7 @@ class NPC(pygame.sprite.Sprite):
 
 		self.rect = self.image.get_rect(center = pos)
 		self.pos = pygame.math.Vector2(self.rect.center)
-		self.hitbox = self.rect.copy().inflate(-self.rect.width * 0.6, -self.rect.height * 0.7)
+		self.hitbox = self.rect.copy().inflate(-self.rect.width * 0.5, -self.rect.height * 0.7)
 
 		self.acc = pygame.math.Vector2()
 		self.friction = -0.2

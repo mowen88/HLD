@@ -6,6 +6,7 @@ from pytmx.util_pygame import load_pygame
 from sprites import FadeSurf, Exit, Object, Void, Gun, Sword, Bullet, Tree
 from camera import Camera
 from state import State
+from ui import UI
 from particles import Particle, Shadow
 from player import Player
 from NPCs import Warrior
@@ -38,6 +39,7 @@ class Zone(State):
 		self.zone_size = self.get_zone_size()
 		self.create_map()
 
+		self.ui = UI(self.game, self)
 		self.fade_surf = FadeSurf(self, [self.updated_sprites, self.rendered_sprites], (0,0))
 
 	def get_zone_size(self):
@@ -111,17 +113,26 @@ class Zone(State):
 		self.gun_sprite = Gun(self.game, self, [self.updated_sprites, self.rendered_sprites], self.player.hitbox.center, LAYERS['player'], pygame.image.load('../assets/weapons/gun.png').convert_alpha())
 
 	def create_bullet(self):
-		self.bulllet = Bullet(self.game, self, [self.updated_sprites, self.rendered_sprites], self.player.hitbox.center, LAYERS['particles'], '../assets/weapons/bullet')
+		if PLAYER_DATA['max_bullets'] >= 0:
+			self.bulllet = Bullet(self.game, self, [self.updated_sprites, self.rendered_sprites], self.player.hitbox.center, LAYERS['particles'], '../assets/weapons/bullet')
+		else:
+			PLAYER_DATA['max_bullets'] = 0
+			
+	def enemy_enemy_collisions(self, direction):
+		enemies = []
+		for sprite in self.enemy_sprites:
+			enemies.append(sprite)
 
-	# def enemy_enemy_collisions(self):
-	# 	enemies = []
-	# 	for sprite in self.enemy_sprites:
-	# 		enemies.append(sprite)
-	# 	for i, enemy1 in enumerate(enemies):
-	# 	    for enemy2 in enemies[i+1:]:
-	# 	        if enemy1.hitbox.colliderect(enemy2.hitbox) and not enemy1.dashing and enemy2.alive:
-	# 	        		if enemy1.vel.x != 0: enemy1.vel.x = 0
-	# 	        		if enemy1.vel.y != 0:enemy1.vel.y = 0
+		for i, enemy1 in enumerate(enemies):
+		    for enemy2 in enemies[i+1:]:
+		        if enemy1.hitbox.colliderect(enemy2.hitbox) and enemy2.alive:
+		        	if direction == 'x':
+		        		if enemy1.vel.x != 0:
+		        			enemy1.vel.x = 0
+		        		
+		        	elif direction == 'y':
+		        		if enemy1.vel.y != 0:
+		        			enemy1.vel.y = 0
 
 	def player_attacking_logic(self):
 		if self.melee_sprite:
@@ -137,7 +148,7 @@ class Zone(State):
 
 	def enemy_attacking_logic(self):
 		for sprite in self.enemy_sprites:
-			if not self.player.invincible and not sprite.invincible and self.player.alive and sprite.dashing:
+			if not self.player.invincible and not sprite.invincible and sprite.alive and self.player.alive and sprite.dashing:
 				if sprite.hitbox.colliderect(self.player.hitbox):
 					self.reduce_health(sprite.damage)
 					self.game.screenshaking = True
@@ -172,10 +183,13 @@ class Zone(State):
 				self.new_zone = ZONE_DATA[self.name][sprite.name]
 				self.entry_point = sprite.name
 
+
 	def update(self, dt):
 		self.exiting()
-		# self.enemy_enemy_collisions()
+		self.enemy_enemy_collisions('x')
+		self.enemy_enemy_collisions('y')
 		self.fade_surf.update(dt)
+		self.ui.update(dt)
 
 		if ACTIONS['return']: 
 			self.exit_state()
@@ -185,8 +199,9 @@ class Zone(State):
 	def draw(self, screen):
 		screen.fill(GREEN)
 		self.rendered_sprites.offset_draw(self.player)
+		self.ui.draw(screen)
 		self.fade_surf.draw(screen)
-		# self.game.render_text(str(round(self.game.clock.get_fps(), 2)), WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.1))
-		# self.game.render_text(self.grunt.state, PINK, self.game.small_font, RES/2)
-		# self.game.render_text(self.player.invincible, WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.9))
+		self.game.render_text(str(round(self.game.clock.get_fps(), 2)), WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.1))
+		self.game.render_text(PLAYER_DATA['max_bullets'], PINK, self.game.small_font, RES/2)
+		self.game.render_text(self.player.invincible, WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.9))
 		

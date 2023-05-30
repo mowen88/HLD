@@ -72,14 +72,13 @@ class Dash:
 
 		ACTIONS['right_click'] = False
 
+		player.frame_index = 0
 		player.dash_count += 1
 		player.dash_timer_running = True
 		
 		self.timer = 20
 		player.dashing = True
 		player.respawn_location = player.rect.center
-
-		player.frame_index = 0
 		self.lunge_speed = 6
 		self.get_current_direction = pygame.mouse.get_pos()
 		player.vel = player.zone.get_distance_direction_and_angle(player.hitbox.center, self.get_current_direction)[1] * self.lunge_speed
@@ -114,11 +113,11 @@ class Attack:
 
 		ACTIONS['left_click'] = False
 
+		player.frame_index = 0
 		player.attack_count += 1
 		player.attack_timer_running = True
 
 		self.timer = 25
-		self.frame_index = 0
 		self.lunge_speed = 1
 		self.get_current_direction = pygame.mouse.get_pos()
 		player.vel = player.zone.get_distance_direction_and_angle(player.hitbox.center, self.get_current_direction)[1] * self.lunge_speed
@@ -151,8 +150,10 @@ class Attack:
 class Shoot:
 	def __init__(self, player, direction):
 
+		player.frame_index = 0
+		PLAYER_DATA['max_bullets'] -= 1
+
 		self.timer = 30
-		self.frame_index = 0
 		self.lunge_speed = 1
 		self.get_current_direction = pygame.mouse.get_pos()
 		player.vel = player.zone.get_distance_direction_and_angle(player.hitbox.center, self.get_current_direction)[1] * self.lunge_speed * -1

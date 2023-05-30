@@ -7,7 +7,7 @@ HALF_WIDTH, HALF_HEIGHT = RES/2
 
 FONT = '../fonts/Pokemon Classic.ttf'
 
-PLAYER_DATA = {'max_health': 6, 'max_bullets': 6}
+PLAYER_DATA = {'max_health': 4, 'max_bullets': 6, 'partial_healths': 0}
 
 ENEMY_DATA = {
 	'grunt':{'speed': 0.1, 'lunge_speed': 2, 'knockback_speed': 1, 'damage': 1, 'health': 3, 'telegraphing_time': 25, 'attack_radius': 30, 'pursue_radius': 90},

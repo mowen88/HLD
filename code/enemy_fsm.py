@@ -2,8 +2,8 @@ import pygame
 from settings import *
 
 class Idle:
-	def __init__(self):
-		self.frame_index = 0
+	def __init__(enemy, self):
+		enemy.frame_index = 0
 
 	def state_logic(self, enemy):
 		if enemy.zone.get_distance_direction_and_angle(enemy.hitbox.center, enemy.zone.player.hitbox.center - enemy.zone.rendered_sprites.offset)[0] < enemy.pursue_radius:
@@ -14,11 +14,11 @@ class Idle:
 
 class Move:
 	def __init__(self, enemy):
-		self.frame_index = 0
+		enemy.frame_index = 0
 
 	def state_logic(self, enemy):
 		if enemy.zone.get_distance_direction_and_angle(enemy.hitbox.center, enemy.zone.player.hitbox.center - enemy.zone.rendered_sprites.offset)[0] > enemy.pursue_radius:
-			return Idle()
+			return Idle(enemy)
 
 		if enemy.zone.get_distance_direction_and_angle(enemy.hitbox.center, enemy.zone.player.hitbox.center - enemy.zone.rendered_sprites.offset)[0] < enemy.attack_radius:
 			return Telegraphing(enemy)
@@ -33,7 +33,7 @@ class Move:
 
 class Telegraphing:
 	def __init__(self, enemy):
-		self.frame_index = 0
+		enemy.frame_index = 0
 		self.timer = enemy.telegraphing_time
 		self.attack_direction = pygame.math.Vector2(enemy.zone.player.rect.center - enemy.zone.rendered_sprites.offset)
 
@@ -45,7 +45,7 @@ class Telegraphing:
 			if self.timer > enemy.telegraphing_time/2:
 				self.attack_direction = pygame.math.Vector2(enemy.zone.player.rect.center - enemy.zone.rendered_sprites.offset)
 			elif self.timer < 0 and enemy.zone.player.dashing:
-				return Idle()
+				return Idle(enemy)
 			elif self.timer < 0:
 				return Attack(enemy, self.attack_direction)
 		else:
@@ -60,7 +60,7 @@ class Attack:
 	def __init__(self, enemy, attack_direction):
 		self.timer = 40
 		enemy.dashing = True
-		self.frame_index = 0
+		enemy.frame_index = 0
 		self.lunge_speed = enemy.lunge_speed
 		self.get_current_direction = attack_direction #enemy.zone.player.rect.center - enemy.zone.rendered_sprites.offset
 		enemy.vel = enemy.zone.get_distance_direction_and_angle(enemy.hitbox.center, self.get_current_direction)[1] * self.lunge_speed
@@ -75,7 +75,7 @@ class Attack:
 					return FallDeath(enemy)
 				else: 
 					enemy.dashing = False
-					return Idle()
+					return Idle(enemy)
 
 			elif enemy.zone.get_distance_direction_and_angle(enemy.hitbox.center, enemy.zone.player.hitbox.center - enemy.zone.rendered_sprites.offset)[0] > enemy.pursue_radius:
 				return Move(enemy)
@@ -83,7 +83,6 @@ class Attack:
 			return Knockback(enemy)
 
 	def update(self, dt, enemy):
-		if self.timer > 5: enemy.zone.enemy_attacking_logic()
 		
 		enemy.physics(dt)
 		enemy.animate('idle', 0.2 * dt, 'end')
@@ -92,6 +91,7 @@ class Attack:
 
 		enemy.acc = pygame.math.Vector2()
 		self.lunge_speed -= 0.05 * dt
+		if enemy.vel.magnitude() > 0.5: enemy.zone.enemy_attacking_logic()
 		if enemy.vel.magnitude() != 0: enemy.vel = enemy.vel.normalize() * self.lunge_speed
 		if enemy.vel.magnitude() < 0.1: enemy.vel = pygame.math.Vector2()
 
