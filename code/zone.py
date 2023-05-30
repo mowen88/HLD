@@ -16,7 +16,6 @@ class Zone(State):
 	def __init__(self, game, name, entry_point):
 		State.__init__(self, game)
 
-		
 		self.game = game
 		self.name = name
 		self.entry_point = entry_point
@@ -70,6 +69,7 @@ class Zone(State):
 				else: self.start_direction = 'up'
 
 				self.player = Player(self.game, self, [self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'])
+				self.target = self.player
 				
 
 		for obj in tmx_data.get_layer_by_name('exits'):
@@ -120,8 +120,8 @@ class Zone(State):
 
 	def create_player_bullet(self):
 		if PLAYER_DATA['max_bullets'] >= 0:
-			self.bullet = Bullet(self.game, self, [self.updated_sprites, self.rendered_sprites], self.player.hitbox.center, LAYERS['player'], f'../assets/weapons/{self.player.gun}_bullet')
-			self.player_bullet_sprites.add(self.bullet)
+			bullet = Bullet(self.game, self, [self.updated_sprites, self.rendered_sprites], self.player.hitbox.center, LAYERS['player'], f'../assets/weapons/{self.player.gun}_bullet')
+			self.player_bullet_sprites.add(bullet)
 		else:
 			PLAYER_DATA['max_bullets'] = 0
 			
@@ -138,6 +138,12 @@ class Zone(State):
 	        		if enemy1.vel.y != 0:
 	        			enemy1.vel.y = 0
 
+	def attackable_terrain_logic(self):
+		if self.melee_sprite:
+			for target in self.attackable_sprites:
+				if self.melee_sprite.rect.colliderect(target.hitbox) and self.melee_sprite.frame_index < 1:
+					target.hit = True
+
 	def enemy_shot_logic(self):
 		for target in self.enemy_sprites:
 			for bullet in self.player_bullet_sprites:
@@ -150,7 +156,6 @@ class Zone(State):
 							target.invincible = False
 							target.alive = False
 
-
 	def player_attacking_logic(self):
 		if self.melee_sprite:
 			for target in self.enemy_sprites:
@@ -161,13 +166,6 @@ class Zone(State):
 						if target.health <= 0:
 							target.invincible = False
 							target.alive = False
-
-
-	def attackable_terrain_logic(self):
-		if self.melee_sprite:
-			for target in self.attackable_sprites:
-				if self.melee_sprite.rect.colliderect(target.hitbox) and self.melee_sprite.frame_index < 1:
-					target.hit = True
 				
 	def enemy_attacking_logic(self):
 		for sprite in self.enemy_sprites:
@@ -215,7 +213,7 @@ class Zone(State):
 		self.fade_surf.update(dt)
 
 		if ACTIONS['return']: 
-			#self.exit_state()
+			self.exit_state()
 			self.ui.add_health()
 			PLAYER_DATA['max_bullets'] = 6
 			self.game.reset_keys()
@@ -223,7 +221,7 @@ class Zone(State):
 
 	def draw(self, screen):
 		screen.fill(GREEN)
-		self.rendered_sprites.offset_draw(self.player)
+		self.rendered_sprites.offset_draw(self.target)
 		self.ui.draw(screen)
 		self.fade_surf.draw(screen)
 		self.game.render_text(str(round(self.game.clock.get_fps(), 2)), WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.1))

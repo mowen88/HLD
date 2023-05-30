@@ -18,7 +18,7 @@ class Player(NPC):
 							'up_attack':[], 'down_attack':[], 'left_attack':[], 'right_attack':[]}
 	
 		self.direction = {'up': False, 'down': False, 'left': False, 'right': False}
-		self.gun = 'gun'
+		self.gun = 'gun_2'
 	
 		self.import_imgs()
 		self.animation_type = 'loop'
