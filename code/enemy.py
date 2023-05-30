@@ -18,8 +18,6 @@ class Grunt(NPC):
 		self.pursue_radius = self.data['pursue_radius']
 		self.telegraphing_time = self.data['telegraphing_time']
 
-		self.hitbox = self.rect.copy().inflate(-self.rect.width * 0.5, -self.rect.height * 0.7)
-
 	def update(self, dt):
 		self.invincibility(dt)
 		if not self.zone.cutscene_running: self.state_logic()

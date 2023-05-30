@@ -1,4 +1,4 @@
-import pygame
+import pygame, random
 from settings import *
 
 class FadeSurf(pygame.sprite.Sprite):
@@ -130,7 +130,9 @@ class Bullet(pygame.sprite.Sprite):
 		self.image = self.frames[self.frame_index]
 		self.rect = self.image.get_rect(center = pos)
 
-		self.vel = self.zone.get_distance_direction_and_angle(self.rect.center, pygame.mouse.get_pos())[1]
+		self.speed = 5
+		self.vel = self.zone.get_distance_direction_and_angle(self.rect.center, pygame.mouse.get_pos())[1] * self.speed
+		self.vel = self.vel.rotate(random.randrange(-10, 10))
 		self.pos = pygame.math.Vector2(self.rect.center)
 
 	def animate(self, animation_speed):
@@ -140,8 +142,35 @@ class Bullet(pygame.sprite.Sprite):
 
 	def update(self, dt):
 		self.animate(0.25 * dt)
-		self.pos += self.vel
+		self.pos += self.vel * dt
 		self.rect.center = self.pos
+
+class AttackableTerrain(pygame.sprite.Sprite):
+	def __init__(self, game, zone, groups, pos, z, path):
+		super().__init__(groups)
+
+		self.game = game
+		self.zone = zone
+		self.z = z
+		self.frames = self.game.get_folder_images(path)
+		self.frame_index = 0
+		self.image = self.frames[self.frame_index]
+		self.rect = self.image.get_rect(center = pos)
+		self.hitbox = self.rect.copy().inflate(-self.rect.width * 0.5, -self.rect.height * 0.7)
+		self.hit = False
+
+	def animate(self, animation_speed):
+		self.frame_index += animation_speed
+		if self.frame_index >= len(self.frames)-1: self.frame_index = len(self.frames)-1
+		else: self.frame_index = self.frame_index % len(self.frames)
+
+		self.image = self.frames[int(self.frame_index)]
+
+	def update(self, dt):
+		if self.hit: 
+			self.animate(0.2 * dt)
+			self.zone.attackable_sprites.remove(self)
+			self.zone.block_sprites.remove(self)
 
 			
 

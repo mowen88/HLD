@@ -8,18 +8,17 @@ class Camera(pygame.sprite.Group):
 		self.game = game
 		self.zone = zone
 		self.offset = pygame.math.Vector2()
-		self.screenshake_timer = 0
 
 		self.BG0 = pygame.image.load(f'../zones/{self.zone.name}/bg.png').convert_alpha()
 
 	def screenshake(self):
-		if self.game.screenshaking:
-			self.screenshake_timer += 1
-			if self.screenshake_timer < 120: 
+		if self.zone.screenshaking:
+			self.zone.screenshake_timer += 1
+			if self.zone.screenshake_timer < 120: 
 				self.offset += [random.randint(-1, 1), random.randint(-1, 1)]
 			else: 
-				self.game.screenshaking = False
-				self.screenshake_timer = 0
+				self.zone.screenshaking = False
+				self.zone.screenshake_timer = 0
 
 	def offset_draw(self, target):
 		
@@ -37,8 +36,6 @@ class Camera(pygame.sprite.Group):
 		elif self.offset[1] >= self.zone.zone_size[1] - HEIGHT: self.offset[1] = self.zone.zone_size[1] - HEIGHT
 
 		self.screenshake()
-
-		
 
 		for layer in LAYERS.values():
 			for sprite in sorted(self.zone.rendered_sprites, key = lambda sprite: sprite.rect.centery):

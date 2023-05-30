@@ -9,7 +9,7 @@ class Idle:
 	def state_logic(self, player):
 		keys = pygame.key.get_pressed()
 
-		if keys[pygame.K_RCTRL]:
+		if keys[pygame.K_SPACE]:
 			return Shoot(player, self.direction)
 
 		if ACTIONS['right_click'] and player.dash_count < 3:
@@ -34,7 +34,7 @@ class Move:
 	def state_logic(self, player):
 		keys = pygame.key.get_pressed()
 
-		if keys[pygame.K_RCTRL]:
+		if keys[pygame.K_SPACE]:
 			return Shoot(player, self.direction)
 
 		if ACTIONS['right_click'] and player.dash_count < 3:
@@ -117,7 +117,7 @@ class Attack:
 		player.attack_count += 1
 		player.attack_timer_running = True
 
-		self.timer = 25
+		self.timer = 22
 		self.lunge_speed = 1
 		self.get_current_direction = pygame.mouse.get_pos()
 		player.vel = player.zone.get_distance_direction_and_angle(player.hitbox.center, self.get_current_direction)[1] * self.lunge_speed
@@ -137,7 +137,11 @@ class Attack:
 			return Idle(player, self.direction)
 
 	def update(self, dt, player):
+
 		if self.timer > 10: player.zone.player_attacking_logic()
+
+		player.zone.attackable_terrain_logic()
+
 		player.physics(dt)
 		player.animate(self.direction + '_attack', 0.2 * dt, 'loop')
 		
@@ -153,7 +157,7 @@ class Shoot:
 		player.frame_index = 0
 		PLAYER_DATA['max_bullets'] -= 1
 
-		self.timer = 30
+		self.timer = 25
 		self.lunge_speed = 1
 		self.get_current_direction = pygame.mouse.get_pos()
 		player.vel = player.zone.get_distance_direction_and_angle(player.hitbox.center, self.get_current_direction)[1] * self.lunge_speed * -1
@@ -161,7 +165,7 @@ class Shoot:
 		self.direction = player.get_direction()
 
 		player.zone.create_gun()
-		player.zone.create_bullet()
+		player.zone.create_player_bullet()
 
 	def state_logic(self, player):
 
@@ -198,7 +202,7 @@ class FallDeath:
 
 	def state_logic(self, player):
 		if self.timer <= 0: 
-			player.game.screenshaking = False
+			player.zone.screenshaking = False
 			player.z = LAYERS['player']
 			player.on_ground = True
 			player.vel.y = 0
@@ -210,12 +214,12 @@ class FallDeath:
 			return Idle(player, self.direction)
 
 	def update(self, dt, player):
-		ACTIONS['right_ctrl'] = False
+		
 		player.animate(self.direction + '_fall', 0.2 * dt, 'end')
 
 		self.timer -= dt
 		if self.timer > 0:
-			if self.timer < 15: player.game.screenshaking = True
+			if self.timer < 15: player.zone.screenshaking = True
 			player.z = LAYERS['BG2']
 			player.vel.y += 0.15 * dt
 			player.pos += player.vel

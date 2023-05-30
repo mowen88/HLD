@@ -3,7 +3,7 @@ from math import atan2, degrees, pi
 from os import walk
 from settings import *
 from pytmx.util_pygame import load_pygame
-from sprites import FadeSurf, Exit, Object, Void, Gun, Sword, Bullet, Tree
+from sprites import FadeSurf, Exit, Object, Void, Gun, Sword, Bullet, Tree, AttackableTerrain
 from camera import Camera
 from state import State
 from ui import UI
@@ -20,6 +20,8 @@ class Zone(State):
 		self.game = game
 		self.name = name
 		self.entry_point = entry_point
+		self.screenshaking = False
+		self.screenshake_timer = 0
 		self.cutscene_running = False
 		self.entering = True
 		self.new_zone = None
@@ -27,6 +29,9 @@ class Zone(State):
 		#sprites
 		self.melee_sprite = pygame.sprite.GroupSingle()
 		self.gun_sprite = pygame.sprite.GroupSingle()
+		self.player_bullet_sprites = pygame.sprite.Group()
+		self.enemy_bullet_sprites = pygame.sprite.Group()
+
 		# sprite groups
 		self.rendered_sprites = Camera(self.game, self)
 		self.updated_sprites = pygame.sprite.Group()
@@ -34,6 +39,7 @@ class Zone(State):
 		self.block_sprites = pygame.sprite.Group()
 		self.void_sprites = pygame.sprite.Group()
 		self.enemy_sprites = pygame.sprite.Group()
+		self.attackable_sprites = pygame.sprite.Group()
 		self.gun_sprites = pygame.sprite.Group()
 
 		self.zone_size = self.get_zone_size()
@@ -81,8 +87,8 @@ class Zone(State):
 			if obj.name == 'big tree': Tree(self.game, self, [self.block_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
 			if obj.name == 'medium tree': Tree(self.game, self, [self.block_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
 			if obj.name == 'tall tree': Tree(self.game, self, [self.block_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
-			if obj.name == 'red flower': Tree(self.game, self, [self.block_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
-			if obj.name == 'blue flower': Tree(self.game, self, [self.block_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
+			if obj.name == 'red flower': AttackableTerrain(self.game, self, [self.block_sprites, self.attackable_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], f'../assets/attackable_terrain/{obj.name}')
+			if obj.name == 'blue flower': AttackableTerrain(self.game, self, [self.block_sprites, self.attackable_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], f'../assets/attackable_terrain/{obj.name}')
 
 		
 		for x, y, surf in tmx_data.get_layer_by_name('walls').tiles():
@@ -110,15 +116,16 @@ class Zone(State):
 		self.melee_sprite = Sword(self.game, self, [self.updated_sprites, self.rendered_sprites], self.player.hitbox.center, LAYERS['player'], '../assets/weapons/sword')
 	
 	def create_gun(self):
-		self.gun_sprite = Gun(self.game, self, [self.updated_sprites, self.rendered_sprites], self.player.hitbox.center, LAYERS['player'], pygame.image.load('../assets/weapons/gun.png').convert_alpha())
+		self.gun_sprite = Gun(self.game, self, [self.updated_sprites, self.rendered_sprites], self.player.hitbox.center, LAYERS['player'], pygame.image.load(f'../assets/weapons/{self.player.gun}.png').convert_alpha())
 
-	def create_bullet(self):
+	def create_player_bullet(self):
 		if PLAYER_DATA['max_bullets'] >= 0:
-			self.bulllet = Bullet(self.game, self, [self.updated_sprites, self.rendered_sprites], self.player.hitbox.center, LAYERS['particles'], '../assets/weapons/bullet')
+			self.bullet = Bullet(self.game, self, [self.updated_sprites, self.rendered_sprites], self.player.hitbox.center, LAYERS['player'], f'../assets/weapons/{self.player.gun}_bullet')
+			self.player_bullet_sprites.add(self.bullet)
 		else:
 			PLAYER_DATA['max_bullets'] = 0
 			
-	def enemy_enemy_collisions(self, direction):
+	def enemy_enemy_collisions(self):
 		enemies = []
 		for sprite in self.enemy_sprites:
 			enemies.append(sprite)
@@ -126,13 +133,23 @@ class Zone(State):
 		for i, enemy1 in enumerate(enemies):
 		    for enemy2 in enemies[i+1:]:
 		        if enemy1.hitbox.colliderect(enemy2.hitbox) and enemy2.alive:
-		        	if direction == 'x':
-		        		if enemy1.vel.x != 0:
-		        			enemy1.vel.x = 0
-		        		
-		        	elif direction == 'y':
-		        		if enemy1.vel.y != 0:
-		        			enemy1.vel.y = 0
+	        		if enemy1.vel.x != 0:
+	        			enemy1.vel.x = 0
+	        		if enemy1.vel.y != 0:
+	        			enemy1.vel.y = 0
+
+	def enemy_shot_logic(self):
+		for target in self.enemy_sprites:
+			for bullet in self.player_bullet_sprites:
+				if bullet.rect.colliderect(target.hitbox):
+					if not target.invincible and target.alive:
+						bullet.kill()
+						target.health -= 1
+						target.invincible = True
+						if target.health <= 0:
+							target.invincible = False
+							target.alive = False
+
 
 	def player_attacking_logic(self):
 		if self.melee_sprite:
@@ -144,20 +161,27 @@ class Zone(State):
 						if target.health <= 0:
 							target.invincible = False
 							target.alive = False
-							
 
+
+	def attackable_terrain_logic(self):
+		if self.melee_sprite:
+			for target in self.attackable_sprites:
+				if self.melee_sprite.rect.colliderect(target.hitbox) and self.melee_sprite.frame_index < 1:
+					target.hit = True
+				
 	def enemy_attacking_logic(self):
 		for sprite in self.enemy_sprites:
 			if not self.player.invincible and not sprite.invincible and sprite.alive and self.player.alive and sprite.dashing:
 				if sprite.hitbox.colliderect(self.player.hitbox):
 					self.reduce_health(sprite.damage)
-					self.game.screenshaking = True
+					self.screenshaking = True
 					self.player.invincible = True
 					if self.melee_sprite: self.melee_sprite.kill()
 						
 	def reduce_health(self, amount):
 		if not self.player.invincible:
 			self.game.current_health -= amount
+			self.ui.flash_icon()
 			if self.game.current_health <= 0:
 				self.player.alive = False
 				self.game.current_health = PLAYER_DATA['max_health']
@@ -183,16 +207,17 @@ class Zone(State):
 				self.new_zone = ZONE_DATA[self.name][sprite.name]
 				self.entry_point = sprite.name
 
-
 	def update(self, dt):
 		self.exiting()
-		self.enemy_enemy_collisions('x')
-		self.enemy_enemy_collisions('y')
+		self.enemy_shot_logic()
+		self.enemy_enemy_collisions()
+		
 		self.fade_surf.update(dt)
-		self.ui.update(dt)
 
 		if ACTIONS['return']: 
-			self.exit_state()
+			#self.exit_state()
+			self.ui.add_health()
+			PLAYER_DATA['max_bullets'] = 6
 			self.game.reset_keys()
 		self.updated_sprites.update(dt)
 
@@ -202,6 +227,6 @@ class Zone(State):
 		self.ui.draw(screen)
 		self.fade_surf.draw(screen)
 		self.game.render_text(str(round(self.game.clock.get_fps(), 2)), WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.1))
-		self.game.render_text(PLAYER_DATA['max_bullets'], PINK, self.game.small_font, RES/2)
+		self.game.render_text(self.grunt.alive, PINK, self.game.small_font, RES/2)
 		self.game.render_text(self.player.invincible, WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.9))
 		

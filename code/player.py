@@ -18,6 +18,7 @@ class Player(NPC):
 							'up_attack':[], 'down_attack':[], 'left_attack':[], 'right_attack':[]}
 	
 		self.direction = {'up': False, 'down': False, 'left': False, 'right': False}
+		self.gun = 'gun'
 	
 		self.import_imgs()
 		self.animation_type = 'loop'
@@ -39,7 +40,6 @@ class Player(NPC):
 		self.dash_timer_running = False
 		self.dash_timer = 0
 		self.dash_cooldown = 100
-
 
 	def attack_logic(self, dt):
 		if self.attack_timer_running: 

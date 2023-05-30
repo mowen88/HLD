@@ -6,8 +6,11 @@ class Idle:
 		enemy.frame_index = 0
 
 	def state_logic(self, enemy):
-		if enemy.zone.get_distance_direction_and_angle(enemy.hitbox.center, enemy.zone.player.hitbox.center - enemy.zone.rendered_sprites.offset)[0] < enemy.pursue_radius:
-			return Move(enemy)
+		if enemy.alive:
+			if enemy.zone.get_distance_direction_and_angle(enemy.hitbox.center, enemy.zone.player.hitbox.center - enemy.zone.rendered_sprites.offset)[0] < enemy.pursue_radius:
+				return Move(enemy)
+		else:
+			return Knockback(enemy)
 
 	def update(self, dt, enemy):
 		enemy.animate('idle', 0.2 * dt, 'loop')
@@ -17,11 +20,14 @@ class Move:
 		enemy.frame_index = 0
 
 	def state_logic(self, enemy):
-		if enemy.zone.get_distance_direction_and_angle(enemy.hitbox.center, enemy.zone.player.hitbox.center - enemy.zone.rendered_sprites.offset)[0] > enemy.pursue_radius:
-			return Idle(enemy)
+		if enemy.alive:
+			if enemy.zone.get_distance_direction_and_angle(enemy.hitbox.center, enemy.zone.player.hitbox.center - enemy.zone.rendered_sprites.offset)[0] > enemy.pursue_radius:
+				return Idle(enemy)
 
-		if enemy.zone.get_distance_direction_and_angle(enemy.hitbox.center, enemy.zone.player.hitbox.center - enemy.zone.rendered_sprites.offset)[0] < enemy.attack_radius:
-			return Telegraphing(enemy)
+			if enemy.zone.get_distance_direction_and_angle(enemy.hitbox.center, enemy.zone.player.hitbox.center - enemy.zone.rendered_sprites.offset)[0] < enemy.attack_radius:
+				return Telegraphing(enemy)
+		else:
+			return Knockback(enemy)
 
 	def update(self, dt, enemy):
 		enemy.acc = pygame.math.Vector2()
