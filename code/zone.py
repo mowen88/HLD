@@ -3,10 +3,11 @@ from math import atan2, degrees, pi
 from os import walk
 from settings import *
 from pytmx.util_pygame import load_pygame
-from sprites import FadeSurf, Exit, Object, Void, Gun, Sword, Bullet, Tree, AttackableTerrain
-from camera import Camera
 from state import State
 from ui import UI
+from map import Map
+from sprites import FadeSurf, Exit, Object, Void, Gun, Sword, Bullet, Tree, AttackableTerrain
+from camera import Camera
 from particles import Particle, Shadow
 from player import Player
 from NPCs import Warrior
@@ -142,7 +143,7 @@ class Zone(State):
 		if self.melee_sprite:
 			for target in self.attackable_sprites:
 				if self.melee_sprite.rect.colliderect(target.hitbox) and self.melee_sprite.frame_index < 1:
-					target.hit = True
+					target.alive = False
 
 	def enemy_shot_logic(self):
 		for target in self.enemy_sprites:
@@ -164,8 +165,8 @@ class Zone(State):
 						target.invincible = True
 						target.health -= 1
 						if target.health <= 0:
-							target.invincible = False
 							target.alive = False
+							target.invincible = False
 				
 	def enemy_attacking_logic(self):
 		for sprite in self.enemy_sprites:
@@ -204,16 +205,16 @@ class Zone(State):
 				self.cutscene_running = True
 				self.new_zone = ZONE_DATA[self.name][sprite.name]
 				self.entry_point = sprite.name
-
+			
 	def update(self, dt):
 		self.exiting()
 		self.enemy_shot_logic()
 		self.enemy_enemy_collisions()
-		
 		self.fade_surf.update(dt)
 
 		if ACTIONS['return']: 
-			self.exit_state()
+			Map(self.game, self).enter_state()
+			#self.exit_state()
 			self.ui.add_health()
 			PLAYER_DATA['max_bullets'] = 6
 			self.game.reset_keys()

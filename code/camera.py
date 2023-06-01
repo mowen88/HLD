@@ -20,15 +20,24 @@ class Camera(pygame.sprite.Group):
 				self.zone.screenshaking = False
 				self.zone.screenshake_timer = 0
 
+	def midpoint(self, p1, p2):
+		return ((p1.x + p2.x)/4, (p1.x + p2.y)/4)
+
 	def offset_draw(self, target):
 		
 		# draw parralax backgrounds
 		self.game.screen.fill(LIGHT_GREY)
 		self.game.screen.blit(self.BG0, (0 - self.offset[0] * 0.2, 0 - self.offset[1] * 0.2))
 
+		distance = self.zone.get_distance_direction_and_angle(pygame.mouse.get_pos() - self.offset, target.rect.center)[0]
+		scroll = pygame.math.Vector2(target.rect.center) + pygame.math.Vector2(pygame.mouse.get_pos())
+		midpoint = self.midpoint(pygame.math.Vector2(target.rect.center - self.offset), pygame.math.Vector2(pygame.mouse.get_pos()))
 
-		self.offset += (target.rect.center - self.offset - RES/2)
+		self.offset += (target.rect.center - RES/2 - self.offset)
+		self.offset += (midpoint - RES - self.offset)/(distance/5)
 
+		#self.offset += self.self.zone.get_distance_direction_and_angle(pygame.math.Vector2(target.rect.center), pygame.math.Vector2(pygame.mouse.get_pos()))[1]
+	
 		# limit offset to stop at edges
 		if self.offset[0] <= 0: self.offset[0] = 0
 		elif self.offset[0] >= self.zone.zone_size[0] - WIDTH: self.offset[0] = self.zone.zone_size[0] - WIDTH
@@ -42,3 +51,5 @@ class Camera(pygame.sprite.Group):
 				if sprite.z == layer:
 					offset = sprite.rect.topleft - self.offset
 					self.game.screen.blit(sprite.image, offset)
+
+		pygame.draw.circle(self.game.screen, GREEN, midpoint, 4)
