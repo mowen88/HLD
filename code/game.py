@@ -55,6 +55,7 @@ class Game:
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_UP or event.key == pygame.K_w:
                     ACTIONS['up'] = False
+
                 elif event.key == pygame.K_DOWN or event.key == pygame.K_s:
                     ACTIONS['down'] = False
                 elif event.key == pygame.K_RIGHT or event.key == pygame.K_d:
@@ -138,9 +139,7 @@ class Game:
         self.stack[-1].update(dt)
 
     def draw(self, screen):
-
         self.stack[-1].draw(screen)
-        self.custom_cursor(screen)
         pygame.display.flip()
 
     def main_loop(self):

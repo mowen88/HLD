@@ -51,5 +51,3 @@ class Camera(pygame.sprite.Group):
 				if sprite.z == layer:
 					offset = sprite.rect.topleft - self.offset
 					self.game.screen.blit(sprite.image, offset)
-
-		pygame.draw.circle(self.game.screen, GREEN, midpoint, 4)

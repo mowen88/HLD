@@ -7,18 +7,18 @@ HALF_WIDTH, HALF_HEIGHT = RES/2
 
 FONT = '../fonts/Pokemon Classic.ttf'
 
+# data that is dynamic and changes throughout play
 MAP_DATA = {
 	'garden':{'pos': (40,20), 'size': (20, 30)},
 	'dungeon':{'pos': (70,30), 'size': (30, 10)},
 }
-
 PLAYER_DATA = {'max_health': 4, 'max_bullets': 6, 'partial_healths': 0}
 
 ENEMY_DATA = {
 	'grunt':{'speed': 0.1, 'lunge_speed': 2, 'knockback_speed': 1, 'damage': 1, 'health': 3, 'telegraphing_time': 25, 'attack_radius': 30, 'pursue_radius': 110},
 	'hound':{'speed': 0.2, 'lunge_speed': 3, 'knockback_speed': 2, 'damage': 1, 'health': 2, 'telegraphing_time': 15, 'attack_radius': 60, 'pursue_radius': 90}
 }
-
+# entry and exit data for zones, does not change
 ZONE_DATA = {
 	'garden':{'1': 'dungeon', '2': 'dungeon'},
 	'dungeon':{'1':'garden', '2':'garden'},

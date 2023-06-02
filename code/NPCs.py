@@ -117,7 +117,7 @@ class NPC(pygame.sprite.Sprite):
 
 	def state_logic(self):
 		new_state = self.state.state_logic(self)
-		if new_state is not None: self.state = new_state
+		if new_state: self.state = new_state
 		else: self.state
 
 	def update(self, dt):

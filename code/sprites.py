@@ -134,7 +134,7 @@ class Sword(AnimatedObject):
 
 class Bullet(AnimatedObject):
 	def __init__(self, game, zone, groups, pos, z, path):
-		super().__init__(groups)
+		super().__init__(game, zone, groups, pos, z, path)
 
 		self.speed = 5
 		self.vel = self.zone.get_distance_direction_and_angle(self.rect.center, pygame.mouse.get_pos())[1] * self.speed
