@@ -3,7 +3,7 @@ from settings import *
 from state import State
 
 class MapSprite(pygame.sprite.Sprite):
-	def __init__(self, pos, size, name):
+	def __init__(self, pos, name):
 		self.name = name
 		self.image = pygame.image.load(f'../assets/map_images/{self.name}.png').convert_alpha()
 		self.rect = self.image.get_rect(center = pos)
@@ -27,7 +27,7 @@ class Map(State):
 		self.map_bg_surf.fill(PURPLE)
 		self.current_zone_pos = MAP_DATA[self.zone.name]['pos']
 
-		self.marker = MapSprite((self.map_surf.get_width()/2, self.map_surf.get_height()/2), (6, 6), 'marker')
+		self.marker = MapSprite((self.map_surf.get_width()/2, self.map_surf.get_height()/2), 'marker')
 		
 		#self.marker = MapSprite((self.map_surf.get_width()/2, self.map_surf.get_height()/2), (6, 6), 'marker')
 		
@@ -36,11 +36,11 @@ class Map(State):
 	def get_zone_sprites(self):
 		zone_sprites = []
 		for zone, data in MAP_DATA.items():
-			sprite = MapSprite(data['pos'], data['size'], zone)
+			sprite = MapSprite(data['pos'], zone)
 			sprite.pos -= self.current_zone_pos - pygame.math.Vector2(self.map_surf.get_width()/2, self.map_surf.get_height()/2)
 			if zone == self.zone.name:
 				self.player_pos = sprite.pos
-				self.player = MapSprite(self.player_pos, (6, 6), 'player')
+				self.player = MapSprite(self.player_pos, 'player')
 			zone_sprites.append(sprite)
 			
 		return zone_sprites
@@ -64,11 +64,11 @@ class Map(State):
 	
 	def fade(self, dt):
 		if not self.fadeout:
-			self.alpha += 8 * dt
+			self.alpha += 10 * dt
 			if self.alpha >= self.max_alpha:
 				self.alpha = self.max_alpha
 		else:
-			self.alpha -= 8 * dt
+			self.alpha -= 10 * dt
 			if self.alpha <= 0:
 				self.alpha = 0
 				self.exit_state()
@@ -80,17 +80,15 @@ class Map(State):
 		for zone in self.zone_sprites:
 			if zone != self.marker:
 				if self.player.rect.centerx > self.map_rect.left:
-					if keys[pygame.K_RIGHT]: self.offset.x += 0.1
-					elif keys[pygame.K_LEFT]: self.offset.x -= 0.1
+					if keys[pygame.K_RIGHT]: self.offset.x -= 0.1
+					elif keys[pygame.K_LEFT]: self.offset.x += 0.1
 					else: self.offset.x = 0
-					if keys[pygame.K_DOWN]: self.offset.y += 0.1
-					elif keys[pygame.K_UP]: self.offset.y -= 0.1
+					if keys[pygame.K_DOWN]: self.offset.y -= 0.1
+					elif keys[pygame.K_UP]: self.offset.y += 0.1
 					else: self.offset.y = 0
 
 					zone.pos += self.offset * dt
 					zone.rect.center = zone.pos
-
-					
 
 					if self.offset.magnitude() > 0: self.offset = self.offset.normalize()
 
@@ -102,6 +100,7 @@ class Map(State):
 			self.fadeout = True
 
 	def draw(self, screen):
+
 		self.prev_state.draw(screen)
 		
 		# blit transparent purple map background
@@ -109,10 +108,12 @@ class Map(State):
 		self.map_bg_surf.set_alpha(self.alpha)
 
 		#blit map surface with details
-		screen.blit(self.map_surf, self.map_rect)
-		self.draw_map(self.map_surf, screen)
+		
+		if self.alpha >= self.max_alpha:
+			screen.blit(self.map_surf, self.map_rect)
+			self.draw_map(self.map_surf, screen)
 
 		# map text
-		self.game.render_text('MAP', WHITE, self.game.small_font, (HALF_WIDTH, TILESIZE * 0.5))
+		self.game.render_text('MAP', WHITE, self.game.small_font, (HALF_WIDTH, TILESIZE * 2))
 		pygame.draw.rect(screen, WHITE, (self.map_rect.x -3, self.map_rect.y -3, self.map_rect.width + 6, self.map_rect.height + 6), 2)
 		

@@ -9,10 +9,15 @@ FONT = '../fonts/Pokemon Classic.ttf'
 
 # data that is dynamic and changes throughout play
 MAP_DATA = {
-	'garden':{'pos': (40,20), 'size': (20, 30)},
-	'dungeon':{'pos': (70,30), 'size': (30, 10)},
+	'garden':{'pos': (30,10)},
+	'dungeon':{'pos': (60,20)},
 }
-PLAYER_DATA = {'max_health': 4, 'max_bullets': 6, 'partial_healths': 0}
+PLAYER_DATA = {'current_zone': 'garden', 'entry_pos': '0', 'max_health': 4, 'max_bullets': 6, 'partial_healths': 0}
+
+GUN_DATA = {
+	'pistol':{'ammo_cost': 1, 'damage': 1, 'fire_rate': 30, 'knockback': 1},
+	'railgun':{'ammo_cost': 2, 'damage': 2, 'fire_rate': 80, 'knockback': 2}
+}
 
 ENEMY_DATA = {
 	'grunt':{'speed': 0.1, 'lunge_speed': 2, 'knockback_speed': 1, 'damage': 1, 'health': 3, 'telegraphing_time': 25, 'attack_radius': 30, 'pursue_radius': 110},

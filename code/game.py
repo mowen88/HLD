@@ -1,7 +1,7 @@
 import pygame, sys
 from settings import *
 from os import walk
-from intro import Intro
+from intro import  Intro
 
 class Game:
     def __init__(self):
@@ -13,8 +13,8 @@ class Game:
         self.running = True
 
         #font
-        self.big_font =  pygame.font.Font(FONT, round(HEIGHT * 0.12))
-        self.small_font = pygame.font.Font(FONT, round(HEIGHT * 0.05))
+        self.big_font =  pygame.font.Font(FONT, 18)
+        self.small_font = pygame.font.Font(FONT, 8)
 
         # states
         self.stack = []

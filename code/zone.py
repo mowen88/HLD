@@ -20,6 +20,8 @@ class Zone(State):
 		self.game = game
 		self.name = name
 		self.entry_point = entry_point
+		PLAYER_DATA.update({'current_zone': self.name, 'entry_pos': self.entry_point})
+
 		self.screenshaking = False
 		self.screenshake_timer = 0
 		self.cutscene_running = False
@@ -223,9 +225,10 @@ class Zone(State):
 	def draw(self, screen):
 		screen.fill(GREEN)
 		self.rendered_sprites.offset_draw(self.target)
+		self.game.custom_cursor(screen)
 		self.ui.draw(screen)
 		self.fade_surf.draw(screen)
 		self.game.render_text(str(round(self.game.clock.get_fps(), 2)), WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.1))
-		self.game.render_text(self.grunt.alive, PINK, self.game.small_font, RES/2)
+		self.game.render_text(self.player.gun_index, PINK, self.game.small_font, RES/2)
 		self.game.render_text(self.player.invincible, WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.9))
 		

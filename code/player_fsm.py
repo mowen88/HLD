@@ -12,6 +12,13 @@ class Idle:
 		if keys[pygame.K_SPACE]:
 			return Shoot(player, self.direction)
 
+		if ACTIONS['right_ctrl']:
+			player.game.reset_keys()
+			if player.gun_index < len(list(GUN_DATA.keys()))-1: player.gun_index += 1
+			else: player.gun_index = 0
+			player.gun = list(GUN_DATA.keys())[player.gun_index]
+			
+
 		if ACTIONS['right_click'] and player.dash_count < 3:
 			return Dash(player, self.direction)
 
@@ -36,6 +43,12 @@ class Move:
 
 		if keys[pygame.K_SPACE]:
 			return Shoot(player, self.direction)
+
+		if ACTIONS['right_ctrl']:
+			player.game.reset_keys()
+			if player.gun_index < len(list(GUN_DATA.keys()))-1: player.gun_index += 1
+			else: player.gun_index = 0
+			player.gun = list(GUN_DATA.keys())[player.gun_index]
 
 		if ACTIONS['right_click'] and player.dash_count < 3:
 			return Dash(player, self.direction)
@@ -158,7 +171,7 @@ class Shoot:
 		PLAYER_DATA['max_bullets'] -= 1
 
 		self.timer = 25
-		self.lunge_speed = 1
+		self.lunge_speed = GUN_DATA[player.gun]['knockback']
 		self.get_current_direction = pygame.mouse.get_pos()
 		player.vel = player.zone.get_distance_direction_and_angle(player.hitbox.center, self.get_current_direction)[1] * self.lunge_speed * -1
 		player.angle = player.zone.get_distance_direction_and_angle(player.hitbox.center, self.get_current_direction)[2]
