@@ -140,6 +140,7 @@ class Bullet(AnimatedObject):
 		self.vel = self.zone.get_distance_direction_and_angle(self.rect.center, pygame.mouse.get_pos())[1] * self.speed
 		self.vel = self.vel.rotate(random.randrange(-10, 10))
 		self.pos = pygame.math.Vector2(self.rect.center)
+		self.damage = 1
 
 	def update(self, dt):
 		self.animate(0.25 * dt)
@@ -171,6 +172,7 @@ class Beam(AnimatedObject):
 
 		self.alpha = 255
 		self.fade_speed = fade_speed
+		self.damage = 2
 
 	def animate(self, animation_speed):
 		self.frame_index += animation_speed

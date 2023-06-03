@@ -15,8 +15,8 @@ MAP_DATA = {
 PLAYER_DATA = {'current_zone': 'garden', 'entry_pos': '0', 'gun_index': 0, 'max_health': 4, 'max_bullets': 6, 'partial_healths': 0}
 
 GUN_DATA = {
-	'pistol':{'ammo_cost': 1, 'damage': 1, 'fire_rate': 30, 'knockback': 1},
-	'railgun':{'ammo_cost': 2, 'damage': 2, 'fire_rate': 80, 'knockback': 2}
+	'pistol':{'ammo_cost': 1, 'damage': 1, 'cooldown': 30, 'knockback': 1},
+	'railgun':{'ammo_cost': 2, 'damage': 2, 'cooldown': 80, 'knockback': 2}
 }
 
 ENEMY_DATA = {
@@ -45,7 +45,7 @@ LAYERS = {
 
 # key events
 ACTIONS = {'escape': False, 'space': False, 'up': False, 'down': False, 'left': False,
-			'right': False, 'return': False, 'right_ctrl': False, 'backspace': False, 'left_click': False, 
+			'right': False, 'return': False, 'right_shift': False, 'backspace': False, 'left_click': False, 
 			'right_click': False, 'scroll_up': False, 'scroll_down': False}
 
 # game colours

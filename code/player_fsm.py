@@ -9,15 +9,14 @@ class Idle:
 	def state_logic(self, player):
 		keys = pygame.key.get_pressed()
 
-		if keys[pygame.K_SPACE]:
+		if keys[pygame.K_RCTRL]:
 			return Shoot(player, self.direction)
 
-		if ACTIONS['right_ctrl']:
+		if ACTIONS['scroll_down']:
 			player.game.reset_keys()
 			if PLAYER_DATA['gun_index'] < len(list(GUN_DATA.keys()))-1: PLAYER_DATA['gun_index'] += 1
 			else: PLAYER_DATA['gun_index'] = 0
-			player.gun = list(GUN_DATA.keys())[PLAYER_DATA['gun_index']]
-			
+			player.gun = list(GUN_DATA.keys())[PLAYER_DATA['gun_index']]	
 
 		if ACTIONS['right_click'] and player.dash_count < 3:
 			return Dash(player, self.direction)
@@ -41,10 +40,10 @@ class Move:
 	def state_logic(self, player):
 		keys = pygame.key.get_pressed()
 
-		if keys[pygame.K_SPACE]:
+		if keys[pygame.K_RCTRL]:
 			return Shoot(player, self.direction)
 
-		if ACTIONS['right_ctrl']:
+		if ACTIONS['scroll_down']:
 			player.game.reset_keys()
 			if PLAYER_DATA['gun_index'] < len(list(GUN_DATA.keys()))-1: PLAYER_DATA['gun_index'] += 1
 			else: PLAYER_DATA['gun_index'] = 0
@@ -169,8 +168,7 @@ class Shoot:
 
 		player.frame_index = 0
 		PLAYER_DATA['max_bullets'] -= 1
-
-		self.timer = 25
+		self.timer = GUN_DATA[player.gun]['cooldown']
 		self.lunge_speed = GUN_DATA[player.gun]['knockback']
 		self.get_current_direction = pygame.mouse.get_pos()
 		player.vel = player.zone.get_distance_direction_and_angle(player.hitbox.center, self.get_current_direction)[1] * self.lunge_speed * -1
@@ -178,6 +176,7 @@ class Shoot:
 		self.direction = player.get_direction()
 
 		player.zone.create_gun()
+		
 		if PLAYER_DATA['max_bullets'] >= 0:
 			if player.gun == 'pistol': player.zone.create_player_bullet()
 			else: player.zone.create_railgun_beam()
@@ -206,6 +205,7 @@ class Shoot:
 		player.animate(self.direction + '_dash', 0.2 * dt, 'end')
 		
 		self.timer -= dt
+
 		player.acc = pygame.math.Vector2()
 		self.lunge_speed -= 0.1 * dt
 		if player.vel.magnitude() != 0: player.vel = player.vel.normalize() * self.lunge_speed

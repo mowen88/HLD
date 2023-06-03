@@ -35,37 +35,37 @@ class Game:
                 if event.key == pygame.K_ESCAPE:
                     ACTIONS['escape'] = True
                     self.running = False
+               
+                if event.key == pygame.K_DOWN or event.key == pygame.K_s:
+                    ACTIONS['down'] = True
                 elif event.key == pygame.K_UP or event.key == pygame.K_w:
                     ACTIONS['up'] = True
-                elif event.key == pygame.K_DOWN or event.key == pygame.K_s:
-                    ACTIONS['down'] = True
-                elif event.key == pygame.K_RIGHT or event.key == pygame.K_d:
-                    ACTIONS['right'] = True
                 elif event.key == pygame.K_LEFT or event.key == pygame.K_a:
                     ACTIONS['left'] = True
+                elif event.key == pygame.K_RIGHT or event.key == pygame.K_d:
+                    ACTIONS['right'] = True
                 elif event.key == pygame.K_SPACE:
                     ACTIONS['space'] = True
-                elif event.key == pygame.K_RCTRL:
-                    ACTIONS['right_ctrl'] = True
+                elif event.key == pygame.K_RSHIFT:
+                    ACTIONS['right_shift'] = True
                 elif event.key == pygame.K_RETURN:
                     ACTIONS['return'] = True
                 elif event.key == pygame.K_BACKSPACE:
                     ACTIONS['backspace'] = True
 
             if event.type == pygame.KEYUP:
-                if event.key == pygame.K_UP or event.key == pygame.K_w:
-                    ACTIONS['up'] = False
-
-                elif event.key == pygame.K_DOWN or event.key == pygame.K_s:
+                if event.key == pygame.K_DOWN or event.key == pygame.K_s:
                     ACTIONS['down'] = False
-                elif event.key == pygame.K_RIGHT or event.key == pygame.K_d:
-                    ACTIONS['right'] = False
+                elif event.key == pygame.K_UP or event.key == pygame.K_w:
+                    ACTIONS['up'] = False
                 elif event.key == pygame.K_LEFT or event.key == pygame.K_a:
                     ACTIONS['left'] = False
+                elif event.key == pygame.K_RIGHT or event.key == pygame.K_d:
+                    ACTIONS['right'] = False
                 elif event.key == pygame.K_SPACE:
                     ACTIONS['space'] = False
-                elif event.key == pygame.K_RCTRL:
-                    ACTIONS['right_ctrl'] = False
+                elif event.key == pygame.K_RSHIFT:
+                    ACTIONS['right_shift'] = False
                 elif event.key == pygame.K_RETURN:
                     ACTIONS['return'] = False
                 elif event.key == pygame.K_BACKSPACE:

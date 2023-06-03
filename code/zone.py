@@ -130,12 +130,10 @@ class Zone(State):
 		x = math.hypot(WIDTH, HEIGHT) * math.cos(angle) + self.player.hitbox.centerx
 		y = math.hypot(WIDTH, HEIGHT) * math.sin(angle) + self.player.hitbox.centery
 		distance = ((x, y) - pygame.math.Vector2(self.player.hitbox.center)).magnitude()
-		point_list = self.get_equidistant_points(self.player.hitbox.center - self.rendered_sprites.offset, (x - self.rendered_sprites.offset[0], y - self.rendered_sprites.offset[1]), int(distance/3))
+		point_list = self.get_equidistant_points(self.player.hitbox.center - self.rendered_sprites.offset, (x - self.rendered_sprites.offset[0], y - self.rendered_sprites.offset[1]), int(distance/6))
 		for num, point in enumerate(point_list):
-			if num > 6: 
-				Beam(self.game, self, [self.updated_sprites, self.rendered_sprites], point + self.rendered_sprites.offset, LAYERS['particles'],  f'../assets/weapons/railgun_particle_2', 6)
-			if num > 3:	
-				self.beam = Beam(self.game, self, [self.updated_sprites, self.rendered_sprites], point + self.rendered_sprites.offset, LAYERS['player'],  f'../assets/weapons/railgun_particle', 3)
+			if 2 < num < 50: 
+				self.beam = Beam(self.game, self, [self.updated_sprites, self.rendered_sprites], point + self.rendered_sprites.offset, LAYERS['particles'],  f'../assets/weapons/railgun_particle', 4)
 				self.player_bullet_sprites.add(self.beam)
 			for sprite in self.block_sprites:
 				if sprite not in self.attackable_sprites:
@@ -173,12 +171,16 @@ class Zone(State):
 			for bullet in self.player_bullet_sprites:
 				if bullet.rect.colliderect(target.hitbox):
 					if not target.invincible and target.alive:
+						target.health -= bullet.damage
 						bullet.kill()
-						target.health -= 1
 						target.invincible = True
 						if target.health <= 0:
 							target.invincible = False
 							target.alive = False
+
+				for sprite in self.block_sprites:
+					if bullet.rect.colliderect(sprite.hitbox) and sprite not in self.attackable_sprites:
+						bullet.kill()
 
 	def player_attacking_logic(self):
 		if self.melee_sprite:
@@ -252,6 +254,6 @@ class Zone(State):
 		self.fade_surf.draw(screen)
 
 		self.game.render_text(str(round(self.game.clock.get_fps(), 2)), WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.1))
-		self.game.render_text(self.player.gun_index, PINK, self.game.small_font, RES/2)
+		self.game.render_text(self.player.state, PINK, self.game.small_font, RES/2)
 		self.game.render_text(self.player.invincible, WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.9))
 		
