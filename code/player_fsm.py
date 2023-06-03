@@ -14,9 +14,9 @@ class Idle:
 
 		if ACTIONS['right_ctrl']:
 			player.game.reset_keys()
-			if player.gun_index < len(list(GUN_DATA.keys()))-1: player.gun_index += 1
-			else: player.gun_index = 0
-			player.gun = list(GUN_DATA.keys())[player.gun_index]
+			if PLAYER_DATA['gun_index'] < len(list(GUN_DATA.keys()))-1: PLAYER_DATA['gun_index'] += 1
+			else: PLAYER_DATA['gun_index'] = 0
+			player.gun = list(GUN_DATA.keys())[PLAYER_DATA['gun_index']]
 			
 
 		if ACTIONS['right_click'] and player.dash_count < 3:
@@ -46,9 +46,9 @@ class Move:
 
 		if ACTIONS['right_ctrl']:
 			player.game.reset_keys()
-			if player.gun_index < len(list(GUN_DATA.keys()))-1: player.gun_index += 1
-			else: player.gun_index = 0
-			player.gun = list(GUN_DATA.keys())[player.gun_index]
+			if PLAYER_DATA['gun_index'] < len(list(GUN_DATA.keys()))-1: PLAYER_DATA['gun_index'] += 1
+			else: PLAYER_DATA['gun_index'] = 0
+			player.gun = list(GUN_DATA.keys())[PLAYER_DATA['gun_index']]
 
 		if ACTIONS['right_click'] and player.dash_count < 3:
 			return Dash(player, self.direction)
@@ -178,7 +178,11 @@ class Shoot:
 		self.direction = player.get_direction()
 
 		player.zone.create_gun()
-		player.zone.create_player_bullet()
+		if PLAYER_DATA['max_bullets'] >= 0:
+			if player.gun == 'pistol': player.zone.create_player_bullet()
+			else: player.zone.create_railgun_beam()
+		else:
+			PLAYER_DATA['max_bullets'] = 0
 
 	def state_logic(self, player):
 

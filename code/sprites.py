@@ -165,6 +165,25 @@ class AttackableTerrain(AnimatedObject):
 
 		self.image = self.frames[int(self.frame_index)]
 
+class Beam(AnimatedObject):
+	def __init__(self, game, zone, groups, pos, z, path, fade_speed):
+		super().__init__(game, zone, groups, pos, z, path)
+
+		self.alpha = 255
+		self.fade_speed = fade_speed
+
+	def animate(self, animation_speed):
+		self.frame_index += animation_speed
+		self.frame_index = self.frame_index % len(self.frames)
+		self.image = self.frames[int(self.frame_index)]
+
+	def update(self, dt):
+		self.animate(0.2 * dt)
+		self.alpha -= self.fade_speed * dt
+		if self.alpha <= 0:
+			self.kill()
+		self.image.set_alpha(self.alpha)
+
 
 			
 

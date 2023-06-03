@@ -19,7 +19,7 @@ class Player(NPC):
 	
 		self.direction = {'up': False, 'down': False, 'left': False, 'right': False}
 		
-		self.gun_index = 0
+		self.gun_index = PLAYER_DATA['gun_index']
 		self.gun = list(GUN_DATA.keys())[self.gun_index]
 	
 		self.import_imgs()
@@ -59,6 +59,7 @@ class Player(NPC):
 			self.dash_count = 0
 			self.dash_timer = 0
 
+	
 	def update(self, dt):
 		self.invincibility(dt)
 		self.attack_logic(dt)

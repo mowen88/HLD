@@ -12,7 +12,7 @@ MAP_DATA = {
 	'garden':{'pos': (30,10)},
 	'dungeon':{'pos': (60,20)},
 }
-PLAYER_DATA = {'current_zone': 'garden', 'entry_pos': '0', 'max_health': 4, 'max_bullets': 6, 'partial_healths': 0}
+PLAYER_DATA = {'current_zone': 'garden', 'entry_pos': '0', 'gun_index': 0, 'max_health': 4, 'max_bullets': 6, 'partial_healths': 0}
 
 GUN_DATA = {
 	'pistol':{'ammo_cost': 1, 'damage': 1, 'fire_rate': 30, 'knockback': 1},

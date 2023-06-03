@@ -6,7 +6,7 @@ from pytmx.util_pygame import load_pygame
 from state import State
 from ui import UI
 from map import Map
-from sprites import FadeSurf, Exit, Object, Void, Gun, Sword, Bullet, Tree, AttackableTerrain
+from sprites import FadeSurf, Exit, Object, Void, Gun, Sword, Bullet, Tree, Beam, AttackableTerrain
 from camera import Camera
 from particles import Particle, Shadow
 from player import Player
@@ -122,11 +122,32 @@ class Zone(State):
 		self.gun_sprite = Gun(self.game, self, [self.updated_sprites, self.rendered_sprites], self.player.hitbox.center, LAYERS['player'], pygame.image.load(f'../assets/weapons/{self.player.gun}.png').convert_alpha())
 
 	def create_player_bullet(self):
-		if PLAYER_DATA['max_bullets'] >= 0:
-			bullet = Bullet(self.game, self, [self.updated_sprites, self.rendered_sprites], self.player.hitbox.center, LAYERS['player'], f'../assets/weapons/{self.player.gun}_bullet')
-			self.player_bullet_sprites.add(bullet)
-		else:
-			PLAYER_DATA['max_bullets'] = 0
+		self.bullet = Bullet(self.game, self, [self.updated_sprites, self.rendered_sprites], self.player.hitbox.center, LAYERS['player'], f'../assets/weapons/{self.player.gun}_bullet')
+		self.player_bullet_sprites.add(self.bullet)
+
+	def create_railgun_beam(self):
+		angle = math.atan2(pygame.mouse.get_pos()[1]-self.player.hitbox.centery + self.rendered_sprites.offset[1], pygame.mouse.get_pos()[0]-self.player.hitbox.centerx + self.rendered_sprites.offset[0])
+		x = math.hypot(WIDTH, HEIGHT) * math.cos(angle) + self.player.hitbox.centerx
+		y = math.hypot(WIDTH, HEIGHT) * math.sin(angle) + self.player.hitbox.centery
+		distance = ((x, y) - pygame.math.Vector2(self.player.hitbox.center)).magnitude()
+		point_list = self.get_equidistant_points(self.player.hitbox.center - self.rendered_sprites.offset, (x - self.rendered_sprites.offset[0], y - self.rendered_sprites.offset[1]), int(distance/3))
+		for num, point in enumerate(point_list):
+			if num > 6: 
+				Beam(self.game, self, [self.updated_sprites, self.rendered_sprites], point + self.rendered_sprites.offset, LAYERS['particles'],  f'../assets/weapons/railgun_particle_2', 6)
+			if num > 3:	
+				self.beam = Beam(self.game, self, [self.updated_sprites, self.rendered_sprites], point + self.rendered_sprites.offset, LAYERS['player'],  f'../assets/weapons/railgun_particle', 3)
+				self.player_bullet_sprites.add(self.beam)
+			for sprite in self.block_sprites:
+				if sprite not in self.attackable_sprites:
+					if sprite.hitbox.collidepoint(point + self.rendered_sprites.offset):
+						#BeamBlast(self.game, self, 'beam_blast', [self.updated_sprites, self.rendered_sprites], point, LAYERS['explosions'])
+						return False
+
+	def lerp(self, v0, v1, t):
+		return v0 + t * (v1 - v0)
+
+	def get_equidistant_points(self, point_1, point_2, num_of_points):
+		return [(self.lerp(point_1[0], point_2[0], 1./num_of_points * i), self.lerp(point_1[1], point_2[1], 1./num_of_points * i)) for i in range(num_of_points + 1)]
 			
 	def enemy_enemy_collisions(self):
 		enemies = []
@@ -226,8 +247,10 @@ class Zone(State):
 		screen.fill(GREEN)
 		self.rendered_sprites.offset_draw(self.target)
 		self.game.custom_cursor(screen)
+
 		self.ui.draw(screen)
 		self.fade_surf.draw(screen)
+
 		self.game.render_text(str(round(self.game.clock.get_fps(), 2)), WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.1))
 		self.game.render_text(self.player.gun_index, PINK, self.game.small_font, RES/2)
 		self.game.render_text(self.player.invincible, WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.9))
