@@ -18,7 +18,7 @@ class Game:
 
         # states
         self.stack = []
-        self.load_states()
+        self.load_states() 
 
         #stats
         self.current_health = PLAYER_DATA['max_health']

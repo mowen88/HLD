@@ -40,7 +40,8 @@ LAYERS = {
 	'weapons': 7,
 	'blocks': 8,
 	'explosions': 9,
-	'foreground': 10
+	'foreground': 10,
+	'ui': 11
 }
 
 # key events

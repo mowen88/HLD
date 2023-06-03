@@ -4,9 +4,10 @@ from os import walk
 from settings import *
 from pytmx.util_pygame import load_pygame
 from state import State
+from cutscenes import CollectionCutscene
 from ui import UI
 from map import Map
-from sprites import FadeSurf, Exit, Object, Void, Gun, Sword, Bullet, Tree, Beam, AttackableTerrain
+from sprites import FadeSurf, Exit, Object, AnimatedObject, Void, Gun, Sword, Bullet, Tree, Beam, AttackableTerrain
 from camera import Camera
 from particles import Particle, Shadow
 from player import Player
@@ -20,6 +21,7 @@ class Zone(State):
 		self.game = game
 		self.name = name
 		self.entry_point = entry_point
+		
 		PLAYER_DATA.update({'current_zone': self.name, 'entry_pos': self.entry_point})
 
 		self.screenshaking = False
@@ -43,12 +45,17 @@ class Zone(State):
 		self.enemy_sprites = pygame.sprite.Group()
 		self.attackable_sprites = pygame.sprite.Group()
 		self.gun_sprites = pygame.sprite.Group()
+		self.health_sprites = pygame.sprite.Group()
+		
 
 		self.zone_size = self.get_zone_size()
 		self.create_map()
 
 		self.ui = UI(self.game, self)
 		self.fade_surf = FadeSurf(self, [self.updated_sprites, self.rendered_sprites], (0,0))
+		self.collection_cutscene = CollectionCutscene(self.game, self)
+
+		
 
 	def get_zone_size(self):
 		with open(f'../zones/{self.name}/{self.name}_walls.csv', newline='') as csvfile:
@@ -85,6 +92,9 @@ class Zone(State):
 			if obj.name == 'hound': self.hound = Hound(self.game, self, [self.enemy_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.name)
 			#NPCs
 			if obj.name == 'warrior': self.warrior = Warrior(self.game, self, [self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.name)
+
+		for obj in tmx_data.get_layer_by_name('collectibles'):
+			if obj.name == 'health': self.health = AnimatedObject(self.game, self, [self.health_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/juice')
 
 		for obj in tmx_data.get_layer_by_name('objects'):
 			if obj.name == 'big tree': Tree(self.game, self, [self.block_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
@@ -212,6 +222,13 @@ class Zone(State):
 				self.exit_state()
 				self.create_zone(self.name)
 
+	def collect(self):
+		for sprite in self.health_sprites:
+			if self.player.hitbox.colliderect(sprite.rect):
+				self.ui.add_health()
+				self.collection_cutscene.enter_state()
+				self.health.kill()
+
 	def get_distance_direction_and_angle(self, point_1, point_2):
 		pos_1 = pygame.math.Vector2(point_1 - self.rendered_sprites.offset)
 		pos_2 = pygame.math.Vector2(point_2)
@@ -232,6 +249,7 @@ class Zone(State):
 				self.entry_point = sprite.name
 			
 	def update(self, dt):
+		self.collect()
 		self.exiting()
 		self.enemy_shot_logic()
 		self.enemy_enemy_collisions()
@@ -240,7 +258,6 @@ class Zone(State):
 		if ACTIONS['return']: 
 			Map(self.game, self).enter_state()
 			#self.exit_state()
-			self.ui.add_health()
 			PLAYER_DATA['max_bullets'] = 6
 			self.game.reset_keys()
 		self.updated_sprites.update(dt)

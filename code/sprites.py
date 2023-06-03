@@ -172,7 +172,7 @@ class Beam(AnimatedObject):
 
 		self.alpha = 255
 		self.fade_speed = fade_speed
-		self.damage = 2
+		self.damage = 3
 
 	def animate(self, animation_speed):
 		self.frame_index += animation_speed

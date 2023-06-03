@@ -72,7 +72,7 @@ class Map(State):
 			if self.alpha <= 0:
 				self.alpha = 0
 				self.exit_state()
-				self.game.reset_keys() 
+				
 
 	def scroll_logic(self, dt):
 		keys = pygame.key.get_pressed()
