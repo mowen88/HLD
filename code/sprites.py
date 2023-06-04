@@ -37,7 +37,6 @@ class Exit(pygame.sprite.Sprite):
 		self.image = surf
 		self.rect = self.image.get_rect(topleft = pos)
 
-
 class Object(pygame.sprite.Sprite):
 	def __init__(self, game, zone, groups, pos, z, surf = pygame.Surface((TILESIZE, TILESIZE))):
 		super().__init__(groups)
@@ -103,6 +102,7 @@ class AnimatedObject(pygame.sprite.Sprite):
 		self.frame_index = self.frame_index % len(self.frames)	
 		self.image = self.frames[int(self.frame_index)]
 
+
 	def update(self, dt):
 		self.animate(0.2 * dt)
 
@@ -111,6 +111,30 @@ class Collectible(AnimatedObject):
 		super().__init__(game, zone, groups, pos, z, path)
 
 		self.name = name
+		self.original_image = self.frames[self.frame_index]
+		self.image = self.original_image
+		self.pos = pos
+		self.rotate = 0
+
+	def animate(self, animation_speed):
+		self.frame_index += animation_speed
+		self.frame_index = self.frame_index % len(self.frames)
+		self.original_image = self.frames[int(self.frame_index)]
+
+	def rotation(self, dt):
+		self.rotate += 3 * dt
+		self.rotate = self.rotate % 360
+
+		self.image = pygame.transform.rotate(self.original_image, self.rotate)
+		self.rect = self.image.get_rect(center = self.rect.center)
+
+		self.hitbox.center = self.rect.center
+
+	def update(self, dt):
+		self.rotation(dt)
+		self.animate(0.2 * dt)
+		
+		
 
 class Sword(AnimatedObject):
 	def __init__(self, game, zone, groups, pos, z, path):
