@@ -22,6 +22,7 @@ class Game:
 
         #stats
         self.current_health = PLAYER_DATA['max_health']
+        self.current_juice = PLAYER_DATA['max_juice']
         self.current_bullets = PLAYER_DATA['max_bullets']
 
     def get_events(self):

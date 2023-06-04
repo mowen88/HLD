@@ -7,7 +7,7 @@ from state import State
 from cutscenes import CollectionCutscene
 from ui import UI
 from map import Map
-from sprites import FadeSurf, Exit, Object, AnimatedObject, Void, Collectible, Gun, Sword, Bullet, Tree, Beam, AttackableTerrain
+from sprites import FadeSurf, Exit, Object, Void, Collectible, Gun, Sword, Bullet, Tree, Beam, AttackableTerrain
 from camera import Camera
 from particles import Particle, Shadow
 from player import Player
@@ -193,12 +193,13 @@ class Zone(State):
 			for bullet in self.player_bullet_sprites:
 				if bullet.rect.colliderect(target.hitbox):
 					if not target.invincible and target.alive:
-						target.health -= bullet.damage
-						bullet.kill()
-						target.invincible = True
-						if target.health <= 0:
-							target.invincible = False
-							target.alive = False
+						if not hasattr(bullet, 'alpha') or (hasattr(bullet, 'alpha') and bullet.alpha >= 255):
+							target.health -= bullet.damage
+							bullet.kill()
+							target.invincible = True
+							if target.health <= 0:
+								target.invincible = False
+								target.alive = False
 
 				for sprite in self.block_sprites:
 					if bullet.rect.colliderect(sprite.hitbox) and sprite not in self.attackable_sprites:
@@ -210,6 +211,7 @@ class Zone(State):
 				if self.melee_sprite.rect.colliderect(target.hitbox) and self.melee_sprite.frame_index < 1:
 					if not target.invincible and target.alive:
 						target.invincible = True
+						self.add_subtract_juice(11, 'add')
 						target.health -= 1
 						if target.health <= 0:
 							target.alive = False
@@ -233,6 +235,14 @@ class Zone(State):
 				self.game.current_health = PLAYER_DATA['max_health']
 				self.exit_state()
 				self.create_zone(self.name)
+
+	def add_subtract_juice(self, amount, direction):
+		if direction == 'add': self.game.current_juice += amount
+		else: self.game.current_juice -= amount
+
+		if self.game.current_juice <= 0:self.game.current_juice = 0
+		if self.game.current_juice > PLAYER_DATA['max_juice']: self.game.current_juice = PLAYER_DATA['max_juice']
+
 
 	def collect(self):
 		for sprite in self.health_sprites:
@@ -269,6 +279,7 @@ class Zone(State):
 		self.enemy_shot_logic()
 		self.enemy_enemy_collisions()
 		self.fade_surf.update(dt)
+		self.ui.update(dt)
 
 		if ACTIONS['return']: 
 			Map(self.game, self).enter_state()
@@ -286,6 +297,6 @@ class Zone(State):
 		self.fade_surf.draw(screen)
 
 		self.game.render_text(str(round(self.game.clock.get_fps(), 2)), WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.1))
-		self.game.render_text(self.player.state, PINK, self.game.small_font, RES/2)
+		self.game.render_text(self.player.changing_weapon, PINK, self.game.small_font, RES/2)
 		self.game.render_text(self.player.invincible, WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.9))
 		

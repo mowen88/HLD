@@ -21,6 +21,7 @@ class Player(NPC):
 		
 		self.gun_index = PLAYER_DATA['gun_index']
 		self.gun = list(GUN_DATA.keys())[self.gun_index]
+		self.changing_weapon = False
 	
 		self.import_imgs()
 		self.animation_type = 'loop'

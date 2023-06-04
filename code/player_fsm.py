@@ -14,9 +14,18 @@ class Idle:
 
 		if ACTIONS['scroll_down']:
 			player.game.reset_keys()
-			if PLAYER_DATA['gun_index'] < len(list(GUN_DATA.keys()))-1: PLAYER_DATA['gun_index'] += 1
-			else: PLAYER_DATA['gun_index'] = 0
-			player.gun = list(GUN_DATA.keys())[PLAYER_DATA['gun_index']]	
+			if not player.changing_weapon:
+				if PLAYER_DATA['gun_index'] < len(list(GUN_DATA.keys()))-1: PLAYER_DATA['gun_index'] += 1
+				else: PLAYER_DATA['gun_index'] = 0
+				player.gun = list(GUN_DATA.keys())[PLAYER_DATA['gun_index']]
+				player.changing_weapon = True
+		if ACTIONS['scroll_up']:
+			player.game.reset_keys()
+			if not player.changing_weapon:
+				if PLAYER_DATA['gun_index'] > 0: PLAYER_DATA['gun_index'] -= 1
+				else: PLAYER_DATA['gun_index'] = len(list(GUN_DATA.keys()))-1
+				player.gun = list(GUN_DATA.keys())[PLAYER_DATA['gun_index']]
+				player.changing_weapon = True
 
 		if ACTIONS['right_click'] and player.dash_count < 3:
 			return Dash(player, self.direction)
@@ -45,9 +54,19 @@ class Move:
 
 		if ACTIONS['scroll_down']:
 			player.game.reset_keys()
-			if PLAYER_DATA['gun_index'] < len(list(GUN_DATA.keys()))-1: PLAYER_DATA['gun_index'] += 1
-			else: PLAYER_DATA['gun_index'] = 0
-			player.gun = list(GUN_DATA.keys())[PLAYER_DATA['gun_index']]
+			if not player.changing_weapon:
+				if PLAYER_DATA['gun_index'] < len(list(GUN_DATA.keys()))-1: PLAYER_DATA['gun_index'] += 1
+				else: PLAYER_DATA['gun_index'] = 0
+				player.gun = list(GUN_DATA.keys())[PLAYER_DATA['gun_index']]
+				player.changing_weapon = True
+
+		if ACTIONS['scroll_up']:
+			player.game.reset_keys()
+			if not player.changing_weapon:
+				if PLAYER_DATA['gun_index'] > 0: PLAYER_DATA['gun_index'] -= 1
+				else: PLAYER_DATA['gun_index'] = len(list(GUN_DATA.keys()))-1
+				player.gun = list(GUN_DATA.keys())[PLAYER_DATA['gun_index']]
+				player.changing_weapon = True
 
 		if ACTIONS['right_click'] and player.dash_count < 3:
 			return Dash(player, self.direction)
@@ -177,9 +196,13 @@ class Shoot:
 
 		player.zone.create_gun()
 		
-		if PLAYER_DATA['max_bullets'] >= 0:
-			if player.gun == 'pistol': player.zone.create_player_bullet()
-			else: player.zone.create_railgun_beam()
+		if player.game.current_juice >= GUN_DATA[player.gun]['cost']:
+			player.zone.add_subtract_juice(GUN_DATA[player.gun]['cost'], 'sub')
+			if player.gun == 'pistol': 
+				player.zone.create_player_bullet()			
+			else: 
+				player.zone.create_railgun_beam()
+
 		else:
 			PLAYER_DATA['max_bullets'] = 0
 

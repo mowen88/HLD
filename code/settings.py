@@ -12,13 +12,13 @@ MAP_DATA = {
 	'garden':{'pos': (30,10)},
 	'dungeon':{'pos': (60,20)},
 }
-PLAYER_DATA = {'current_zone': 'garden', 'entry_pos': '0', 'gun_index': 0, 'max_health': 4, 'max_bullets': 6, 'partial_healths': 0}
+PLAYER_DATA = {'current_zone': 'garden', 'entry_pos': '0', 'gun_index': 0, 'max_health': 4, 'max_juice': 99, 'max_bullets': 6, 'partial_healths': 0}
 
 COMPLETED_DATA = {'visited_zones': [], 'health': []}
 
 GUN_DATA = {
-	'pistol':{'ammo_cost': 1, 'damage': 1, 'cooldown': 30, 'knockback': 1},
-	'railgun':{'ammo_cost': 2, 'damage': 2, 'cooldown': 80, 'knockback': 2}
+	'pistol':{'cost': 11, 'damage': 1, 'cooldown': 20, 'knockback': 1},
+	'railgun':{'cost': 33, 'damage': 2, 'cooldown': 50, 'knockback': 2}
 }
 
 ENEMY_DATA = {
@@ -52,10 +52,10 @@ ACTIONS = {'escape': False, 'space': False, 'up': False, 'down': False, 'left': 
 			'right_click': False, 'scroll_up': False, 'scroll_down': False}
 
 # game colours
-BLACK = ((9, 9, 14))
+BLACK = ((20, 14, 30))
 GREY = ((91,83,145))
 LIGHT_GREY = ((146, 143, 184))
-WHITE = ((255, 255, 255)) 
+WHITE = ((223, 234, 228)) 
 BLUE = ((20, 68, 145))
 LIGHT_BLUE = ((113, 181, 219))
 RED = ((112, 21, 31))

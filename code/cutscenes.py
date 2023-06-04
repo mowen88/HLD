@@ -11,7 +11,7 @@ class CollectionCutscene(State):
 		self.zone = zone
 
 		self.alpha = 0
-		self.max_alpha = 180
+		self.max_alpha = 255
 		self.fadeout = False
 
 		self.frames = self.game.get_folder_images('../assets/ui_images/partial_health_collected')
@@ -21,7 +21,13 @@ class CollectionCutscene(State):
 
 	def animate(self, animation_speed):
 		self.frame_index += animation_speed
-		self.frame_index = self.frame_index % len(self.frames)	
+		
+		if self.frame_index >= len(self.frames) -1: 
+			self.frame_index = len(self.frames) -1
+			self.fadeout = True
+		else:
+			self.frame_index = self.frame_index % len(self.frames)	
+
 		self.image = self.frames[int(self.frame_index)]
 
 	def fade(self, dt):
@@ -33,15 +39,11 @@ class CollectionCutscene(State):
 			self.alpha -= 10 * dt
 			if self.alpha <= 0:
 				self.alpha = 0
-				self.exit_state()
-				
+				self.exit_state()	
 
 	def update(self, dt):
 		self.fade(dt)
-		self.animate(0.4 * dt)
-		
-		if ACTIONS['return']:
-			self.fadeout = True
+		self.animate(0.2 * dt)
 
 	def draw(self, screen):
 		self.prev_state.draw(screen)
