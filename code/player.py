@@ -35,7 +35,7 @@ class Player(NPC):
 		self.attack_count = 0
 		self.attack_timer_running = False
 		self.attack_timer = 0
-		self.attack_cooldown = 100
+		self.attack_cooldown = 90
 
 		# dashing
 		self.dash_count = 0

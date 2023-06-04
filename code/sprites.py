@@ -94,7 +94,9 @@ class AnimatedObject(pygame.sprite.Sprite):
 		self.frame_index = 0
 		self.image = self.frames[self.frame_index]
 		self.rect = self.image.get_rect(center = pos)
-		
+
+		self.hitbox = self.rect.copy().inflate(0,0)
+		self.alive = True
 
 	def animate(self, animation_speed):
 		self.frame_index += animation_speed
@@ -103,6 +105,12 @@ class AnimatedObject(pygame.sprite.Sprite):
 
 	def update(self, dt):
 		self.animate(0.2 * dt)
+
+class Collectible(AnimatedObject):
+	def __init__(self, game, zone, groups, pos, z, path, name):
+		super().__init__(game, zone, groups, pos, z, path)
+
+		self.name = name
 
 class Sword(AnimatedObject):
 	def __init__(self, game, zone, groups, pos, z, path):

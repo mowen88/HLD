@@ -36,13 +36,14 @@ class Map(State):
 	def get_zone_sprites(self):
 		zone_sprites = []
 		for zone, data in MAP_DATA.items():
-			sprite = MapSprite(data['pos'], zone)
-			sprite.pos -= self.current_zone_pos - pygame.math.Vector2(self.map_surf.get_width()/2, self.map_surf.get_height()/2)
-			if zone == self.zone.name:
-				self.player_pos = sprite.pos
-				self.player = MapSprite(self.player_pos, 'player')
-			zone_sprites.append(sprite)
-			
+			if zone in COMPLETED_DATA['visited_zones']:
+				sprite = MapSprite(data['pos'], zone)
+				sprite.pos -= self.current_zone_pos - pygame.math.Vector2(self.map_surf.get_width()/2, self.map_surf.get_height()/2)
+				if zone == self.zone.name:
+					self.player_pos = sprite.pos
+					self.player = MapSprite(self.player_pos, 'player')
+				zone_sprites.append(sprite)
+				
 		return zone_sprites
 
 	def draw_map(self, surf, screen):

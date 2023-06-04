@@ -129,7 +129,7 @@ class Attack:
 		player.attack_count += 1
 		player.attack_timer_running = True
 
-		self.timer = 22
+		self.timer = 20
 		self.lunge_speed = 1
 		self.get_current_direction = pygame.mouse.get_pos()
 		player.vel = player.zone.get_distance_direction_and_angle(player.hitbox.center, self.get_current_direction)[1] * self.lunge_speed

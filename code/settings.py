@@ -14,6 +14,8 @@ MAP_DATA = {
 }
 PLAYER_DATA = {'current_zone': 'garden', 'entry_pos': '0', 'gun_index': 0, 'max_health': 4, 'max_bullets': 6, 'partial_healths': 0}
 
+COMPLETED_DATA = {'visited_zones': [], 'health': []}
+
 GUN_DATA = {
 	'pistol':{'ammo_cost': 1, 'damage': 1, 'cooldown': 30, 'knockback': 1},
 	'railgun':{'ammo_cost': 2, 'damage': 2, 'cooldown': 80, 'knockback': 2}

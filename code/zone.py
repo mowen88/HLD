@@ -7,7 +7,7 @@ from state import State
 from cutscenes import CollectionCutscene
 from ui import UI
 from map import Map
-from sprites import FadeSurf, Exit, Object, AnimatedObject, Void, Gun, Sword, Bullet, Tree, Beam, AttackableTerrain
+from sprites import FadeSurf, Exit, Object, AnimatedObject, Void, Collectible, Gun, Sword, Bullet, Tree, Beam, AttackableTerrain
 from camera import Camera
 from particles import Particle, Shadow
 from player import Player
@@ -23,6 +23,8 @@ class Zone(State):
 		self.entry_point = entry_point
 		
 		PLAYER_DATA.update({'current_zone': self.name, 'entry_pos': self.entry_point})
+		COMPLETED_DATA['visited_zones'].append(self.name)
+
 
 		self.screenshaking = False
 		self.screenshake_timer = 0
@@ -46,7 +48,7 @@ class Zone(State):
 		self.attackable_sprites = pygame.sprite.Group()
 		self.gun_sprites = pygame.sprite.Group()
 		self.health_sprites = pygame.sprite.Group()
-		
+
 
 		self.zone_size = self.get_zone_size()
 		self.create_map()
@@ -55,7 +57,6 @@ class Zone(State):
 		self.fade_surf = FadeSurf(self, [self.updated_sprites, self.rendered_sprites], (0,0))
 		self.collection_cutscene = CollectionCutscene(self.game, self)
 
-		
 
 	def get_zone_size(self):
 		with open(f'../zones/{self.name}/{self.name}_walls.csv', newline='') as csvfile:
@@ -94,7 +95,15 @@ class Zone(State):
 			if obj.name == 'warrior': self.warrior = Warrior(self.game, self, [self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.name)
 
 		for obj in tmx_data.get_layer_by_name('collectibles'):
-			if obj.name == 'health': self.health = AnimatedObject(self.game, self, [self.health_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/juice')
+			if obj.name not in COMPLETED_DATA['health']:
+				if obj.name == 'health_1': self.health_1 = Collectible(self.game, self, [self.health_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/health', obj.name)
+				if obj.name == 'health_2': self.health_2 = Collectible(self.game, self, [self.health_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/health', obj.name)
+				if obj.name == 'health_3': self.health_3 = Collectible(self.game, self, [self.health_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/health', obj.name)
+				if obj.name == 'health_4': self.health_4 = Collectible(self.game, self, [self.health_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/health', obj.name)
+				if obj.name == 'health_5': self.health_5 = Collectible(self.game, self, [self.health_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/health', obj.name)
+				if obj.name == 'health_6': self.health_6 = Collectible(self.game, self, [self.health_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/health', obj.name)
+				if obj.name == 'health_7': self.health_7 = Collectible(self.game, self, [self.health_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/health', obj.name)
+				if obj.name == 'health_8': self.health_8 = Collectible(self.game, self, [self.health_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/health', obj.name)
 
 		for obj in tmx_data.get_layer_by_name('objects'):
 			if obj.name == 'big tree': Tree(self.game, self, [self.block_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
@@ -112,10 +121,13 @@ class Zone(State):
 		# self.create_guns()
 
 		# create shadows for player and NPCs
-		Shadow(self.game, self, [self.updated_sprites, self.rendered_sprites], (self.player.hitbox.midbottom), LAYERS['particles'], self.player)
+		Shadow(self.game, self, [self.updated_sprites, self.rendered_sprites], (self.player.hitbox.midbottom), LAYERS['particles'], self.player, 'medium')
 
 		for sprite in self.enemy_sprites:
-			Shadow(self.game, self, [self.updated_sprites, self.rendered_sprites], (sprite.hitbox.midbottom), LAYERS['particles'], sprite)
+			Shadow(self.game, self, [self.updated_sprites, self.rendered_sprites], (sprite.hitbox.midbottom), LAYERS['particles'], sprite, 'medium')
+		for sprite in self.health_sprites:
+			Shadow(self.game, self, [self.updated_sprites, self.rendered_sprites], (sprite.hitbox.midbottom), LAYERS['particles'], sprite, 'small')
+
 
 		# add static image layers
 		Object(self.game, self, [self.rendered_sprites], (0,-8), LAYERS['BG1'], pygame.image.load(f'../zones/{self.name}/static_bg.png').convert_alpha())
@@ -226,8 +238,11 @@ class Zone(State):
 		for sprite in self.health_sprites:
 			if self.player.hitbox.colliderect(sprite.rect):
 				self.ui.add_health()
+				COMPLETED_DATA['health'].append(sprite.name)
 				self.collection_cutscene.enter_state()
-				self.health.kill()
+				sprite.alive = False
+				sprite.kill()
+		print(COMPLETED_DATA['health'])
 
 	def get_distance_direction_and_angle(self, point_1, point_2):
 		pos_1 = pygame.math.Vector2(point_1 - self.rendered_sprites.offset)

@@ -20,6 +20,6 @@
   <image width="16" height="32" source="objects/tall tree.png"/>
  </tile>
  <tile id="6">
-  <image width="10" height="10" source="assets/collectibles/juice/1.png"/>
+  <image width="10" height="10" source="assets/collectibles/health/1.png"/>
  </tile>
 </tileset>

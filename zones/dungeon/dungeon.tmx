@@ -67,7 +67,7 @@
   </object>
  </objectgroup>
  <objectgroup id="12" name="collectibles">
-  <object id="17" name="health" gid="9" x="177.606" y="191.276" width="10" height="10"/>
+  <object id="17" name="health_2" gid="9" x="177.606" y="191.276" width="10" height="10"/>
  </objectgroup>
  <objectgroup id="8" name="entries">
   <object id="4" name="0" x="209.217" y="173.43">
