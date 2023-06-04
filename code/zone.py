@@ -45,6 +45,7 @@ class Zone(State):
 		self.block_sprites = pygame.sprite.Group()
 		self.void_sprites = pygame.sprite.Group()
 		self.enemy_sprites = pygame.sprite.Group()
+		self.npc_sprites = pygame.sprite.Group()
 		self.attackable_sprites = pygame.sprite.Group()
 		self.gun_sprites = pygame.sprite.Group()
 		self.health_sprites = pygame.sprite.Group()
@@ -92,7 +93,7 @@ class Zone(State):
 			if obj.name == 'grunt': self.grunt = Grunt(self.game, self, [self.enemy_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.name)
 			if obj.name == 'hound': self.hound = Hound(self.game, self, [self.enemy_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.name)
 			#NPCs
-			if obj.name == 'warrior': self.warrior = Warrior(self.game, self, [self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.name)
+			if obj.name == 'warrior': self.warrior = Warrior(self.game, self, [self.npc_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.name)
 
 		for obj in tmx_data.get_layer_by_name('collectibles'):
 			if obj.name not in COMPLETED_DATA['health']:
@@ -122,7 +123,8 @@ class Zone(State):
 
 		# create shadows for player and NPCs
 		Shadow(self.game, self, [self.updated_sprites, self.rendered_sprites], (self.player.hitbox.midbottom), LAYERS['particles'], self.player, 'medium')
-
+		for sprite in self.npc_sprites:
+			Shadow(self.game, self, [self.updated_sprites, self.rendered_sprites], (sprite.hitbox.midbottom), LAYERS['particles'], sprite, 'medium')
 		for sprite in self.enemy_sprites:
 			Shadow(self.game, self, [self.updated_sprites, self.rendered_sprites], (sprite.hitbox.midbottom), LAYERS['particles'], sprite, 'medium')
 		for sprite in self.health_sprites:
@@ -186,6 +188,7 @@ class Zone(State):
 		if self.melee_sprite:
 			for target in self.attackable_sprites:
 				if self.melee_sprite.rect.colliderect(target.hitbox) and self.melee_sprite.frame_index < 1:
+					self.add_subtract_juice(5.5, 'add')
 					target.alive = False
 
 	def enemy_shot_logic(self):

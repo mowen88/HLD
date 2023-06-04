@@ -12,6 +12,9 @@ class Idle:
 		if keys[pygame.K_RCTRL]:
 			return Shoot(player, self.direction)
 
+		if ACTIONS['space']:
+			return Heal(player, self.direction)
+
 		if ACTIONS['scroll_down']:
 			player.game.reset_keys()
 			if not player.changing_weapon:
@@ -52,8 +55,11 @@ class Move:
 		if keys[pygame.K_RCTRL]:
 			return Shoot(player, self.direction)
 
+		if ACTIONS['space']:
+			return Heal(player, self.direction)
+
 		if ACTIONS['scroll_down']:
-			player.game.reset_keys()
+			ACTIONS['scroll_down'] = False
 			if not player.changing_weapon:
 				if PLAYER_DATA['gun_index'] < len(list(GUN_DATA.keys()))-1: PLAYER_DATA['gun_index'] += 1
 				else: PLAYER_DATA['gun_index'] = 0
@@ -61,7 +67,7 @@ class Move:
 				player.changing_weapon = True
 
 		if ACTIONS['scroll_up']:
-			player.game.reset_keys()
+			ACTIONS['scroll_up'] = False
 			if not player.changing_weapon:
 				if PLAYER_DATA['gun_index'] > 0: PLAYER_DATA['gun_index'] -= 1
 				else: PLAYER_DATA['gun_index'] = len(list(GUN_DATA.keys()))-1
@@ -186,7 +192,6 @@ class Shoot:
 	def __init__(self, player, direction):
 
 		player.frame_index = 0
-		PLAYER_DATA['max_bullets'] -= 1
 		self.timer = GUN_DATA[player.gun]['cooldown']
 		self.lunge_speed = GUN_DATA[player.gun]['knockback']
 		self.get_current_direction = pygame.mouse.get_pos()
@@ -203,8 +208,6 @@ class Shoot:
 			else: 
 				player.zone.create_railgun_beam()
 
-		else:
-			PLAYER_DATA['max_bullets'] = 0
 
 	def state_logic(self, player):
 
@@ -233,6 +236,32 @@ class Shoot:
 		self.lunge_speed -= 0.1 * dt
 		if player.vel.magnitude() != 0: player.vel = player.vel.normalize() * self.lunge_speed
 		if player.vel.magnitude() < 0.1: player.vel = pygame.math.Vector2()
+
+class Heal:
+	def __init__(self, player, direction):
+		player.frame_index = 0
+		self.direction = direction
+		self.timer = 60
+
+	def state_logic(self, player):
+		if not ACTIONS['space'] or player.invincible:
+			return Idle(player, self.direction)
+
+		if self.timer <= 0:
+			self.heal_player(player)
+			return Idle(player, self.direction)
+
+	def heal_player(self, player):
+		if player.game.current_juice >= PLAYER_DATA['heal_cost']:
+			player.zone.add_subtract_juice(PLAYER_DATA['heal_cost'], 'sub')
+			if PLAYER_DATA['max_health'] >= player.game.current_health +1:
+				player.game.current_health += 1
+
+	def update(self, dt, player):
+		self.timer -= dt
+		player.animate(self.direction + '_heal', 0.2 * dt, 'end')
+
+
 
 class FallDeath:
 	def __init__(self, direction):

@@ -34,7 +34,7 @@ class Camera(pygame.sprite.Group):
 		midpoint = self.midpoint(pygame.math.Vector2(target.rect.center - self.offset), pygame.math.Vector2(pygame.mouse.get_pos()))
 
 		self.offset += (target.rect.center - RES/2 - self.offset)
-		self.offset += (midpoint - RES - self.offset)/(distance/5)
+		#self.offset += (midpoint - RES - self.offset)/(distance/5)
 
 		#self.offset += self.self.zone.get_distance_direction_and_angle(pygame.math.Vector2(target.rect.center), pygame.math.Vector2(pygame.mouse.get_pos()))[1]
 	

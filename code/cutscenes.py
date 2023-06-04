@@ -14,7 +14,7 @@ class CollectionCutscene(State):
 		self.max_alpha = 255
 		self.fadeout = False
 
-		self.frames = self.game.get_folder_images('../assets/ui_images/partial_health_collected')
+		self.frames = self.game.get_folder_images(f"../assets/ui_images/partial_health_collected/{PLAYER_DATA['partial_healths']}")
 		self.frame_index = 0
 		self.image = self.frames[self.frame_index]
 		self.rect = self.image.get_rect(center = RES/2)
