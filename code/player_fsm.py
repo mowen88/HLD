@@ -16,19 +16,10 @@ class Idle:
 			return Heal(player, self.direction)
 
 		if ACTIONS['scroll_down']:
-			player.game.reset_keys()
-			if not player.changing_weapon:
-				if PLAYER_DATA['gun_index'] < len(list(GUN_DATA.keys()))-1: PLAYER_DATA['gun_index'] += 1
-				else: PLAYER_DATA['gun_index'] = 0
-				player.gun = list(GUN_DATA.keys())[PLAYER_DATA['gun_index']]
-				player.changing_weapon = True
+			player.change_gun('scroll_down')
+
 		if ACTIONS['scroll_up']:
-			player.game.reset_keys()
-			if not player.changing_weapon:
-				if PLAYER_DATA['gun_index'] > 0: PLAYER_DATA['gun_index'] -= 1
-				else: PLAYER_DATA['gun_index'] = len(list(GUN_DATA.keys()))-1
-				player.gun = list(GUN_DATA.keys())[PLAYER_DATA['gun_index']]
-				player.changing_weapon = True
+			player.change_gun('scroll_up')
 
 		if ACTIONS['right_click'] and player.dash_count < 3:
 			return Dash(player, self.direction)
@@ -59,20 +50,10 @@ class Move:
 			return Heal(player, self.direction)
 
 		if ACTIONS['scroll_down']:
-			ACTIONS['scroll_down'] = False
-			if not player.changing_weapon:
-				if PLAYER_DATA['gun_index'] < len(list(GUN_DATA.keys()))-1: PLAYER_DATA['gun_index'] += 1
-				else: PLAYER_DATA['gun_index'] = 0
-				player.gun = list(GUN_DATA.keys())[PLAYER_DATA['gun_index']]
-				player.changing_weapon = True
-
+			player.change_gun('scroll_down')
+			
 		if ACTIONS['scroll_up']:
-			ACTIONS['scroll_up'] = False
-			if not player.changing_weapon:
-				if PLAYER_DATA['gun_index'] > 0: PLAYER_DATA['gun_index'] -= 1
-				else: PLAYER_DATA['gun_index'] = len(list(GUN_DATA.keys()))-1
-				player.gun = list(GUN_DATA.keys())[PLAYER_DATA['gun_index']]
-				player.changing_weapon = True
+			player.change_gun('scroll_up')
 
 		if ACTIONS['right_click'] and player.dash_count < 3:
 			return Dash(player, self.direction)
@@ -175,9 +156,9 @@ class Attack:
 
 	def update(self, dt, player):
 
-		if self.timer > 10: player.zone.player_attacking_logic()
+		if self.timer > 10: player.player_attacking_logic()
 
-		player.zone.attackable_terrain_logic()
+		player.attackable_terrain_logic()
 
 		player.physics(dt)
 		player.animate(self.direction + '_attack', 0.2 * dt, 'loop')
@@ -202,11 +183,13 @@ class Shoot:
 		player.zone.create_gun()
 		
 		if player.game.current_juice >= GUN_DATA[player.gun]['cost']:
-			player.zone.add_subtract_juice(GUN_DATA[player.gun]['cost'], 'sub')
+			player.add_subtract_juice(GUN_DATA[player.gun]['cost'], 'sub')
 			if player.gun == 'pistol': 
 				player.zone.create_player_bullet()			
 			else: 
 				player.zone.create_railgun_beam()
+		else: self.lunge_speed = 0
+
 
 
 	def state_logic(self, player):
@@ -279,7 +262,7 @@ class FallDeath:
 			player.pos.y = player.respawn_location[1]
 			player.hitbox.center = (player.pos.x, player.pos.y)
 			player.rect.center = player.hitbox.center
-			player.zone.reduce_health(1)
+			player.reduce_health(1)
 			return Idle(player, self.direction)
 
 	def update(self, dt, player):

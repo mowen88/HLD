@@ -8,10 +8,7 @@ HALF_WIDTH, HALF_HEIGHT = RES/2
 FONT = '../fonts/Pokemon Classic.ttf'
 
 # data that is dynamic and changes throughout play
-MAP_DATA = {
-	'garden':{'pos': (30,10)},
-	'dungeon':{'pos': (60,20)},
-}
+
 PLAYER_DATA = {'current_zone': 'garden', 'entry_pos': '0', 'gun_index': 0, 'max_health': 4, 'max_juice': 99, 'heal_cost': 11, 'partial_healths': 0}
 
 COMPLETED_DATA = {'visited_zones': [], 'health': []}
@@ -27,8 +24,14 @@ ENEMY_DATA = {
 }
 # entry and exit data for zones, does not change
 ZONE_DATA = {
-	'garden':{'1': 'dungeon', '2': 'dungeon'},
+	'garden':{'1': 'datacentre', '2': 'dungeon'},
 	'dungeon':{'1':'garden', '2':'garden'},
+	'datacentre':{'1':'garden', '2':'garden'},
+}
+MAP_DATA = {
+	'garden':{'pos': (30,10)},
+	'dungeon':{'pos': (60,20)},
+	'datacentre':{'pos': (60,20)},
 }
 
 LAYERS = {

@@ -25,7 +25,6 @@ class Zone(State):
 		PLAYER_DATA.update({'current_zone': self.name, 'entry_pos': self.entry_point})
 		COMPLETED_DATA['visited_zones'].append(self.name)
 
-
 		self.screenshaking = False
 		self.screenshake_timer = 0
 		self.cutscene_running = False
@@ -49,7 +48,7 @@ class Zone(State):
 		self.attackable_sprites = pygame.sprite.Group()
 		self.gun_sprites = pygame.sprite.Group()
 		self.health_sprites = pygame.sprite.Group()
-
+		self.juice_sprites = pygame.sprite.Group()
 
 		self.zone_size = self.get_zone_size()
 		self.create_map()
@@ -57,7 +56,6 @@ class Zone(State):
 		self.ui = UI(self.game, self)
 		self.fade_surf = FadeSurf(self, [self.updated_sprites, self.rendered_sprites], (0,0))
 		self.collection_cutscene = CollectionCutscene(self.game, self)
-
 
 	def get_zone_size(self):
 		with open(f'../zones/{self.name}/{self.name}_walls.csv', newline='') as csvfile:
@@ -96,6 +94,7 @@ class Zone(State):
 			if obj.name == 'warrior': self.warrior = Warrior(self.game, self, [self.npc_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.name)
 
 		for obj in tmx_data.get_layer_by_name('collectibles'):
+			if obj.name == 'juice': Collectible(self.game, self, [self.juice_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/juice', obj.name)
 			if obj.name not in COMPLETED_DATA['health']:
 				if obj.name == 'health_1': self.health_1 = Collectible(self.game, self, [self.health_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/health', obj.name)
 				if obj.name == 'health_2': self.health_2 = Collectible(self.game, self, [self.health_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/health', obj.name)
@@ -184,13 +183,6 @@ class Zone(State):
 	        		if enemy1.vel.y != 0:
 	        			enemy1.vel.y = 0
 
-	def attackable_terrain_logic(self):
-		if self.melee_sprite:
-			for target in self.attackable_sprites:
-				if self.melee_sprite.rect.colliderect(target.hitbox) and self.melee_sprite.frame_index < 1:
-					self.add_subtract_juice(5.5, 'add')
-					target.alive = False
-
 	def enemy_shot_logic(self):
 		for target in self.enemy_sprites:
 			for bullet in self.player_bullet_sprites:
@@ -208,45 +200,6 @@ class Zone(State):
 					if bullet.rect.colliderect(sprite.hitbox) and sprite not in self.attackable_sprites:
 						bullet.kill()
 
-	def player_attacking_logic(self):
-		if self.melee_sprite:
-			for target in self.enemy_sprites:
-				if self.melee_sprite.rect.colliderect(target.hitbox) and self.melee_sprite.frame_index < 1:
-					if not target.invincible and target.alive:
-						target.invincible = True
-						self.add_subtract_juice(11, 'add')
-						target.health -= 1
-						if target.health <= 0:
-							target.alive = False
-							target.invincible = False
-				
-	def enemy_attacking_logic(self):
-		for sprite in self.enemy_sprites:
-			if not self.player.invincible and not sprite.invincible and sprite.alive and self.player.alive and sprite.dashing:
-				if sprite.hitbox.colliderect(self.player.hitbox):
-					self.reduce_health(sprite.damage)
-					self.screenshaking = True
-					self.player.invincible = True
-					if self.melee_sprite: self.melee_sprite.kill()
-						
-	def reduce_health(self, amount):
-		if not self.player.invincible:
-			self.game.current_health -= amount
-			self.ui.flash_icon()
-			if self.game.current_health <= 0:
-				self.player.alive = False
-				self.game.current_health = PLAYER_DATA['max_health']
-				self.exit_state()
-				self.create_zone(self.name)
-
-	def add_subtract_juice(self, amount, direction):
-		if direction == 'add': self.game.current_juice += amount
-		else: self.game.current_juice -= amount
-
-		if self.game.current_juice <= 0:self.game.current_juice = 0
-		if self.game.current_juice > PLAYER_DATA['max_juice']: self.game.current_juice = PLAYER_DATA['max_juice']
-
-
 	def collect(self):
 		for sprite in self.health_sprites:
 			if self.player.hitbox.colliderect(sprite.rect):
@@ -255,8 +208,14 @@ class Zone(State):
 				self.collection_cutscene.enter_state()
 				sprite.alive = False
 				sprite.kill()
-		print(COMPLETED_DATA['health'])
 
+		for sprite in self.juice_sprites:
+			if self.player.hitbox.colliderect(sprite.hitbox):
+				PLAYER_DATA['max_juice'] += 11
+				sprite.alive = False
+				sprite.kill()
+				
+		
 	def get_distance_direction_and_angle(self, point_1, point_2):
 		pos_1 = pygame.math.Vector2(point_1 - self.rendered_sprites.offset)
 		pos_2 = pygame.math.Vector2(point_2)

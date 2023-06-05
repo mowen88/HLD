@@ -60,7 +60,67 @@ class Player(NPC):
 			self.dash_count = 0
 			self.dash_timer = 0
 
-	
+	def change_gun(self, direction):
+		if direction == 'scroll_down':
+			ACTIONS['scroll_down'] = False
+			if not self.changing_weapon:
+				if PLAYER_DATA['gun_index'] < len(list(GUN_DATA.keys()))-1: PLAYER_DATA['gun_index'] += 1
+			else: PLAYER_DATA['gun_index'] = 0
+			self.gun = list(GUN_DATA.keys())[PLAYER_DATA['gun_index']]
+			self.changing_weapon = True
+			
+		elif direction == 'scroll_up':
+			ACTIONS['scroll_up'] = False
+			if not self.changing_weapon:
+				if PLAYER_DATA['gun_index'] > 0: PLAYER_DATA['gun_index'] -= 1
+				else: PLAYER_DATA['gun_index'] = len(list(GUN_DATA.keys()))-1
+				self.gun = list(GUN_DATA.keys())[PLAYER_DATA['gun_index']]
+				self.changing_weapon = True
+
+	def attackable_terrain_logic(self):
+		if self.zone.melee_sprite:
+			for target in self.zone.attackable_sprites:
+				if self.zone.melee_sprite.rect.colliderect(target.hitbox) and self.zone.melee_sprite.frame_index < 1:
+					self.add_subtract_juice(5.5, 'add')
+					target.alive = False
+
+	def player_attacking_logic(self):
+		if self.zone.melee_sprite:
+			for target in self.zone.enemy_sprites:
+				if self.zone.melee_sprite.rect.colliderect(target.hitbox) and self.zone.melee_sprite.frame_index < 1:
+					if not target.invincible and target.alive:
+						target.invincible = True
+						self.add_subtract_juice(11, 'add')
+						target.health -= 1
+						if target.health <= 0:
+							target.alive = False
+							target.invincible = False
+
+	def enemy_attacking_logic(self):
+		for sprite in self.zone.enemy_sprites:
+			if not self.invincible and not sprite.invincible and sprite.alive and self.alive and sprite.dashing:
+				if sprite.hitbox.colliderect(self.hitbox):
+					self.reduce_health(sprite.damage)
+					self.screenshaking = True
+					self.invincible = True
+					if self.zone.melee_sprite: self.zone.melee_sprite.kill()
+
+	def reduce_health(self, amount):
+		if not self.invincible:
+			self.game.current_health -= amount
+			self.zone.ui.flash_icon()
+			if self.game.current_health <= 0:
+				self.alive = False
+				self.game.current_health = PLAYER_DATA['max_health']
+				self.zone.exit_state()
+				self.zone.create_zone(self.zone.name)
+
+	def add_subtract_juice(self, amount, direction):
+		if direction == 'add': self.game.current_juice += amount
+		else: self.game.current_juice -= amount
+		if self.game.current_juice <= 0:self.game.current_juice = 0
+		if self.game.current_juice > PLAYER_DATA['max_juice']: self.game.current_juice = PLAYER_DATA['max_juice']
+
 	def update(self, dt):
 		self.invincibility(dt)
 		self.attack_logic(dt)
