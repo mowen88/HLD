@@ -85,6 +85,7 @@ class Zone(State):
 		for obj in tmx_data.get_layer_by_name('exits'):
 			if obj.name == '1': Exit([self.exit_sprites, self.updated_sprites], (obj.x, obj.y ), obj.name)
 			if obj.name == '2': Exit([self.exit_sprites, self.updated_sprites], (obj.x, obj.y), obj.name)
+			if obj.name == '3': Exit([self.exit_sprites, self.updated_sprites], (obj.x, obj.y), obj.name)
 
 		for obj in tmx_data.get_layer_by_name('entities'):
 			#enemies
@@ -230,7 +231,7 @@ class Zone(State):
 
 	def exiting(self):
 		for sprite in self.exit_sprites:
-			if sprite.rect.colliderect(self.player.hitbox):
+			if self.player.rect.colliderect(sprite.rect):
 				self.cutscene_running = True
 				self.new_zone = ZONE_DATA[self.name][sprite.name]
 				self.entry_point = sprite.name
@@ -246,7 +247,6 @@ class Zone(State):
 		if ACTIONS['return']: 
 			Map(self.game, self).enter_state()
 			#self.exit_state()
-			PLAYER_DATA['max_bullets'] = 6
 			self.game.reset_keys()
 		self.updated_sprites.update(dt)
 

@@ -101,8 +101,8 @@
   <object id="54" name="health_5" gid="7" x="343.667" y="214.333" width="10" height="10"/>
  </objectgroup>
  <objectgroup id="11" name="exits">
-  <object id="41" name="2" x="497.349" y="364.6" width="24.4698" height="11.6232"/>
-  <object id="42" name="1" x="-13.4584" y="389.682" width="33.646" height="18.3524"/>
+  <object id="41" name="2" x="497.349" y="364.6" width="24.4698" height="19.6232"/>
+  <object id="42" name="1" x="-13.4584" y="389.682" width="33.646" height="30.3524"/>
  </objectgroup>
  <objectgroup id="4" name="objects">
   <object id="3" x="157.218" y="308.931" visible="0"/>

@@ -31,7 +31,7 @@ ZONE_DATA = {
 MAP_DATA = {
 	'garden':{'pos': (30,10)},
 	'dungeon':{'pos': (60,20)},
-	'datacentre':{'pos': (60,20)},
+	'datacentre':{'pos': (0,20)},
 }
 
 LAYERS = {
