@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="32" height="27" tilewidth="16" tileheight="16" infinite="0" nextlayerid="13" nextobjectid="55">
+<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="32" height="27" tilewidth="16" tileheight="16" infinite="0" nextlayerid="15" nextobjectid="58">
  <editorsettings>
   <export target="garden.csv" format="csv"/>
  </editorsettings>
  <tileset firstgid="1" source="../../objects.tsx"/>
  <tileset firstgid="9" source="../../tileset.tsx"/>
+ <tileset firstgid="11" source="doors.tsx"/>
  <imagelayer id="2" name="bg">
   <image source="bg.png" width="512" height="432"/>
  </imagelayer>
@@ -88,12 +89,16 @@
   <object id="40" name="0" x="128.466" y="392.74">
    <point/>
   </object>
-  <object id="44" name="2" x="485.114" y="370.717">
+  <object id="44" name="2" x="483.781" y="373.384">
    <point/>
   </object>
-  <object id="52" name="1" x="44.6574" y="404.975">
+  <object id="52" name="1" x="38.6574" y="406.975">
    <point/>
   </object>
+ </objectgroup>
+ <objectgroup id="14" name="doors">
+  <object id="56" name="blue_door" gid="11" x="368" y="224" width="32" height="32"/>
+  <object id="57" name="red_door" gid="12" x="416" y="224" width="32" height="32"/>
  </objectgroup>
  <objectgroup id="12" name="collectibles">
   <object id="51" name="health_1" gid="7" x="415.269" y="371.435" width="10" height="10"/>
@@ -101,8 +106,8 @@
   <object id="54" name="health_5" gid="7" x="343.667" y="214.333" width="10" height="10"/>
  </objectgroup>
  <objectgroup id="11" name="exits">
-  <object id="41" name="2" x="497.349" y="364.6" width="24.4698" height="19.6232"/>
-  <object id="42" name="1" x="-13.4584" y="389.682" width="33.646" height="30.3524"/>
+  <object id="41" name="2" x="497.349" y="346.6" width="24.4698" height="55.6232"/>
+  <object id="42" name="1" x="-15.4584" y="374.349" width="33.646" height="66.3524"/>
  </objectgroup>
  <objectgroup id="4" name="objects">
   <object id="3" x="157.218" y="308.931" visible="0"/>

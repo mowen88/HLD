@@ -30,11 +30,12 @@ class FadeSurf(pygame.sprite.Sprite):
 		screen.blit(self.image, (0,0))
 
 class Exit(pygame.sprite.Sprite):
-	def __init__(self, groups, pos, name, surf = pygame.Surface((TILESIZE, TILESIZE))):
+	def __init__(self, groups, pos, size, name):
 		super().__init__(groups)
 
 		self.name = name
-		self.image = surf
+		self.size = size
+		self.image = pygame.Surface((self.size))
 		self.rect = self.image.get_rect(topleft = pos)
 
 class Object(pygame.sprite.Sprite):
@@ -102,9 +103,14 @@ class AnimatedObject(pygame.sprite.Sprite):
 		self.frame_index = self.frame_index % len(self.frames)	
 		self.image = self.frames[int(self.frame_index)]
 
-
 	def update(self, dt):
 		self.animate(0.2 * dt)
+
+class Door(AnimatedObject):
+	def __init__(self, game, zone, groups, pos, z, path):
+		super().__init__(game, zone, groups, pos, z, path)
+
+
 
 class Collectible(AnimatedObject):
 	def __init__(self, game, zone, groups, pos, z, path, name):
@@ -132,9 +138,7 @@ class Collectible(AnimatedObject):
 
 	def update(self, dt):
 		self.rotation(dt)
-		self.animate(0.2 * dt)
-		
-		
+		self.animate(0.2 * dt)		
 
 class Sword(AnimatedObject):
 	def __init__(self, game, zone, groups, pos, z, path):

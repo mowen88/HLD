@@ -9,7 +9,7 @@ class Idle:
 	def state_logic(self, player):
 		keys = pygame.key.get_pressed()
 
-		if keys[pygame.K_RCTRL]:
+		if keys[pygame.K_RCTRL] and player.game.current_juice >= GUN_DATA[player.gun]['cost']:
 			return Shoot(player, self.direction)
 
 		if ACTIONS['space']:
@@ -43,7 +43,7 @@ class Move:
 	def state_logic(self, player):
 		keys = pygame.key.get_pressed()
 
-		if keys[pygame.K_RCTRL]:
+		if keys[pygame.K_RCTRL] and player.game.current_juice >= GUN_DATA[player.gun]['cost']:
 			return Shoot(player, self.direction)
 
 		if ACTIONS['space']:
@@ -182,16 +182,10 @@ class Shoot:
 
 		player.zone.create_gun()
 		
-		if player.game.current_juice >= GUN_DATA[player.gun]['cost']:
-			player.add_subtract_juice(GUN_DATA[player.gun]['cost'], 'sub')
-			if player.gun == 'pistol': 
-				player.zone.create_player_bullet()			
-			else: 
-				player.zone.create_railgun_beam()
-		else: self.lunge_speed = 0
-
-
-
+		player.add_subtract_juice(GUN_DATA[player.gun]['cost'], 'sub')
+		if player.gun == 'pistol': player.zone.create_player_bullet()			
+		else: player.zone.create_railgun_beam()
+		
 	def state_logic(self, player):
 
 		if ACTIONS['right_click']:

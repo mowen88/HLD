@@ -4,17 +4,18 @@ from state import State
 from sprites import AnimatedObject
 
 class CollectionCutscene(State):
-	def __init__(self, game, zone):
+	def __init__(self, game, zone, overlay_animation):
 		State.__init__(self, game)
 
 		
 		self.zone = zone
+		self.overlay_animation = overlay_animation
 
 		self.alpha = 0
 		self.max_alpha = 255
 		self.fadeout = False
 
-		self.frames = self.game.get_folder_images(f"../assets/ui_images/partial_health_collected/{PLAYER_DATA['partial_healths']}")
+		self.frames = self.game.get_folder_images(self.overlay_animation)
 		self.frame_index = 0
 		self.image = self.frames[self.frame_index]
 		self.rect = self.image.get_rect(center = RES/2)

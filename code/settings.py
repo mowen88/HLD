@@ -11,7 +11,7 @@ FONT = '../fonts/Pokemon Classic.ttf'
 
 PLAYER_DATA = {'current_zone': 'garden', 'entry_pos': '0', 'gun_index': 0, 'max_health': 4, 'max_juice': 99, 'heal_cost': 11, 'partial_healths': 0}
 
-COMPLETED_DATA = {'visited_zones': [], 'health': []}
+COMPLETED_DATA = {'visited_zones': [], 'health': [], 'juice': []}
 
 GUN_DATA = {
 	'pistol':{'cost': 11, 'damage': 1, 'cooldown': 20, 'knockback': 1},
