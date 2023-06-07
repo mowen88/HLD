@@ -36,7 +36,7 @@ class Player(NPC):
 		self.attack_count = 0
 		self.attack_timer_running = False
 		self.attack_timer = 0
-		self.attack_cooldown = 90
+		self.attack_cooldown = 80
 
 		# dashing
 		self.dash_count = 0
@@ -44,17 +44,17 @@ class Player(NPC):
 		self.dash_timer = 0
 		self.dash_cooldown = 100
 
-	def attack_logic(self, dt):
+	def attack_timer_logic(self, dt):
 		if self.attack_timer_running: 
-			self.attack_timer += 1 *dt
+			self.attack_timer += dt
 		if self.attack_timer >= self.attack_cooldown: 
 			self.attack_timer_running = False
 			self.attack_count = 0
 			self.attack_timer = 0
 
-	def dash_logic(self, dt):
+	def dash_timer_logic(self, dt):
 		if self.dash_timer_running: 
-			self.dash_timer += 1 *dt
+			self.dash_timer += dt
 		if self.dash_timer >= self.dash_cooldown: 
 			self.dash_timer_running = False
 			self.dash_count = 0
@@ -123,8 +123,8 @@ class Player(NPC):
 
 	def update(self, dt):
 		self.invincibility(dt)
-		self.attack_logic(dt)
-		self.dash_logic(dt)
+		self.attack_timer_logic(dt)
+		self.dash_timer_logic(dt)
 		if not self.zone.cutscene_running: self.state_logic()
 		self.state.update(dt, self)
 		

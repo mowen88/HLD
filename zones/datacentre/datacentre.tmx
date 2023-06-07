@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="25" height="27" tilewidth="16" tileheight="16" infinite="0" nextlayerid="13" nextobjectid="9">
+<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="25" height="27" tilewidth="16" tileheight="16" infinite="0" nextlayerid="13" nextobjectid="11">
  <editorsettings>
   <export target="datacentre.csv" format="csv"/>
  </editorsettings>
@@ -114,12 +114,16 @@
   <object id="2" name="2" x="33.6249" y="323.44">
    <point/>
   </object>
+  <object id="9" name="3" x="176.13" y="406.168">
+   <point/>
+  </object>
  </objectgroup>
  <objectgroup id="12" name="doors"/>
  <objectgroup id="7" name="collectibles"/>
  <objectgroup id="10" name="exits">
   <object id="5" name="1" x="386.953" y="329.311" width="32.0237" height="54.9741"/>
   <object id="6" name="2" x="-17.613" y="287.146" width="32.0237" height="60.8451"/>
+  <object id="10" name="3" x="148.91" y="419.511" width="51.238" height="30.9563"/>
  </objectgroup>
  <objectgroup id="8" name="objects"/>
 </map>

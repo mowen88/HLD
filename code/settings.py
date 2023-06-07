@@ -24,9 +24,9 @@ ENEMY_DATA = {
 }
 # entry and exit data for zones, does not change
 ZONE_DATA = {
-	'garden':{'1': 'datacentre', '2': 'dungeon'},
+	'garden':{'1': 'datacentre', '2': 'dungeon', '3':'datacentre'},
 	'dungeon':{'1':'garden', '2':'garden'},
-	'datacentre':{'1':'garden', '2':'garden'},
+	'datacentre':{'1':'garden', '2':'garden', '3':'garden'},
 }
 MAP_DATA = {
 	'garden':{'pos': (30,10)},

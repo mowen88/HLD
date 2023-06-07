@@ -52,7 +52,7 @@ class Void(Object):
 	def __init__(self, game, zone, groups, pos, z, surf = pygame.Surface((TILESIZE, TILESIZE))):
 		super().__init__(game, zone, groups, pos, z, surf)
 
-		self.hitbox = self.rect.copy().inflate(-self.rect.width *0.4, 0)
+		self.hitbox = self.rect.copy().inflate(-self.rect.width *0.4, -self.rect.height*0.2)
 
 class Tree(Object):
 	def __init__(self, game, zone, groups, pos, z, surf):
@@ -128,7 +128,6 @@ class Door(AnimatedObject):
 		self.image = self.frames[int(self.frame_index)]
 		if self.frame_index == len(self.frames) -1: self.zone.block_sprites.remove(self)
 		else: self.zone.block_sprites.add(self)	
-
 
 	def update(self, dt):
 		self.open(dt)
