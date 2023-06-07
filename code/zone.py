@@ -120,8 +120,8 @@ class Zone(State):
 			if obj.name == 'blue flower': AttackableTerrain(self.game, self, [self.block_sprites, self.attackable_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], f'../assets/attackable_terrain/{obj.name}')
 
 		for obj in tmx_data.get_layer_by_name('doors'):
-			if obj.name == 'blue_door': Door(self.game, self, [self.block_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], f'../doors/{obj.name}')
-			if obj.name == 'red_door': Door(self.game, self, [self.block_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], f'../doors/{obj.name}')
+			if obj.name == 'blue_door': Door(self.game, self, [self.block_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], f'../doors/{obj.name}', obj.name)
+			if obj.name == 'red_door': Door(self.game, self, [self.block_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], f'../doors/{obj.name}', obj.name)
 
 		# tilesets
 		for x, y, surf in tmx_data.get_layer_by_name('walls').tiles():
@@ -165,9 +165,7 @@ class Zone(State):
 		distance = ((x, y) - pygame.math.Vector2(self.player.hitbox.center)).magnitude()
 		point_list = self.get_equidistant_points(self.player.hitbox.center - self.rendered_sprites.offset, (x - self.rendered_sprites.offset[0], y - self.rendered_sprites.offset[1]), int(distance/6))
 		for num, point in enumerate(point_list):
-			if 2 < num < 50: 
-				self.beam = Beam(self.game, self, [self.updated_sprites, self.rendered_sprites], point + self.rendered_sprites.offset, LAYERS['particles'],  f'../assets/weapons/railgun_particle', 4)
-				self.player_bullet_sprites.add(self.beam)
+			if num < 50: self.beam = Beam(self.game, self, [self.player_bullet_sprites, self.updated_sprites, self.rendered_sprites], point + self.rendered_sprites.offset, LAYERS['particles'],  f'../assets/weapons/railgun_particle', 4)
 			for sprite in self.block_sprites:
 				if sprite not in self.attackable_sprites:
 					if sprite.hitbox.collidepoint(point + self.rendered_sprites.offset):
