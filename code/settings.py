@@ -9,7 +9,7 @@ FONT = '../fonts/Pokemon Classic.ttf'
 
 # data that is dynamic and changes throughout play
 
-PLAYER_DATA = {'current_zone': 'garden', 'entry_pos': '0', 'keys': ['blue_door'], 'gun_index': 0, 'max_health': 4, 'max_juice': 99, 'heal_cost': 11, 'partial_healths': 0}
+PLAYER_DATA = {'current_zone': 'start', 'entry_pos': '0', 'keys': ['blue_door'], 'gun_index': 0, 'max_health': 4, 'max_juice': 99, 'heal_cost': 11, 'partial_healths': 0}
 
 COMPLETED_DATA = {'visited_zones': [], 'health': [], 'juice': []}
 
@@ -24,7 +24,8 @@ ENEMY_DATA = {
 }
 # entry and exit data for zones, does not change
 ZONE_DATA = {
-	'garden':{'1': 'datacentre', '2': 'dungeon', '3':'datacentre'},
+	'start':{'1': 'garden', '2': 'dungeon', '3':'datacentre'},
+	'garden':{'1': 'start', '2': 'dungeon', '3':'datacentre'},
 	'dungeon':{'1':'garden', '2':'garden'},
 	'datacentre':{'1':'garden', '2':'garden', '3':'garden'},
 }

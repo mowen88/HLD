@@ -230,7 +230,7 @@ class Heal:
 
 	def heal_player(self, player):
 		if player.game.current_juice >= PLAYER_DATA['heal_cost']:
-			player.zone.add_subtract_juice(PLAYER_DATA['heal_cost'], 'sub')
+			player.zone.player.add_subtract_juice(PLAYER_DATA['heal_cost'], 'sub')
 			if PLAYER_DATA['max_health'] >= player.game.current_health +1:
 				player.game.current_health += 1
 

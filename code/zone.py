@@ -125,7 +125,7 @@ class Zone(State):
 
 		# tilesets
 		for x, y, surf in tmx_data.get_layer_by_name('walls').tiles():
-			Object(self.game, self, [self.block_sprites, self.updated_sprites, self.rendered_sprites], (x * TILESIZE, y * TILESIZE), LAYERS['player'], surf)
+			Object(self.game, self, [self.block_sprites, self.updated_sprites], (x * TILESIZE, y * TILESIZE), LAYERS['player'], surf)
 		for x, y, surf in tmx_data.get_layer_by_name('void').tiles():
 			Void(self.game, self, [self.void_sprites, self.updated_sprites], (x * TILESIZE, y * TILESIZE), LAYERS['player'], surf)
 		# self.create_guns()
