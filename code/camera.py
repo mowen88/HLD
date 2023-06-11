@@ -42,7 +42,7 @@ class Camera(pygame.sprite.Group):
 		if self.offset[0] <= 0: self.offset[0] = 0
 		elif self.offset[0] >= self.zone.zone_size[0] - WIDTH: self.offset[0] = self.zone.zone_size[0] - WIDTH
 		if self.offset[1] <= 0: self.offset[1] = 0
-		elif self.offset[1] >= self.zone.zone_size[1] - HEIGHT - (TILESIZE/2): self.offset[1] = self.zone.zone_size[1] - HEIGHT - (TILESIZE/2)
+		elif self.offset[1] >= self.zone.zone_size[1] - HEIGHT: self.offset[1] = self.zone.zone_size[1] - HEIGHT
 
 		self.screenshake()
 

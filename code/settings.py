@@ -19,7 +19,7 @@ GUN_DATA = {
 }
 
 ENEMY_DATA = {
-	'grunt':{'speed': 0.1, 'lunge_speed': 2, 'knockback_speed': 1, 'damage': 1, 'health': 3, 'telegraphing_time': 25, 'attack_radius': 30, 'pursue_radius': 110},
+	'grunt':{'speed': 0.1, 'lunge_speed': 2, 'knockback_speed': 1, 'damage': 1, 'health': 3, 'telegraphing_time': 20, 'attack_radius': 30, 'pursue_radius': 110},
 	'hound':{'speed': 0.2, 'lunge_speed': 3, 'knockback_speed': 2, 'damage': 1, 'health': 2, 'telegraphing_time': 15, 'attack_radius': 60, 'pursue_radius': 90}
 }
 # entry and exit data for zones, does not change
@@ -30,6 +30,7 @@ ZONE_DATA = {
 	'datacentre':{'1':'garden', '2':'garden', '3':'garden'},
 }
 MAP_DATA = {
+	'start':{'pos': (-20,-20)},
 	'garden':{'pos': (30,10)},
 	'dungeon':{'pos': (60,20)},
 	'datacentre':{'pos': (0,20)},

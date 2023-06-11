@@ -113,8 +113,10 @@ class Zone(State):
 				if obj.name == 'health_8': self.health_8 = Collectible(self.game, self, [self.health_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/health', obj.name)
 
 		for obj in tmx_data.get_layer_by_name('objects'):
+			if obj.name == 'blue tree': Tree(self.game, self, [self.block_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
 			if obj.name == 'big tree': Tree(self.game, self, [self.block_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
 			if obj.name == 'medium tree': Tree(self.game, self, [self.block_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
+			if obj.name == 'small tree': Tree(self.game, self, [self.block_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
 			if obj.name == 'tall tree': Tree(self.game, self, [self.block_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
 			if obj.name == 'red flower': AttackableTerrain(self.game, self, [self.block_sprites, self.attackable_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], f'../assets/attackable_terrain/{obj.name}')
 			if obj.name == 'blue flower': AttackableTerrain(self.game, self, [self.block_sprites, self.attackable_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], f'../assets/attackable_terrain/{obj.name}')
@@ -125,9 +127,9 @@ class Zone(State):
 
 		# tilesets
 		for x, y, surf in tmx_data.get_layer_by_name('walls').tiles():
-			Object(self.game, self, [self.block_sprites, self.updated_sprites], (x * TILESIZE, y * TILESIZE), LAYERS['player'], surf)
+			Object(self.game, self, [self.block_sprites, self.updated_sprites, self.rendered_sprites], (x * TILESIZE, y * TILESIZE), LAYERS['player'], surf)
 		for x, y, surf in tmx_data.get_layer_by_name('void').tiles():
-			Void(self.game, self, [self.void_sprites, self.updated_sprites], (x * TILESIZE, y * TILESIZE), LAYERS['player'], surf)
+			Void(self.game, self, [self.void_sprites, self.updated_sprites], (x * TILESIZE, y * TILESIZE + 8), LAYERS['player'], surf)
 		# self.create_guns()
 
 		# create shadows for player and NPCs
@@ -139,11 +141,12 @@ class Zone(State):
 		for sprite in self.health_sprites:
 			Shadow(self.game, self, [self.updated_sprites, self.rendered_sprites], (sprite.hitbox.midbottom), LAYERS['particles'], sprite, 'small')
 
-
 		# add static image layers
-		Object(self.game, self, [self.rendered_sprites], (0,-8), LAYERS['BG1'], pygame.image.load(f'../zones/{self.name}/static_bg.png').convert_alpha())
-		Object(self.game, self, [self.rendered_sprites], (0,-8), LAYERS['floor'], pygame.image.load(f'../zones/{self.name}/floor.png').convert_alpha())
-		Object(self.game, self, [self.rendered_sprites], (0, 0), LAYERS['floor'], pygame.image.load(f'../zones/{self.name}/rocks.png').convert_alpha())
+		for _, __, img_files in walk(f'../zones/{self.name}'):
+			for img in img_files:
+				if img == 'static_bg.png': Object(self.game, self, [self.rendered_sprites], (0, 0), LAYERS['BG1'], pygame.image.load(f'../zones/{self.name}/{img}').convert_alpha())
+				if img == 'floor.png': Object(self.game, self, [self.rendered_sprites], (0, 0), LAYERS['floor'], pygame.image.load(f'../zones/{self.name}/{img}').convert_alpha())
+				if img == 'spaceship.png': Object(self.game, self, [self.rendered_sprites], (0, 0), LAYERS['foreground'], pygame.image.load(f'../zones/{self.name}/{img}').convert_alpha())
 	
 	def create_zone(self, zone):
 		Zone(self.game, zone, self.entry_point).enter_state()
