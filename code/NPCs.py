@@ -112,6 +112,9 @@ class NPC(pygame.sprite.Sprite):
 			if not self.dashing: self.collisions('y', self.zone.void_sprites)
 			self.rect.centery = self.hitbox.centery
 
+			if self.vel.magnitude() > 1:
+				self.vel = self.vel.normalize()
+
 
 	def invincibility(self, dt):
 		if self.invincible:
