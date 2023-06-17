@@ -126,6 +126,8 @@ class Zone(State):
 			if obj.name == 'red_door': Door(self.game, self, [self.block_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], f'../doors/{obj.name}', obj.name)
 
 		# tilesets
+		for x, y, surf in tmx_data.get_layer_by_name('floor').tiles():
+			Object(self.game, self, [self.rendered_sprites], (x * TILESIZE, y * TILESIZE), LAYERS['floor'], surf)
 		for x, y, surf in tmx_data.get_layer_by_name('walls').tiles():
 			Object(self.game, self, [self.block_sprites, self.updated_sprites, self.rendered_sprites], (x * TILESIZE, y * TILESIZE), LAYERS['player'], surf)
 		for x, y, surf in tmx_data.get_layer_by_name('void').tiles():
@@ -145,7 +147,7 @@ class Zone(State):
 		for _, __, img_files in walk(f'../zones/{self.name}'):
 			for img in img_files:
 				if img == 'static_bg.png': Object(self.game, self, [self.rendered_sprites], (0, 0), LAYERS['BG1'], pygame.image.load(f'../zones/{self.name}/{img}').convert_alpha())
-				if img == 'floor.png': Object(self.game, self, [self.rendered_sprites], (0, 0), LAYERS['floor'], pygame.image.load(f'../zones/{self.name}/{img}').convert_alpha())
+				#if img == 'floor.png': Object(self.game, self, [self.rendered_sprites], (0, 0), LAYERS['floor'], pygame.image.load(f'../zones/{self.name}/{img}').convert_alpha())
 				if img == 'spaceship.png': Object(self.game, self, [self.rendered_sprites], (0, 0), LAYERS['foreground'], pygame.image.load(f'../zones/{self.name}/{img}').convert_alpha())
 	
 	def create_zone(self, zone):

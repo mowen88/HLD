@@ -96,8 +96,8 @@ class NPC(pygame.sprite.Sprite):
 			self.pos.x += self.vel.x * dt + (0.5 * self.vel.x) * dt
 			self.hitbox.centerx = round(self.pos.x)
 			self.collisions('x', self.zone.block_sprites)
-			#if self == self.zone.player: self.collisions('x', self.zone.enemy_sprites)
-			#if self in self.zone.enemy_sprites: self.collisions('x', [self.zone.player])
+			if self == self.zone.player: self.collisions('x', self.zone.enemy_sprites)
+			if self in self.zone.enemy_sprites: self.collisions('x', [self.zone.player])
 			if not self.dashing: self.collisions('x', self.zone.void_sprites)
 			self.rect.centerx = self.hitbox.centerx
 			
@@ -107,13 +107,12 @@ class NPC(pygame.sprite.Sprite):
 			self.pos.y += self.vel.y * dt + (0.5 * self.vel.y * dt) * dt
 			self.hitbox.centery = round(self.pos.y)
 			self.collisions('y', self.zone.block_sprites)
-			#if self == self.zone.player: self.collisions('y', self.zone.enemy_sprites)
-			#if self in self.zone.enemy_sprites: self.collisions('y', [self.zone.player])
+			if self == self.zone.player: self.collisions('y', self.zone.enemy_sprites)
+			if self in self.zone.enemy_sprites: self.collisions('y', [self.zone.player])
 			if not self.dashing: self.collisions('y', self.zone.void_sprites)
 			self.rect.centery = self.hitbox.centery
 
-			if self.vel.magnitude() > 1:
-				self.vel = self.vel.normalize()
+			if self.vel.magnitude() > 1: self.vel = self.vel.normalize()
 
 
 	def invincibility(self, dt):
