@@ -61,21 +61,22 @@ class Player(NPC):
 			self.dash_timer = 0
 
 	def change_gun(self, direction):
-		if direction == 'scroll_down':
-			ACTIONS['scroll_down'] = False
-			if not self.changing_weapon:
+		if not self.changing_weapon:
+
+			if direction == 'scroll_down':
 				if PLAYER_DATA['gun_index'] < len(list(GUN_DATA.keys()))-1: PLAYER_DATA['gun_index'] += 1
-			else: PLAYER_DATA['gun_index'] = 0
-			self.gun = list(GUN_DATA.keys())[PLAYER_DATA['gun_index']]
-			self.changing_weapon = True
+				else: PLAYER_DATA['gun_index'] = 0
+				self.changing_weapon = True
+				ACTIONS['scroll_down'] = False
 			
-		elif direction == 'scroll_up':
-			ACTIONS['scroll_up'] = False
-			if not self.changing_weapon:
+			elif direction == 'scroll_up':
 				if PLAYER_DATA['gun_index'] > 0: PLAYER_DATA['gun_index'] -= 1
 				else: PLAYER_DATA['gun_index'] = len(list(GUN_DATA.keys()))-1
-				self.gun = list(GUN_DATA.keys())[PLAYER_DATA['gun_index']]
 				self.changing_weapon = True
+				ACTIONS['scroll_up'] = False
+
+		self.gun = list(GUN_DATA.keys())[PLAYER_DATA['gun_index']]
+	
 
 	def attackable_terrain_logic(self):
 		if self.zone.melee_sprite:

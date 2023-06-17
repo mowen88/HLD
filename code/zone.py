@@ -131,7 +131,7 @@ class Zone(State):
 		for x, y, surf in tmx_data.get_layer_by_name('walls').tiles():
 			Object(self.game, self, [self.block_sprites, self.updated_sprites, self.rendered_sprites], (x * TILESIZE, y * TILESIZE), LAYERS['player'], surf)
 		for x, y, surf in tmx_data.get_layer_by_name('void').tiles():
-			Void(self.game, self, [self.void_sprites, self.updated_sprites], (x * TILESIZE, y * TILESIZE + 8), LAYERS['player'], surf)
+			Void(self.game, self, [self.void_sprites, self.updated_sprites], (x * TILESIZE, y * TILESIZE - 8), LAYERS['player'], surf)
 		# self.create_guns()
 
 		# create shadows for player and NPCs

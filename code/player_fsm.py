@@ -238,8 +238,6 @@ class Heal:
 		self.timer -= dt
 		player.animate(self.direction + '_heal', 0.2 * dt, 'end')
 
-
-
 class FallDeath:
 	def __init__(self, direction):
 		self.frame_index = 0
