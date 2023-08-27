@@ -25,11 +25,15 @@ class Zone(State):
 		PLAYER_DATA.update({'current_zone': self.name, 'entry_pos': self.entry_point})
 		COMPLETED_DATA['visited_zones'].append(self.name)
 
+		self.game.current_health = PLAYER_DATA['max_health']
+
 		self.screenshaking = False
 		self.screenshake_timer = 0
 		self.cutscene_running = False
 		self.entering = True
 		self.new_zone = None
+
+		self.zone_size = self.get_zone_size()
 
 		#sprites
 		self.melee_sprite = pygame.sprite.GroupSingle()
@@ -50,11 +54,11 @@ class Zone(State):
 		self.health_sprites = pygame.sprite.Group()
 		self.juice_sprites = pygame.sprite.Group()
 
-		self.zone_size = self.get_zone_size()
+		
 		self.create_map()
 
 		self.ui = UI(self.game, self)
-		self.fade_surf = FadeSurf(self, [self.updated_sprites, self.rendered_sprites], (0,0))
+		self.fade_surf = FadeSurf(self.game, self, [self.updated_sprites, self.rendered_sprites], (0,0))
 		self.collect_health_cutscene = CollectionCutscene(self.game, self, f"../assets/ui_images/partial_health_collected/{PLAYER_DATA['partial_healths']}")
 		self.collect_juice_cutscene = CollectionCutscene(self.game, self, f"../assets/ui_images/juice_collected")
 
@@ -258,7 +262,7 @@ class Zone(State):
 		self.ui.draw(screen)
 		self.fade_surf.draw(screen)
 
-		self.game.render_text(str(round(self.game.clock.get_fps(), 2)), WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.1))
-		self.game.render_text(self.player.changing_weapon, PINK, self.game.small_font, RES/2)
-		self.game.render_text(self.player.invincible, WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.9))
+		# self.game.render_text(str(round(self.game.clock.get_fps(), 2)), WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.1))
+		# self.game.render_text(round(self.player.vel, 2), PINK, self.game.small_font, RES/2)
+		# self.game.render_text(self.player.invincible, WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.9))
 		

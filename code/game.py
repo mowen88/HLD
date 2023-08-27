@@ -116,6 +116,7 @@ class Game:
                 img_surf = pygame.image.load(full_path).convert_alpha()
                 surf_list.append(img_surf)
 
+
         return surf_list
 
     def custom_cursor(self, screen): 
@@ -143,7 +144,7 @@ class Game:
         pygame.display.flip()
 
     def main_loop(self):
-        dt = (self.clock.tick()/1000) * FPS
+        dt = self.clock.tick() * 0.001 * FPS
         self.get_events()
         self.update(dt)
         self.draw(self.screen)        

@@ -2,32 +2,40 @@ import pygame, random
 from settings import *
 
 class FadeSurf(pygame.sprite.Sprite):
-	def __init__(self, zone, groups, pos, alpha = 255, z = LAYERS['foreground']):
+	def __init__(self, game, zone, groups, pos, alpha = 255, z = LAYERS['foreground']):
 		super().__init__(groups)
 
 		self.zone = zone
+		self.game = game
 		self.image = pygame.Surface((self.zone.zone_size))
 		self.alpha = alpha
+		self.loading_text = True
+		self.timer = pygame.math.Vector2(self.zone.zone_size).magnitude()/2 # makes load time reltaive to zone size
 		self.z = z
 		self.rect = self.image.get_rect(topleft = pos)
 
 	def update(self, dt):
 		if self.zone.cutscene_running:
-			self.alpha += 4 * dt
+			self.alpha += 2 * dt
 			if self.alpha >= 255: 
 				self.alpha = 255
 				self.zone.exit_state()
 				self.zone.create_zone(self.zone.new_zone)
 			
 		elif self.zone.entering:
-			self.alpha -= 4 * dt
-			if self.alpha <= 0:
-				self.alpha = 0
-				self.zone.entering = False
+			self.timer -= 2 * dt
+			if self.timer <= 0:
+				self.loading_text = False
+				self.alpha -= 2 * dt
+				if self.alpha <= 0:
+					self.alpha = 0
+					self.zone.entering = False
 
 	def draw(self, screen):
 		self.image.set_alpha(self.alpha)
 		screen.blit(self.image, (0,0))
+		if self.loading_text:
+			self.game.render_text('Loading...', WHITE, self.game.small_font, (RES/2 * 1.75))
 
 class Exit(pygame.sprite.Sprite):
 	def __init__(self, groups, pos, size, name):

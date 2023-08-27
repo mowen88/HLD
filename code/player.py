@@ -111,9 +111,9 @@ class Player(NPC):
 			self.zone.ui.flash_icon()
 			if self.game.current_health <= 0:
 				self.alive = False
-				self.game.current_health = PLAYER_DATA['max_health']
-				self.zone.exit_state()
-				self.zone.create_zone(self.zone.name)
+				self.zone.cutscene_running = True
+				# set new zone to the current one to re-enter after death
+				self.zone.new_zone = self.zone.name
 
 	def add_subtract_juice(self, amount, direction):
 		if direction == 'add': self.game.current_juice += amount
