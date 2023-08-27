@@ -1,6 +1,6 @@
 import math
 from settings import *
-from enemy_fsm import Idle, Knockback
+from entities.enemy_fsm import Idle
 
 class NPC(pygame.sprite.Sprite):
 	def __init__(self, game, zone, groups, pos, z, name):
@@ -15,7 +15,6 @@ class NPC(pygame.sprite.Sprite):
 		self.invincibility_timer = 0
 		self.alive = True
 		self.animations = {'idle':[], 'telegraphing':[], 'death':[]}
-
 
 		if self.name: self.import_imgs()
 		self.animation_type = 'loop'

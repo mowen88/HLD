@@ -1,15 +1,11 @@
 import math
 from settings import *
-from NPCs import NPC
-from player_fsm import Idle
+from entities.NPCs import NPC
+from entities.player_fsm import Idle
 
 class Player(NPC):
 	def __init__(self, game, zone, groups, pos, z, name = 'player'):
 		super().__init__(game, zone, groups, pos, z, name)
-
-		self.game = game
-		self.zone = zone
-		self.z = z
 
 		self.state = Idle(self, self.zone.start_direction)
 
@@ -113,7 +109,8 @@ class Player(NPC):
 				self.alive = False
 				self.zone.cutscene_running = True
 				# set new zone to the current one to re-enter after death
-				self.zone.new_zone = self.zone.name
+				#self.zone.new_zone = self.zone.name
+				self.zone.create_zone(self.zone.name)
 
 	def add_subtract_juice(self, amount, direction):
 		if direction == 'add': self.game.current_juice += amount
@@ -125,7 +122,7 @@ class Player(NPC):
 		self.invincibility(dt)
 		self.attack_timer_logic(dt)
 		self.dash_timer_logic(dt)
-		if not self.zone.cutscene_running: self.state_logic()
+		if not (self.zone.exiting or self.zone.entering): self.state_logic()
 		self.state.update(dt, self)
 		
 		

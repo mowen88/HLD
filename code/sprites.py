@@ -1,6 +1,14 @@
 import pygame, random
 from settings import *
 
+class Collider(pygame.sprite.Sprite):
+	def __init__(self, groups, rect, number):
+		super().__init__(groups)
+
+		#self.image = pygame.Surface((size))
+		self.rect = pygame.Rect(rect)
+		self.number = int(number)
+
 class FadeSurf(pygame.sprite.Sprite):
 	def __init__(self, game, zone, groups, pos, alpha = 255, z = LAYERS['foreground']):
 		super().__init__(groups)
@@ -15,21 +23,24 @@ class FadeSurf(pygame.sprite.Sprite):
 		self.rect = self.image.get_rect(topleft = pos)
 
 	def update(self, dt):
-		if self.zone.cutscene_running:
+
+		if self.zone.exiting:
 			self.alpha += 2 * dt
 			if self.alpha >= 255: 
 				self.alpha = 255
 				self.zone.exit_state()
 				self.zone.create_zone(self.zone.new_zone)
 			
-		elif self.zone.entering:
+		else:
 			self.timer -= 2 * dt
 			if self.timer <= 0:
+				self.zone.entering = False
 				self.loading_text = False
 				self.alpha -= 2 * dt
 				if self.alpha <= 0:
 					self.alpha = 0
-					self.zone.entering = False
+					
+
 
 	def draw(self, screen):
 		self.image.set_alpha(self.alpha)
@@ -139,7 +150,6 @@ class Door(AnimatedObject):
 
 	def update(self, dt):
 		self.open(dt)
-
 
 
 class Collectible(AnimatedObject):

@@ -7,7 +7,6 @@ class CollectionCutscene(State):
 	def __init__(self, game, zone, overlay_animation):
 		State.__init__(self, game)
 
-		
 		self.zone = zone
 		self.overlay_animation = overlay_animation
 

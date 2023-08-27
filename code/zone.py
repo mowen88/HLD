@@ -4,15 +4,16 @@ from os import walk
 from settings import *
 from pytmx.util_pygame import load_pygame
 from state import State
-from cutscenes import CollectionCutscene
+#from cutscenes import CollectionCutscene
+from cutscene import Cutscene, CollectionCutscene
 from ui import UI
 from map import Map
-from sprites import FadeSurf, Exit, Object, AnimatedObject, Door, Void, Collectible, Gun, Sword, Bullet, Tree, Beam, AttackableTerrain
+from sprites import FadeSurf, Collider, Exit, Object, AnimatedObject, Door, Void, Collectible, Gun, Sword, Bullet, Tree, Beam, AttackableTerrain
 from camera import Camera
 from particles import Particle, Shadow
-from player import Player
-from NPCs import Warrior
-from enemy import Grunt, Hound
+from entities.player import Player
+from entities.NPCs import Warrior
+from entities.enemy import Grunt, Hound
 
 class Zone(State):
 	def __init__(self, game, name, entry_point):
@@ -25,16 +26,6 @@ class Zone(State):
 		PLAYER_DATA.update({'current_zone': self.name, 'entry_pos': self.entry_point})
 		COMPLETED_DATA['visited_zones'].append(self.name)
 
-		self.game.current_health = PLAYER_DATA['max_health']
-
-		self.screenshaking = False
-		self.screenshake_timer = 0
-		self.cutscene_running = False
-		self.entering = True
-		self.new_zone = None
-
-		self.zone_size = self.get_zone_size()
-
 		#sprites
 		self.melee_sprite = pygame.sprite.GroupSingle()
 		self.gun_sprite = pygame.sprite.GroupSingle()
@@ -44,6 +35,7 @@ class Zone(State):
 		# sprite groups
 		self.rendered_sprites = Camera(self.game, self)
 		self.updated_sprites = pygame.sprite.Group()
+		self.cutscene_sprites = pygame.sprite.Group()
 		self.exit_sprites = pygame.sprite.Group()
 		self.block_sprites = pygame.sprite.Group()
 		self.void_sprites = pygame.sprite.Group()
@@ -54,12 +46,19 @@ class Zone(State):
 		self.health_sprites = pygame.sprite.Group()
 		self.juice_sprites = pygame.sprite.Group()
 
-		
+		self.zone_size = self.get_zone_size()
 		self.create_map()
+
+		self.game.current_health = PLAYER_DATA['max_health']
+		self.screenshaking = False
+		self.screenshake_timer = 0
+		self.cutscene_running = False
+		self.entering = True
+		self.exiting = False
+		self.new_zone = None
 
 		self.ui = UI(self.game, self)
 		self.fade_surf = FadeSurf(self.game, self, [self.updated_sprites, self.rendered_sprites], (0,0))
-		self.collect_health_cutscene = CollectionCutscene(self.game, self, f"../assets/ui_images/partial_health_collected/{PLAYER_DATA['partial_healths']}")
 		self.collect_juice_cutscene = CollectionCutscene(self.game, self, f"../assets/ui_images/juice_collected")
 
 	def get_zone_size(self):
@@ -85,7 +84,10 @@ class Zone(State):
 
 				self.player = Player(self.game, self, [self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'])
 				self.target = self.player
-	
+
+		for obj in tmx_data.get_layer_by_name('cutscenes'):
+			if obj.name == '0': Collider([self.cutscene_sprites, self.updated_sprites], (obj.x, obj.y, obj.width, obj.height), obj.name)
+
 		for obj in tmx_data.get_layer_by_name('exits'):
 			if obj.name == '1': Exit([self.exit_sprites, self.updated_sprites], (obj.x, obj.y), (obj.width, obj.height), obj.name)
 			if obj.name == '2': Exit([self.exit_sprites, self.updated_sprites], (obj.x, obj.y), (obj.width, obj.height), obj.name)
@@ -107,14 +109,19 @@ class Zone(State):
 				if obj.name == 'juice_5': self.juice_5 = Collectible(self.game, self, [self.juice_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/juice', obj.name)
 				if obj.name == 'juice_6': self.juice_6 = Collectible(self.game, self, [self.juice_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/juice', obj.name)
 			if obj.name not in COMPLETED_DATA['health']:
-				if obj.name == 'health_1': self.health_1 = Collectible(self.game, self, [self.health_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/health', obj.name)
-				if obj.name == 'health_2': self.health_2 = Collectible(self.game, self, [self.health_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/health', obj.name)
-				if obj.name == 'health_3': self.health_3 = Collectible(self.game, self, [self.health_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/health', obj.name)
-				if obj.name == 'health_4': self.health_4 = Collectible(self.game, self, [self.health_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/health', obj.name)
-				if obj.name == 'health_5': self.health_5 = Collectible(self.game, self, [self.health_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/health', obj.name)
-				if obj.name == 'health_6': self.health_6 = Collectible(self.game, self, [self.health_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/health', obj.name)
-				if obj.name == 'health_7': self.health_7 = Collectible(self.game, self, [self.health_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/health', obj.name)
-				if obj.name == 'health_8': self.health_8 = Collectible(self.game, self, [self.health_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/health', obj.name)
+
+				if obj.name == 'health_0': Collectible(self.game, self, [self.health_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/health', obj.name)
+				if obj.name == 'health_1': Collectible(self.game, self, [self.health_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/health', obj.name)
+				if obj.name == 'health_2': Collectible(self.game, self, [self.health_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/health', obj.name)
+				if obj.name == 'health_3': Collectible(self.game, self, [self.health_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/health', obj.name)
+				if obj.name == 'health_4': Collectible(self.game, self, [self.health_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/health', obj.name)
+				if obj.name == 'health_5': Collectible(self.game, self, [self.health_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/health', obj.name)
+				if obj.name == 'health_6': Collectible(self.game, self, [self.health_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/health', obj.name)
+				if obj.name == 'health_7': Collectible(self.game, self, [self.health_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/health', obj.name)
+				if obj.name == 'health_8': Collectible(self.game, self, [self.health_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/health', obj.name)
+				if obj.name == 'health_9': Collectible(self.game, self, [self.health_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/health', obj.name)
+				if obj.name == 'health_10': Collectible(self.game, self, [self.health_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/health', obj.name)
+				if obj.name == 'health_11': Collectible(self.game, self, [self.health_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/health', obj.name)
 
 		for obj in tmx_data.get_layer_by_name('objects'):
 			if obj.name == 'blue tree': Tree(self.game, self, [self.block_sprites, self.updated_sprites, self.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
@@ -210,7 +217,9 @@ class Zone(State):
 				if self.player.hitbox.colliderect(sprite.rect):
 					self.ui.add_health()
 					COMPLETED_DATA['health'].append(sprite.name)
-					self.collect_health_cutscene.enter_state()
+					# self.target.direction.update({key: False for key in self.target.direction})
+					self.cutscene_running = True
+					CollectionCutscene(self.game, self, f"../assets/ui_images/partial_health_collected/{PLAYER_DATA['partial_healths']}").enter_state()
 					sprite.alive = False
 					sprite.kill()
 
@@ -234,35 +243,45 @@ class Zone(State):
 
 		return(distance, direction, angle)
 
-	def exiting(self):
+	def exit_zone(self):
 		for sprite in self.exit_sprites:
 			if self.player.hitbox.colliderect(sprite.rect):
-				self.cutscene_running = True
+				self.exiting = True
 				self.new_zone = ZONE_DATA[self.name][sprite.name]
 				self.entry_point = sprite.name
+
+	def start_cutscene(self):
+		for sprite in self.cutscene_sprites:
+			if self.player.hitbox.colliderect(sprite.rect) and sprite.number not in COMPLETED_DATA['cutscenes']:
+				COMPLETED_DATA['cutscenes'].append(sprite.number)
+				# self.target.direction.update({key: False for key in self.target.direction})
+				self.cutscene_running = True
+				Cutscene(self.game, self, sprite.number).enter_state()
 			
 	def update(self, dt):
-		self.collect()
-		self.exiting()
+		self.start_cutscene()
+		self.exit_zone()
 		self.enemy_shot_logic()
-		self.fade_surf.update(dt)
 		self.ui.update(dt)
+		self.collect()
 
 		if ACTIONS['return']: 
 			Map(self.game, self).enter_state()
 			#self.exit_state()
 			self.game.reset_keys()
+
 		self.updated_sprites.update(dt)
+		self.fade_surf.update(dt)
 
 	def draw(self, screen):
 		screen.fill(GREEN)
-		self.rendered_sprites.offset_draw(self.target)
+		self.rendered_sprites.offset_draw(screen, self.target.rect.center)
 		self.game.custom_cursor(screen)
 
 		self.ui.draw(screen)
 		self.fade_surf.draw(screen)
 
-		# self.game.render_text(str(round(self.game.clock.get_fps(), 2)), WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.1))
-		# self.game.render_text(round(self.player.vel, 2), PINK, self.game.small_font, RES/2)
+		self.game.render_text(str(round(self.game.clock.get_fps(), 2)), WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.1))
+		self.game.render_text(PLAYER_DATA['partial_healths'], PINK, self.game.small_font, RES/2)
 		# self.game.render_text(self.player.invincible, WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.9))
 		

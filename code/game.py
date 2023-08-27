@@ -9,6 +9,9 @@ class Game:
         pygame.init()
 
         self.clock = pygame.time.Clock()
+
+        self.monitor_size = [pygame.display.Info().current_w, pygame.display.Info().current_h]
+
         self.screen = pygame.display.set_mode((RES), pygame.FULLSCREEN|pygame.SCALED)
         self.running = True
 
@@ -116,7 +119,6 @@ class Game:
                 img_surf = pygame.image.load(full_path).convert_alpha()
                 surf_list.append(img_surf)
 
-
         return surf_list
 
     def custom_cursor(self, screen): 
@@ -139,7 +141,7 @@ class Game:
         pygame.display.set_caption(str(round(self.clock.get_fps(), 2)))
         self.stack[-1].update(dt)
 
-    def draw(self, screen):
+    def draw(self, screen): 
         self.stack[-1].draw(screen)
         pygame.display.flip()
 

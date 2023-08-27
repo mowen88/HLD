@@ -79,7 +79,7 @@ class UI:
 		
 	def add_health(self):
 		PLAYER_DATA['partial_healths'] += 1
-		if PLAYER_DATA['partial_healths'] > 3:
+		if PLAYER_DATA['partial_healths'] >= 4:
 			PLAYER_DATA['partial_healths'] = 0
 			PLAYER_DATA['max_health'] += 1 
 			self.game.current_health = PLAYER_DATA['max_health']
