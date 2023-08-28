@@ -9,11 +9,9 @@ class Camera(pygame.sprite.Group):
 		self.zone = zone
 		self.offset = pygame.math.Vector2()
 
-		self.BG0 = pygame.image.load(f'../zones/{self.zone.name}/bg.png').convert_alpha()
-
 	# 	# fog variables
 	# 	self.dark = True
-	# 	self.main_fog = self.get_fog_image(YELLOW, (self.zone.zone_size), self.zone.zone_size)
+	# 	self.main_fog = self.get_fog_image(BLUE, (self.zone.zone_size), self.zone.zone_size)
 
 	# def get_fog_image(self, colour, circle_size, canvas_size):
 	# 	self.fog_colour = colour
@@ -43,8 +41,7 @@ class Camera(pygame.sprite.Group):
 	def offset_draw(self, screen, target):
 		
 		# draw parralax backgrounds
-		screen.fill(LIGHT_GREY)
-		screen.blit(self.BG0, (0 - self.offset[0] * 0.2, 0 - self.offset[1] * 0.2))
+		screen.fill(ZONE_DATA[self.zone.name]['bg_colour'])
 
 		distance = self.zone.get_distance_direction_and_angle(pygame.mouse.get_pos() - self.offset, target)[0]
 		scroll = pygame.math.Vector2(target) + pygame.math.Vector2(pygame.mouse.get_pos())

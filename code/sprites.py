@@ -18,29 +18,28 @@ class FadeSurf(pygame.sprite.Sprite):
 		self.image = pygame.Surface((self.zone.zone_size))
 		self.alpha = alpha
 		self.loading_text = True
-		self.timer = pygame.math.Vector2(self.zone.zone_size).magnitude()/2 # makes load time reltaive to zone size
+		self.timer = pygame.math.Vector2(self.zone.zone_size).magnitude()/10 # makes load time relative to zone size
+		self.fade_duration = 5
 		self.z = z
 		self.rect = self.image.get_rect(topleft = pos)
 
 	def update(self, dt):
 
 		if self.zone.exiting:
-			self.alpha += 2 * dt
+			self.alpha += self.fade_duration * dt
 			if self.alpha >= 255: 
 				self.alpha = 255
 				self.zone.exit_state()
 				self.zone.create_zone(self.zone.new_zone)
 			
 		else:
-			self.timer -= 2 * dt
+			self.timer -= dt
 			if self.timer <= 0:
 				self.zone.entering = False
 				self.loading_text = False
-				self.alpha -= 2 * dt
+				self.alpha -= self.fade_duration * dt
 				if self.alpha <= 0:
 					self.alpha = 0
-					
-
 
 	def draw(self, screen):
 		self.image.set_alpha(self.alpha)
@@ -58,7 +57,7 @@ class Exit(pygame.sprite.Sprite):
 		self.rect = self.image.get_rect(topleft = pos)
 
 class Object(pygame.sprite.Sprite):
-	def __init__(self, game, zone, groups, pos, z, surf = pygame.Surface((TILESIZE, TILESIZE))):
+	def __init__(self, game, zone, groups, pos, z, surf = pygame.Surface((TILESIZE, TILESIZE)), bloom_surf = None):
 		super().__init__(groups)
 
 		self.zone = zone
@@ -66,6 +65,24 @@ class Object(pygame.sprite.Sprite):
 		self.image = surf
 		self.rect = self.image.get_rect(topleft = pos)
 		self.hitbox = self.rect.copy().inflate(-self.rect.width *0.1, -self.rect.height *0.4)
+
+
+class BG(Object):
+	def __init__(self, game, zone, groups, pos, z, surf, parralax_value = (0, 0)):
+		super().__init__(game, zone, groups, pos, z, surf)
+
+		self.zone = zone
+		self.image = surf
+		self.parralax_value = pygame.math.Vector2(parralax_value)
+		self.offset = self.zone.rendered_sprites.offset
+		self.rect = self.image.get_rect(topleft = pos)	
+		self.z = z
+		self.hitbox = self.rect.copy().inflate(0,0)	
+		self.old_hitbox = self.hitbox.copy()
+		self.pos = pygame.math.Vector2(self.rect.topleft)
+
+	def update(self, dt):
+		self.rect.topleft = (0 - self.offset[0] * self.parralax_value.x, 0 - self.offset[1] * self.parralax_value.y)
 
 class Void(Object):
 	def __init__(self, game, zone, groups, pos, z, surf = pygame.Surface((TILESIZE, TILESIZE))):

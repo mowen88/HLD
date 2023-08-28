@@ -13,6 +13,7 @@ class Game:
         self.monitor_size = [pygame.display.Info().current_w, pygame.display.Info().current_h]
 
         self.screen = pygame.display.set_mode((RES), pygame.FULLSCREEN|pygame.SCALED)
+
         self.running = True
 
         #font

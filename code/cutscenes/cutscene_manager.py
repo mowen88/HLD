@@ -1,7 +1,8 @@
 
 from state import State
 from settings import *
-#from dialogue import Dialogue
+from cutscenes.dialogue import Dialogue
+from cutscenes.sequences import Sequences
 
 class CollectionCutscene(State):
 	def __init__(self, game, zone, number):
@@ -62,7 +63,7 @@ class CollectionCutscene(State):
 			self.alpha -= 10 * dt
 			if self.alpha <= 0:
 				self.alpha = 0
-				self.zone.cutscene_running = False	
+					
 
 	def update(self, dt):
 		self.game.reset_keys()
@@ -95,6 +96,7 @@ class Cutscene(State):
 
 		self.timer = 0
 		self.int_time = 0
+		self.cutscene_sequence = Sequences(self)
 
 	def create_dialogue(self, target_sprite, dialogue_index, duration):
 		Dialogue(self.game, self.zone, self.number, target_sprite, dialogue_index, duration).enter_state()
@@ -120,19 +122,8 @@ class Cutscene(State):
 		pygame.draw.rect(screen, BLACK, (0, 0, WIDTH, self.bar_height))
 		pygame.draw.rect(screen, BLACK, (0, HEIGHT - self.bar_height, WIDTH, self.target_height))
 
-	def sequence(self):
-		if self.number == 0:
-
-			if self.timer < 100:
-				self.target = pygame.math.Vector2(self.zone.target.rect.center)
-
-			elif self.timer < 200:
-				self.target = pygame.math.Vector2(self.zone.warrior.rect.center)
-
-			elif self.timer < 400:
-				self.target = pygame.math.Vector2(self.zone.warrior.rect.center)
-			if self.timer > 300:
-				self.opening = False
+	def sequence(self, number):
+		self.cutscene_sequence.run(number)
 
 	def update(self, dt):
 		self.game.reset_keys()
@@ -145,7 +136,7 @@ class Cutscene(State):
 
 	def draw(self, screen):
 		
-		self.sequence()
+		self.sequence(self.number)
 		self.prev_state.rendered_sprites.offset_draw(screen, self.target)
 		self.draw_blackbars(screen)
 

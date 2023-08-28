@@ -6,6 +6,24 @@ RES = WIDTH, HEIGHT = pygame.math.Vector2(320, 180)#(360, 202.5)#(480, 270)#(640
 HALF_WIDTH, HALF_HEIGHT = RES/2
 
 FONT = '../fonts/Pokemon Classic.ttf'
+#FONT = '../fonts/Typori-Regular.ttf'
+
+# game colours
+BLACK = ((20, 14, 30))
+GREY = ((91,83,145))
+LIGHT_GREY = ((146, 143, 184))
+WHITE = ((223, 234, 228)) 
+BLUE = ((20, 68, 145))
+LIGHT_BLUE = ((113, 181, 219))
+RED = ((112, 21, 31))
+ORANGE = ((227, 133, 36))
+PINK = ((195, 67, 92))
+GREEN = ((88, 179, 150))
+LIGHT_GREEN = ((106, 226, 145))
+PURPLE = ((66, 0, 78))
+CYAN = ((0, 255, 255))
+MAGENTA = ((153, 60, 139))
+YELLOW = ((224, 225, 146))
 
 # data that is dynamic and changes throughout play
 
@@ -34,10 +52,10 @@ ENEMY_DATA = {
 }
 # entry and exit data for zones, does not change
 ZONE_DATA = {
-	'start':{'1': 'garden', '2': 'dungeon', '3':'datacentre'},
-	'garden':{'1': 'start', '2': 'dungeon', '3':'datacentre'},
-	'dungeon':{'1':'garden', '2':'garden'},
-	'datacentre':{'1':'garden', '2':'garden', '3':'garden'},
+	'start':{'bg_colour': YELLOW, '1': 'garden', '2': 'dungeon', '3':'datacentre'},
+	'garden':{'bg_colour': PINK,'1': 'start', '2': 'dungeon', '3':'datacentre'},
+	'dungeon':{'bg_colour': PURPLE,'1':'garden', '2':'garden'},
+	'datacentre':{'bg_colour': GREEN,'1':'garden', '2':'garden', '3':'garden'},
 }
 MAP_DATA = {
 	'start':{'pos': (-20,-20)},
@@ -45,6 +63,16 @@ MAP_DATA = {
 	'dungeon':{'pos': (60,20)},
 	'datacentre':{'pos': (0,20)},
 }
+
+DIALOGUE = {
+			0: [['Dude, where the hell are','you going ?'],
+				['Sorry pal, gotta go!','Places to go....','People to see....']], 
+			1: [['This is more dialogue for','a second cutscene.','Tell me if it worked ?'], 
+				['How do you expect me to','hear you from up there ?']],
+			2: [['I am on my bike and loving it!', 'Whatcha think?'], 
+				['Anyway. . . '],
+				["It's time to get outta here!"]]
+			}
 
 LAYERS = {
 	'BG0': 0,
@@ -66,19 +94,3 @@ ACTIONS = {'escape': False, 'space': False, 'up': False, 'down': False, 'left': 
 			'right': False, 'return': False, 'right_shift': False, 'backspace': False, 'left_click': False, 
 			'right_click': False, 'scroll_up': False, 'scroll_down': False}
 
-# game colours
-BLACK = ((20, 14, 30))
-GREY = ((91,83,145))
-LIGHT_GREY = ((146, 143, 184))
-WHITE = ((223, 234, 228)) 
-BLUE = ((20, 68, 145))
-LIGHT_BLUE = ((113, 181, 219))
-RED = ((112, 21, 31))
-ORANGE = ((227, 133, 36))
-PINK = ((195, 67, 92))
-GREEN = ((88, 179, 150))
-LIGHT_GREEN = ((106, 226, 145))
-PURPLE = ((66, 0, 78))
-CYAN = ((0, 255, 255))
-MAGENTA = ((153, 60, 139))
-YELLOW = ((224, 225, 146))

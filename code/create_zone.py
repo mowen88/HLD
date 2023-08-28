@@ -1,0 +1,116 @@
+import pygame
+from os import walk
+from settings import *
+from pytmx.util_pygame import load_pygame
+from map import Map
+from sprites import BG, FadeSurf, Collider, Exit, Object, AnimatedObject, Door, Void, Collectible, Gun, Sword, Bullet, Tree, Beam, AttackableTerrain
+from particles import Particle, Shadow
+from entities.player import Player
+from entities.NPCs import Warrior
+from entities.enemy import Grunt, Hound
+
+class CreateZone:
+	def __init__(self, game, zone):
+		self.game = game
+		self.zone = zone
+
+		self.zone.fade_surf = FadeSurf(self.game, self.zone, [self.zone.updated_sprites], (0,0))
+
+	def create(self):
+		tmx_data = load_pygame(f'../zones/{self.zone.name}/{self.zone.name}.tmx')
+	
+		# # add the player
+		for obj in tmx_data.get_layer_by_name('entries'):
+			if obj.name == self.zone.entry_point:
+
+				if obj.x > self.zone.zone_size[0] - (self.zone.zone_size[0]/5): self.zone.start_direction = 'left'
+				elif obj.x < self.zone.zone_size[0]/5: self.zone.start_direction = 'right'
+				elif obj.y < self.zone.zone_size[1]/2: self.zone.start_direction = 'down'
+
+				else: self.zone.start_direction = 'up'
+
+				self.zone.player = Player(self.zone.game, self.zone, [self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'])
+				self.zone.target = self.zone.player
+
+		for obj in tmx_data.get_layer_by_name('cutscenes'):
+			if obj.name == '0': Collider([self.zone.cutscene_sprites, self.zone.updated_sprites], (obj.x, obj.y, obj.width, obj.height), obj.name)
+
+		for obj in tmx_data.get_layer_by_name('exits'):
+			if obj.name == '1': Exit([self.zone.exit_sprites, self.zone.updated_sprites], (obj.x, obj.y), (obj.width, obj.height), obj.name)
+			if obj.name == '2': Exit([self.zone.exit_sprites, self.zone.updated_sprites], (obj.x, obj.y), (obj.width, obj.height), obj.name)
+			if obj.name == '3': Exit([self.zone.exit_sprites, self.zone.updated_sprites], (obj.x, obj.y), (obj.width, obj.height), obj.name)
+
+		for obj in tmx_data.get_layer_by_name('entities'):
+			#enemies
+			if obj.name == 'grunt': self.zone.grunt = Grunt(self.zone.game, self.zone, [self.zone.enemy_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.name)
+			if obj.name == 'hound': self.zone.hound = Hound(self.zone.game, self.zone, [self.zone.enemy_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.name)
+			#NPCs
+			if obj.name == 'warrior': self.zone.warrior = Warrior(self.zone.game, self.zone, [self.zone.npc_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.name)
+
+		for obj in tmx_data.get_layer_by_name('collectibles'):
+			if obj.name not in COMPLETED_DATA['juice']:
+				if obj.name == 'juice_1': self.zone.juice_1 = Collectible(self.zone.game, self.zone, [self.zone.juice_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/juice', obj.name)
+				if obj.name == 'juice_2': self.zone.juice_2 = Collectible(self.zone.game, self.zone, [self.zone.juice_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/juice', obj.name)
+				if obj.name == 'juice_3': self.zone.juice_3 = Collectible(self.zone.game, self.zone, [self.zone.juice_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/juice', obj.name)
+				if obj.name == 'juice_4': self.zone.juice_4 = Collectible(self.zone.game, self.zone, [self.zone.juice_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/juice', obj.name)
+				if obj.name == 'juice_5': self.zone.juice_5 = Collectible(self.zone.game, self.zone, [self.zone.juice_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/juice', obj.name)
+				if obj.name == 'juice_6': self.zone.juice_6 = Collectible(self.zone.game, self.zone, [self.zone.juice_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/juice', obj.name)
+			if obj.name not in COMPLETED_DATA['health']:
+
+				if obj.name == 'health_0': Collectible(self.zone.game, self.zone, [self.zone.health_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/health', obj.name)
+				if obj.name == 'health_1': Collectible(self.zone.game, self.zone, [self.zone.health_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/health', obj.name)
+				if obj.name == 'health_2': Collectible(self.zone.game, self.zone, [self.zone.health_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/health', obj.name)
+				if obj.name == 'health_3': Collectible(self.zone.game, self.zone, [self.zone.health_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/health', obj.name)
+				if obj.name == 'health_4': Collectible(self.zone.game, self.zone, [self.zone.health_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/health', obj.name)
+				if obj.name == 'health_5': Collectible(self.zone.game, self.zone, [self.zone.health_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/health', obj.name)
+				if obj.name == 'health_6': Collectible(self.zone.game, self.zone, [self.zone.health_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/health', obj.name)
+				if obj.name == 'health_7': Collectible(self.zone.game, self.zone, [self.zone.health_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/health', obj.name)
+				if obj.name == 'health_8': Collectible(self.zone.game, self.zone, [self.zone.health_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/health', obj.name)
+				if obj.name == 'health_9': Collectible(self.zone.game, self.zone, [self.zone.health_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/health', obj.name)
+				if obj.name == 'health_10': Collectible(self.zone.game, self.zone, [self.zone.health_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/health', obj.name)
+				if obj.name == 'health_11': Collectible(self.zone.game, self.zone, [self.zone.health_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/health', obj.name)
+
+		for obj in tmx_data.get_layer_by_name('objects'):
+			if obj.name == 'blue tree': Tree(self.zone.game, self.zone, [self.zone.block_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
+			if obj.name == 'big tree': Tree(self.zone.game, self.zone, [self.zone.block_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
+			if obj.name == 'medium tree': Tree(self.zone.game, self.zone, [self.zone.block_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
+			if obj.name == 'small tree': Tree(self.zone.game, self.zone, [self.zone.block_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
+			if obj.name == 'tall tree': Tree(self.zone.game, self.zone, [self.zone.block_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
+			if obj.name == 'red flower': AttackableTerrain(self.zone.game, self.zone, [self.zone.block_sprites, self.zone.attackable_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], f'../assets/attackable_terrain/{obj.name}')
+			if obj.name == 'blue flower': AttackableTerrain(self.zone.game, self.zone, [self.zone.block_sprites, self.zone.attackable_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], f'../assets/attackable_terrain/{obj.name}')
+
+		for obj in tmx_data.get_layer_by_name('doors'):
+			if obj.name == 'blue_door': Door(self.zone.game, self.zone, [self.zone.block_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], f'../doors/{obj.name}', obj.name)
+			if obj.name == 'red_door': Door(self.zone.game, self.zone, [self.zone.block_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], f'../doors/{obj.name}', obj.name)
+
+		# tilesets
+		# for x, y, surf in tmx_data.get_layer_by_name('floor').tiles():
+		# 	Object(self.zone.game, self.zone, [self.zone.rendered_sprites], (x * TILESIZE, y * TILESIZE), LAYERS['floor'], surf)
+		for x, y, surf in tmx_data.get_layer_by_name('walls').tiles():
+			Object(self.zone.game, self.zone, [self.zone.block_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (x * TILESIZE, y * TILESIZE), LAYERS['player'], surf)
+		for x, y, surf in tmx_data.get_layer_by_name('void').tiles():
+			Void(self.zone.game, self.zone, [self.zone.void_sprites, self.zone.updated_sprites], (x * TILESIZE, y * TILESIZE + 8), LAYERS['player'], surf)
+		# self.zone.create_guns()
+
+		# create shadows for player and NPCs
+		Shadow(self.zone.game, self.zone, [self.zone.updated_sprites, self.zone.rendered_sprites], (self.zone.player.hitbox.midbottom), LAYERS['particles'], self.zone.player, 'medium')
+		for sprite in self.zone.npc_sprites:
+			Shadow(self.zone.game, self.zone, [self.zone.updated_sprites, self.zone.rendered_sprites], (sprite.hitbox.midbottom), LAYERS['particles'], sprite, 'medium')
+		for sprite in self.zone.enemy_sprites:
+			Shadow(self.zone.game, self.zone, [self.zone.updated_sprites, self.zone.rendered_sprites], (sprite.hitbox.midbottom), LAYERS['particles'], sprite, 'medium')
+		for sprite in self.zone.health_sprites:
+			Shadow(self.zone.game, self.zone, [self.zone.updated_sprites, self.zone.rendered_sprites], (sprite.hitbox.midbottom), LAYERS['particles'], sprite, 'small')
+
+		# add static image layers
+		for _, __, img_files in walk(f'../zones/{self.zone.name}'):
+			for img in img_files:
+				if img == 'static_bg.png': BG(self.zone.game, self.zone, [self.zone.rendered_sprites], (0, 0), LAYERS['BG1'], pygame.image.load(f'../zones/{self.zone.name}/{img}').convert_alpha())
+				if img == 'bg.png': BG(self.zone.game, self.zone, [self.zone.updated_sprites, self.zone.rendered_sprites], (0, 0), LAYERS['BG0'], pygame.image.load(f'../zones/{self.zone.name}/{img}').convert_alpha(), (0.2, 0.2))
+				if img == 'floor.png': BG(self.zone.game, self.zone, [self.zone.rendered_sprites], (0, 0), LAYERS['floor'], pygame.image.load(f'../zones/{self.zone.name}/{img}').convert_alpha())
+				#if img == '2x6_white.png': BG(self.zone.game, self.zone, [self.zone.updated_sprites, self.zone.rendered_sprites], (0, 0), LAYERS['foreground'], pygame.image.load(f'../zones/{self.zone.name}/{img}').convert_alpha(), (0.2, 0.2))
+				if img == 'spaceship.png': Object(self.zone.game, self.zone, [self.zone.rendered_sprites], (0, 0), LAYERS['blocks'], pygame.image.load(f'../zones/{self.zone.name}/{img}').convert_alpha())
+
+				# if img == 'static_bg.png': Object(self.zone.game, self.zone, [self.zone.rendered_sprites], (0, 0), LAYERS['BG1'], pygame.image.load(f'../zones/{self.zone.name}/{img}').convert_alpha())
+				# #if img == 'floor.png': Object(self.zone.game, self.zone, [self.zone.rendered_sprites], (0, 0), LAYERS['floor'], pygame.image.load(f'../zones/{self.zone.name}/{img}').convert_alpha())
+				# if img == 'spaceship.png': Object(self.zone.game, self.zone, [self.zone.rendered_sprites], (0, 0), LAYERS['foreground'], pygame.image.load(f'../zones/{self.zone.name}/{img}').convert_alpha())
+	
