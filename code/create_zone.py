@@ -34,6 +34,7 @@ class CreateZone:
 
 		for obj in tmx_data.get_layer_by_name('cutscenes'):
 			if obj.name == '0': Collider([self.zone.cutscene_sprites, self.zone.updated_sprites], (obj.x, obj.y, obj.width, obj.height), obj.name)
+			if obj.name == '1': Collider([self.zone.cutscene_sprites, self.zone.updated_sprites], (obj.x, obj.y, obj.width, obj.height), obj.name)
 
 		for obj in tmx_data.get_layer_by_name('exits'):
 			if obj.name == '1': Exit([self.zone.exit_sprites, self.zone.updated_sprites], (obj.x, obj.y), (obj.width, obj.height), obj.name)

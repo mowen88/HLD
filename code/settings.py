@@ -69,7 +69,7 @@ DIALOGUE = {
 			0: [['Dude, where the hell are','you going ?'],
 				['Sorry pal, gotta go!','Places to go....','People to see....']], 
 			1: [['This is more dialogue for','a second cutscene.','Tell me if it worked ?'], 
-				['How do you expect me to','hear you from up there ?']],
+				['How do you expect me to','hear you from there ?']],
 			2: [['I am on my bike and loving it!', 'Whatcha think?'], 
 				['Anyway. . . '],
 				["It's time to get outta here!"]]

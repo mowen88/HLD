@@ -7,6 +7,7 @@ class Sequences:
 		self.cutscene = cutscene
 	
 	def run(self, number):
+
 		if number == 0:
 
 			if self.cutscene.int_time == 120:
@@ -26,11 +27,11 @@ class Sequences:
 				self.cutscene.target = pygame.math.Vector2(self.cutscene.zone.target.rect.center)
 				self.cutscene.opening = False
 
-		if number == 1:
+		elif number == 1:
 
 			if self.cutscene.int_time == 120:
-				self.cutscene.create_dialogue(self.cutscene.zone.warrior, 0, 60)
-			elif self.cutscene.int_time == 300:
+				self.cutscene.create_dialogue(self.cutscene.zone.hound, 0, 60)
+			elif self.cutscene.int_time == 350:
 				self.cutscene.create_dialogue(self.cutscene.zone.player, 1, 100)
 
 			# whilst running
@@ -38,7 +39,7 @@ class Sequences:
 				self.cutscene.target = pygame.math.Vector2(self.cutscene.zone.target.rect.center)
 
 			elif self.cutscene.timer < 300:
-				self.cutscene.target = pygame.math.Vector2(self.cutscene.zone.warrior.rect.center)
+				self.cutscene.target = pygame.math.Vector2(self.cutscene.zone.hound.rect.center)
 
 			elif self.cutscene.timer < 600:
 				self.cutscene.target = pygame.math.Vector2(self.cutscene.zone.target.rect.center)

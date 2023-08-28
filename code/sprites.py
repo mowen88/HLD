@@ -180,7 +180,6 @@ class Barrier(AnimatedObject):
 			self.frame_index += 0.15 * dt
 			if self.frame_index >= len(self.frames) -1: 
 				self.frame_index = len(self.frames) -1
-				self.z = LAYERS['floor']
 			else: 
 				self.frame_index = self.frame_index % len(self.frames)	
 		else:
@@ -190,8 +189,12 @@ class Barrier(AnimatedObject):
 			self.z = LAYERS['player']
 
 		self.image = self.frames[int(self.frame_index)]
-		if self.frame_index > 0: self.zone.block_sprites.remove(self)
-		else: self.zone.block_sprites.add(self)	
+		if self.frame_index > 0: 
+			self.zone.block_sprites.remove(self)
+			self.z = LAYERS['floor']
+		else: 
+			self.zone.block_sprites.add(self)
+			self.z = LAYERS['player']	
 
 	def update(self, dt):
 		self.open(dt)
