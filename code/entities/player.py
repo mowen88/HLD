@@ -91,6 +91,7 @@ class Player(NPC):
 						if target.health <= 0:
 							target.alive = False
 							target.invincible = False
+							self.zone.enemy_sprites.remove(target)
 
 	def enemy_attacking_logic(self):
 		for sprite in self.zone.enemy_sprites:

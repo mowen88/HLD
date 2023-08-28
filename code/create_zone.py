@@ -3,7 +3,7 @@ from os import walk
 from settings import *
 from pytmx.util_pygame import load_pygame
 from map import Map
-from sprites import BG, FadeSurf, Collider, Exit, Object, AnimatedObject, Door, Void, Collectible, Gun, Sword, Bullet, Tree, Beam, AttackableTerrain
+from sprites import BG, FadeSurf, Collider, Exit, Object, AnimatedObject, Barrier, Door, Void, Collectible, Gun, Sword, Bullet, Tree, Beam, AttackableTerrain
 from particles import Particle, Shadow
 from entities.player import Player
 from entities.NPCs import Warrior
@@ -46,6 +46,10 @@ class CreateZone:
 			if obj.name == 'hound': self.zone.hound = Hound(self.zone.game, self.zone, [self.zone.enemy_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.name)
 			#NPCs
 			if obj.name == 'warrior': self.zone.warrior = Warrior(self.zone.game, self.zone, [self.zone.npc_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.name)
+
+		for obj in tmx_data.get_layer_by_name('barriers'):
+			if obj.name == 'barrier': Barrier(self.zone.game, self.zone, [self.zone.barrier_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], f'../assets/{obj.name}/', obj.name)
+			if obj.name == '0': Collider([self.zone.barrier_activator_sprites, self.zone.updated_sprites], (obj.x, obj.y, obj.width, obj.height), obj.name)
 
 		for obj in tmx_data.get_layer_by_name('collectibles'):
 			if obj.name not in COMPLETED_DATA['keys']:

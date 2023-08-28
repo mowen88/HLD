@@ -34,6 +34,8 @@ class Zone(State):
 		self.cutscene_sprites = pygame.sprite.Group()
 		self.exit_sprites = pygame.sprite.Group()
 		self.block_sprites = pygame.sprite.Group()
+		self.barrier_sprites = pygame.sprite.Group()
+		self.barrier_activator_sprites = pygame.sprite.Group()
 		self.void_sprites = pygame.sprite.Group()
 		self.enemy_sprites = pygame.sprite.Group()
 		self.npc_sprites = pygame.sprite.Group()
@@ -52,6 +54,7 @@ class Zone(State):
 		self.cutscene_running = False
 		self.entering = True
 		self.exiting = False
+		self.locked_in = False
 		self.new_zone = None
 
 		self.ui = UI(self.game, self)
@@ -112,6 +115,7 @@ class Zone(State):
 							if target.health <= 0:
 								target.invincible = False
 								target.alive = False
+								self.enemy_sprites.remove(target)
 
 				for sprite in self.block_sprites:
 					if bullet.rect.colliderect(sprite.hitbox) and sprite not in self.attackable_sprites:
@@ -147,6 +151,11 @@ class Zone(State):
 					CollectionCutscene(self.game, self, f"../assets/ui_images/juice_collected/").enter_state()
 					sprite.alive = False
 					sprite.kill()
+
+	def activate_barriers(self):
+		for sprite in self.barrier_activator_sprites:
+			if self.player.hitbox.colliderect(sprite.rect):
+				self.locked_in = True
 					
 	def get_distance_direction_and_angle(self, point_1, point_2):
 		pos_1 = pygame.math.Vector2(point_1 - self.rendered_sprites.offset)
@@ -176,6 +185,7 @@ class Zone(State):
 				Cutscene(self.game, self, sprite.number).enter_state()
 			
 	def update(self, dt):
+		self.activate_barriers()
 		self.start_cutscene()
 		self.collect()
 		self.exit_zone()
@@ -198,7 +208,7 @@ class Zone(State):
 		self.fade_surf.draw(screen)
 
 		self.game.render_text(str(round(self.game.clock.get_fps(), 2)), WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.1))
-		self.game.render_text(len(COMPLETED_DATA['keys']), PINK, self.game.small_font, RES/2)
+		self.game.render_text(len(self.enemy_sprites), PINK, self.game.small_font, RES/2)
 		# self.game.render_text(self.player.invincible, WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.9))
 		
 		
