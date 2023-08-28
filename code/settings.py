@@ -39,7 +39,8 @@ PLAYER_DATA = {'current_zone': 'dungeon',
 COMPLETED_DATA = {'cutscenes': [],
 				  'visited_zones': [],
 				  'health': [],
-				  'juice': []}
+				  'juice': [],
+				  'keys':[]}
 
 GUN_DATA = {
 	'pistol':{'cost': 11, 'damage': 1, 'cooldown': 20, 'knockback': 1},
@@ -54,7 +55,7 @@ ENEMY_DATA = {
 ZONE_DATA = {
 	'start':{'bg_colour': YELLOW, '1': 'garden', '2': 'dungeon', '3':'datacentre'},
 	'garden':{'bg_colour': PINK,'1': 'start', '2': 'dungeon', '3':'datacentre'},
-	'dungeon':{'bg_colour': PURPLE,'1':'garden', '2':'garden'},
+	'dungeon':{'bg_colour': BLACK,'1':'garden', '2':'garden'},
 	'datacentre':{'bg_colour': GREEN,'1':'garden', '2':'garden', '3':'garden'},
 }
 MAP_DATA = {

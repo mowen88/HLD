@@ -32,4 +32,35 @@ class Shadow(Particle):
 			self.rect = self.image.get_rect(center = (self.sprite.hitbox.midbottom[0], self.sprite.hitbox.midbottom[1] + self.rect.height))
 		else:
 			self.image.set_alpha(0)
+
+class Flash(Particle):
+	def __init__(self, game, zone, groups, pos, z = LAYERS['particles']):
+		super().__init__(game, zone, groups, pos, z)
+
+		self.zone = zone
+		self.z = z
+		self.pos = pos
+		self.alpha = 255
+		self.flash_size = [0, 0]
+		self.image = pygame.Surface((self.flash_size))
+		self.image.fill(WHITE)
+		self.rect = self.image.get_rect(center = self.pos)
+
+	def update(self, dt):
+		
+		self.image.fill(WHITE)
+		self.alpha -= 12 * dt
+		self.flash_size[0] += 5 * dt
+		self.flash_size[1] += 5 * dt
+
+		if self.alpha < 0:
+			self.kill()
+
+		self.image = pygame.transform.scale(self.image, (self.flash_size))
+		self.image.set_alpha(self.alpha)
+		self.rect = self.image.get_rect(center = self.pos)
+
+		
+		
+
 			

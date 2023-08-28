@@ -4,6 +4,7 @@ from settings import *
 from state import State
 from camera import Camera
 from create_zone import CreateZone
+from particles import Flash
 from sprites import Sword, Gun, Bullet, Beam
 from cutscenes.cutscene_manager import Cutscene, CollectionCutscene
 from ui import UI
@@ -40,6 +41,7 @@ class Zone(State):
 		self.gun_sprites = pygame.sprite.Group()
 		self.health_sprites = pygame.sprite.Group()
 		self.juice_sprites = pygame.sprite.Group()
+		self.key_sprites = pygame.sprite.Group()
 
 		self.scene = CreateZone(self.game, self)
 		self.scene.create()
@@ -64,6 +66,9 @@ class Zone(State):
 
 	def create_zone(self, zone):
 		Zone(self.game, zone, self.entry_point).enter_state()
+
+	def create_flash(self, pos):
+		self.flash = Flash(self.game, self, [self.updated_sprites, self.rendered_sprites], pos, LAYERS['particles'])
 
 	def create_melee(self):
 		self.melee_sprite = Sword(self.game, self, [self.updated_sprites, self.rendered_sprites], self.player.hitbox.center, LAYERS['player'], '../assets/weapons/sword')
@@ -115,7 +120,8 @@ class Zone(State):
 	def collect(self):
 		if self.player.z == LAYERS['player'] and not self.cutscene_running:
 			for sprite in self.health_sprites:
-				if self.player.hitbox.colliderect(sprite.rect):
+				if self.player.hitbox.colliderect(sprite.hitbox):
+					self.create_flash(sprite.rect.center)
 					self.ui.add_health()
 					COMPLETED_DATA['health'].append(sprite.name)
 					self.cutscene_running = True
@@ -125,8 +131,18 @@ class Zone(State):
 
 			for sprite in self.juice_sprites:
 				if self.player.hitbox.colliderect(sprite.hitbox):
+					self.create_flash(sprite.rect.center)
 					PLAYER_DATA['max_juice'] += 11
 					COMPLETED_DATA['juice'].append(sprite.name)
+					self.cutscene_running = True
+					CollectionCutscene(self.game, self, f"../assets/ui_images/juice_collected/").enter_state()
+					sprite.alive = False
+					sprite.kill()
+
+			for sprite in self.key_sprites:
+				if self.player.hitbox.colliderect(sprite.hitbox):
+					self.create_flash(sprite.rect.center)
+					COMPLETED_DATA['keys'].append(sprite.name)
 					self.cutscene_running = True
 					CollectionCutscene(self.game, self, f"../assets/ui_images/juice_collected/").enter_state()
 					sprite.alive = False
@@ -182,6 +198,7 @@ class Zone(State):
 		self.fade_surf.draw(screen)
 
 		self.game.render_text(str(round(self.game.clock.get_fps(), 2)), WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.1))
-		self.game.render_text(PLAYER_DATA['partial_healths'], PINK, self.game.small_font, RES/2)
+		self.game.render_text(len(COMPLETED_DATA['keys']), PINK, self.game.small_font, RES/2)
 		# self.game.render_text(self.player.invincible, WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.9))
+		
 		

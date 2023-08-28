@@ -1,6 +1,7 @@
 
 from state import State
 from settings import *
+from particles import Flash
 from cutscenes.dialogue import Dialogue
 from cutscenes.sequences import Sequences
 
@@ -64,7 +65,6 @@ class CollectionCutscene(State):
 			if self.alpha <= 0:
 				self.alpha = 0
 					
-
 	def update(self, dt):
 		self.game.reset_keys()
 		self.fade(dt)
@@ -135,7 +135,6 @@ class Cutscene(State):
 		self.blackbar_logic(dt)
 
 	def draw(self, screen):
-		
 		self.sequence(self.number)
 		self.prev_state.rendered_sprites.offset_draw(screen, self.target)
 		self.draw_blackbars(screen)

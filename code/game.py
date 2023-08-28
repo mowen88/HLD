@@ -76,7 +76,6 @@ class Game:
                     ACTIONS['backspace'] = False
 
             if event.type == pygame.MOUSEWHEEL:
-
                 if event.y == 1:
                     ACTIONS['scroll_up'] = True
                 elif event.y == -1:

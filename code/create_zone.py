@@ -48,15 +48,17 @@ class CreateZone:
 			if obj.name == 'warrior': self.zone.warrior = Warrior(self.zone.game, self.zone, [self.zone.npc_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.name)
 
 		for obj in tmx_data.get_layer_by_name('collectibles'):
+			if obj.name not in COMPLETED_DATA['keys']:
+				if obj.name == 'key_0': Collectible(self.zone.game, self.zone, [self.zone.key_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/key', obj.name)
+				if obj.name == 'key_1': Collectible(self.zone.game, self.zone, [self.zone.key_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/key', obj.name)
 			if obj.name not in COMPLETED_DATA['juice']:
-				if obj.name == 'juice_1': self.zone.juice_1 = Collectible(self.zone.game, self.zone, [self.zone.juice_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/juice', obj.name)
-				if obj.name == 'juice_2': self.zone.juice_2 = Collectible(self.zone.game, self.zone, [self.zone.juice_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/juice', obj.name)
-				if obj.name == 'juice_3': self.zone.juice_3 = Collectible(self.zone.game, self.zone, [self.zone.juice_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/juice', obj.name)
-				if obj.name == 'juice_4': self.zone.juice_4 = Collectible(self.zone.game, self.zone, [self.zone.juice_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/juice', obj.name)
-				if obj.name == 'juice_5': self.zone.juice_5 = Collectible(self.zone.game, self.zone, [self.zone.juice_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/juice', obj.name)
-				if obj.name == 'juice_6': self.zone.juice_6 = Collectible(self.zone.game, self.zone, [self.zone.juice_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/juice', obj.name)
+				if obj.name == 'juice_1': Collectible(self.zone.game, self.zone, [self.zone.juice_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/juice', obj.name)
+				if obj.name == 'juice_2': Collectible(self.zone.game, self.zone, [self.zone.juice_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/juice', obj.name)
+				if obj.name == 'juice_3':Collectible(self.zone.game, self.zone, [self.zone.juice_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/juice', obj.name)
+				if obj.name == 'juice_4': Collectible(self.zone.game, self.zone, [self.zone.juice_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/juice', obj.name)
+				if obj.name == 'juice_5': Collectible(self.zone.game, self.zone, [self.zone.juice_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/juice', obj.name)
+				if obj.name == 'juice_6': Collectible(self.zone.game, self.zone, [self.zone.juice_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/juice', obj.name)
 			if obj.name not in COMPLETED_DATA['health']:
-
 				if obj.name == 'health_0': Collectible(self.zone.game, self.zone, [self.zone.health_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/health', obj.name)
 				if obj.name == 'health_1': Collectible(self.zone.game, self.zone, [self.zone.health_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/health', obj.name)
 				if obj.name == 'health_2': Collectible(self.zone.game, self.zone, [self.zone.health_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/health', obj.name)
@@ -80,8 +82,8 @@ class CreateZone:
 			if obj.name == 'blue flower': AttackableTerrain(self.zone.game, self.zone, [self.zone.block_sprites, self.zone.attackable_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], f'../assets/attackable_terrain/{obj.name}')
 
 		for obj in tmx_data.get_layer_by_name('doors'):
-			if obj.name == 'blue_door': Door(self.zone.game, self.zone, [self.zone.block_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], f'../doors/{obj.name}', obj.name)
-			if obj.name == 'red_door': Door(self.zone.game, self.zone, [self.zone.block_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], f'../doors/{obj.name}', obj.name)
+			if obj.name == '1': Door(self.zone.game, self.zone, [self.zone.block_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], f'../doors/{obj.name}', obj.name)
+			if obj.name == '2': Door(self.zone.game, self.zone, [self.zone.block_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], f'../doors/{obj.name}', obj.name)
 
 		# tilesets
 		# for x, y, surf in tmx_data.get_layer_by_name('floor').tiles():

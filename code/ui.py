@@ -30,7 +30,7 @@ class UI:
 
 		self.juice_bar_length = 47
 		self.juice_bar_ratio = PLAYER_DATA['max_juice'] / self.juice_bar_length
-		
+	
 
 	def health_display(self, screen):
 		
@@ -91,15 +91,6 @@ class UI:
 			self.gun_icon_size[0] += 4 * dt
 			self.gun_icon_size[1] += 4 * dt
 
-		# if ACTIONS['up']:
-		# 	self.game.reset_keys()
-		# 	self.zone.add_subtract_juice(11, 'add')
-		# if ACTIONS['down']:
-		# 	self.game.reset_keys()
-		# 	self.zone.add_subtract_juice(11, 'sub')
-
-			
-	
 	def draw(self, screen):
 		self.health_display(screen)
 		self.flash_icon()

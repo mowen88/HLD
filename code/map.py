@@ -1,6 +1,7 @@
 import pygame
 from settings import *
 from state import State
+from sprites import Collectible
 
 class MapSprite(pygame.sprite.Sprite):
 	def __init__(self, pos, name):
@@ -13,11 +14,13 @@ class Map(State):
 	def __init__(self, game, zone):
 		State.__init__(self, game)
 
+		self.game = game
 		self.zone = zone
+		self.zone.cutscene_running = True
 		self.offset = pygame.math.Vector2()
 
 		self.alpha = 0
-		self.max_alpha = 180
+		self.max_alpha = 200
 		self.fadeout = False
 
 		self.map_surf = pygame.Surface((HALF_WIDTH * 1.5, HALF_HEIGHT * 1.5), pygame.SRCALPHA)
@@ -32,6 +35,8 @@ class Map(State):
 		#self.marker = MapSprite((self.map_surf.get_width()/2, self.map_surf.get_height()/2), (6, 6), 'marker')
 		
 		self.zone_sprites = self.get_zone_sprites()
+		self.key_surf = pygame.image.load('../assets/collectibles/key/0.png').convert_alpha()
+		self.key_rect = self.key_surf.get_rect(center = (self.map_rect.right -TILESIZE, self.map_rect.top + TILESIZE))
 
 	def get_zone_sprites(self):
 		zone_sprites = []
@@ -72,6 +77,7 @@ class Map(State):
 			self.alpha -= 10 * dt
 			if self.alpha <= 0:
 				self.alpha = 0
+				self.zone.cutscene_running = False
 				self.exit_state()
 				
 
@@ -117,4 +123,10 @@ class Map(State):
 		# map text
 		self.game.render_text('MAP', WHITE, self.game.small_font, (HALF_WIDTH, TILESIZE * 2))
 		pygame.draw.rect(screen, WHITE, (self.map_rect.x -3, self.map_rect.y -3, self.map_rect.width + 6, self.map_rect.height + 6), 2)
+
+		# draw keys
+		if len(COMPLETED_DATA['keys']) > 0:
+			pygame.draw.rect(screen, BLACK, (self.key_rect.x -2, self.key_rect.y -2, self.key_rect.width + 4, self.key_rect.height + 4), border_radius=2)
+			self.game.render_text('x' + str(len(COMPLETED_DATA['keys'])), WHITE, self.game.small_font, (self.key_rect.x - TILESIZE, TILESIZE * 2))
+			screen.blit(self.key_surf, self.key_rect)
 		

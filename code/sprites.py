@@ -143,19 +143,18 @@ class AnimatedObject(pygame.sprite.Sprite):
 		self.animate(0.2 * dt)
 
 class Door(AnimatedObject):
-	def __init__(self, game, zone, groups, pos, z, path, name):
+	def __init__(self, game, zone, groups, pos, z, path, number):
 		super().__init__(game, zone, groups, pos, z, path)
 
-		self.name = name
+		self.number = int(number)
 
 	def open(self, dt):
 		if self.rect.colliderect(self.zone.player.rect):
-			for i in PLAYER_DATA['keys']:
-				if i == self.name:
-					self.zone.block_sprites.remove(self)
-					self.frame_index += 0.2 * dt
-					if self.frame_index >= len(self.frames) -1: self.frame_index = len(self.frames) -1
-					else: self.frame_index = self.frame_index % len(self.frames)	
+			if len(COMPLETED_DATA['keys']) >= self.number:
+				self.zone.block_sprites.remove(self)
+				self.frame_index += 0.2 * dt
+				if self.frame_index >= len(self.frames) -1: self.frame_index = len(self.frames) -1
+				else: self.frame_index = self.frame_index % len(self.frames)	
 		else:
 			self.frame_index -= 0.2 * dt
 			if self.frame_index <= 0: self.frame_index = 0
