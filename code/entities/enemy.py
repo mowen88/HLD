@@ -1,7 +1,7 @@
 import math
 from settings import *
 from entities.NPCs import NPC
-from entities.enemy_fsm import Idle
+from entities.npc_fsm import Idle
 
 class Grunt(NPC):
 	def __init__(self, game, zone, groups, pos, z, name):

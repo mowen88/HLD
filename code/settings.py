@@ -5,8 +5,8 @@ TILESIZE = 16
 RES = WIDTH, HEIGHT = pygame.math.Vector2(320, 180)#(360, 202.5)#(480, 270)#(640, 360)#(960, 540) or... (512, 288)
 HALF_WIDTH, HALF_HEIGHT = RES/2
 
-FONT = '../fonts/Pokemon Classic.ttf'
-#FONT = '../fonts/Typori-Regular.ttf'
+#FONT = '../fonts/Pokemon Classic.ttf'
+FONT = '../fonts/Typori-Regular.ttf'
 
 # game colours
 BLACK = ((20, 14, 30))
@@ -27,7 +27,7 @@ YELLOW = ((224, 225, 146))
 
 # data that is dynamic and changes throughout play
 
-PLAYER_DATA = {'current_zone': 'start',
+PLAYER_DATA = {'current_zone': 'datacentre',
  				'entry_pos': '0', 
  				'keys': ['blue_door'],
  				'gun_index': 0, 

@@ -3,7 +3,7 @@ from os import walk
 from settings import *
 from pytmx.util_pygame import load_pygame
 from map import Map
-from sprites import BG, FadeSurf, Collider, Exit, Object, AnimatedObject, Barrier, Door, Void, Collectible, Gun, Sword, Bullet, Tree, Beam, AttackableTerrain
+from sprites import BG, FadeSurf, Collider, Exit, Object, AnimatedObject, Barrier, Door, Platform, Void, Collectible, Gun, Sword, Bullet, Tree, Beam, AttackableTerrain
 from particles import Particle, Shadow
 from entities.player import Player
 from entities.NPCs import Warrior
@@ -89,6 +89,9 @@ class CreateZone:
 		for obj in tmx_data.get_layer_by_name('doors'):
 			if obj.name == '1': Door(self.zone.game, self.zone, [self.zone.block_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], f'../doors/{obj.name}', obj.name)
 			if obj.name == '2': Door(self.zone.game, self.zone, [self.zone.block_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], f'../doors/{obj.name}', obj.name)
+		
+		for obj in tmx_data.get_layer_by_name('platforms'):
+			if obj.name == '0': Platform(self.zone.game, self.zone, [self.zone.platform_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['floor'], f'../platforms/{obj.name}', obj.name)
 
 		# tilesets
 		# for x, y, surf in tmx_data.get_layer_by_name('floor').tiles():
@@ -97,7 +100,8 @@ class CreateZone:
 			Object(self.zone.game, self.zone, [self.zone.block_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (x * TILESIZE, y * TILESIZE), LAYERS['player'], surf)
 		for x, y, surf in tmx_data.get_layer_by_name('void').tiles():
 			Void(self.zone.game, self.zone, [self.zone.void_sprites, self.zone.updated_sprites], (x * TILESIZE, y * TILESIZE + 8), LAYERS['player'], surf)
-		# self.zone.create_guns()
+		# for x, y, surf in tmx_data.get_layer_by_name('platforms').tiles():
+		# 	Platform(self.zone.game, self.zone, [self.zone.platform_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (x * TILESIZE, y * TILESIZE), LAYERS['floor'], f'../platforms/0')
 
 		# create shadows for player and NPCs
 		Shadow(self.zone.game, self.zone, [self.zone.updated_sprites, self.zone.rendered_sprites], (self.zone.player.hitbox.midbottom), LAYERS['particles'], self.zone.player, 'medium')

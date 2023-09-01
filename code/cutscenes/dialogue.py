@@ -20,8 +20,8 @@ class Dialogue(State):
         self.box_colour = PURPLE
         self.text_colour = CYAN
         self.box_width = 0
-        self.center = (self.sprite.rect.centerx - self.offset.x, self.sprite.rect.top - 30 - self.offset.y)
-        self.target_width = TILESIZE * 12
+        self.center = (self.sprite.rect.centerx - self.offset.x, self.sprite.rect.top - 25 - self.offset.y)
+        self.target_width = TILESIZE * 10
         self.line_spacing = 10
 
         self.lines = DIALOGUE[self.cutscene_number][self.dialog_number]
@@ -53,7 +53,7 @@ class Dialogue(State):
         elif self.box_width < self.target_width - 1:
             self.box_width += (self.target_width - self.box_width) * 0.2 * dt
 
-        self.center = (self.sprite.rect.centerx - self.offset.x, self.sprite.rect.top - 30 - self.offset.y)
+        self.center = (self.sprite.rect.centerx - self.offset.x, self.sprite.rect.top - 25 - self.offset.y)
 
     def draw_box(self, screen):
         if self.timer > self.duration:

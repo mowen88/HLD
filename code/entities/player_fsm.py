@@ -9,6 +9,8 @@ class Idle:
 	def state_logic(self, player):
 		keys = pygame.key.get_pressed()
 
+		
+
 		if keys[pygame.K_RCTRL] and player.game.current_juice >= GUN_DATA[player.gun]['cost']:
 			return Shoot(player, self.direction)
 

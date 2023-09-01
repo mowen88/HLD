@@ -1,6 +1,7 @@
 import math
 from settings import *
-from entities.enemy_fsm import Idle
+from entities.npc_fsm import Idle
+
 
 class NPC(pygame.sprite.Sprite):
 	def __init__(self, game, zone, groups, pos, z, name):
@@ -111,8 +112,7 @@ class NPC(pygame.sprite.Sprite):
 			if not self.dashing: self.collisions('y', self.zone.void_sprites)
 			self.rect.centery = self.hitbox.centery
 
-			if self.vel.magnitude() > 1: self.vel = self.vel.normalize()
-
+			if self.acc.magnitude() > 1: self.vel = self.vel.normalize()
 
 	def invincibility(self, dt):
 		if self.invincible:

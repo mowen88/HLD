@@ -12,6 +12,9 @@ class CollectionCutscene(State):
 		self.zone = zone
 		self.number = number
 		self.target = pygame.math.Vector2(self.zone.target.rect.center)
+		
+		#stop player moving
+		self.zone.target.vel = pygame.math.Vector2()
 
 		self.opening = True
 		self.bar_height = 0
@@ -78,6 +81,7 @@ class CollectionCutscene(State):
 
 		screen.blit(self.image, self.rect)
 		self.image.set_alpha(self.alpha)
+		
 
 class Cutscene(State):
 	def __init__(self, game, zone, number):

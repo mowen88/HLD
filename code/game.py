@@ -1,7 +1,7 @@
 import pygame, sys
 from settings import *
 from os import walk
-from intro import  Intro
+from intro import Intro
 
 class Game:
     def __init__(self):
@@ -11,18 +11,17 @@ class Game:
         self.clock = pygame.time.Clock()
 
         self.monitor_size = [pygame.display.Info().current_w, pygame.display.Info().current_h]
-
         self.screen = pygame.display.set_mode((RES), pygame.FULLSCREEN|pygame.SCALED)
 
         self.running = True
 
         #font
         self.big_font =  pygame.font.Font(FONT, 18)
-        self.small_font = pygame.font.Font(FONT, 8)
+        self.small_font = pygame.font.Font(FONT, 10)
 
         # states
         self.stack = []
-        self.load_states() 
+        self.load_states()
 
         #stats
         self.current_health = PLAYER_DATA['max_health']
@@ -142,6 +141,7 @@ class Game:
         self.stack[-1].update(dt)
 
     def draw(self, screen): 
+        #scaled_screen = pygame.transform.scale(self.screen, (self.window.get_size()))
         self.stack[-1].draw(screen)
         pygame.display.flip()
 

@@ -34,6 +34,7 @@ class Zone(State):
 		self.cutscene_sprites = pygame.sprite.Group()
 		self.exit_sprites = pygame.sprite.Group()
 		self.block_sprites = pygame.sprite.Group()
+		self.platform_sprites = pygame.sprite.Group()
 		self.barrier_sprites = pygame.sprite.Group()
 		self.barrier_activator_sprites = pygame.sprite.Group()
 		self.void_sprites = pygame.sprite.Group()
@@ -185,15 +186,22 @@ class Zone(State):
 				Cutscene(self.game, self, sprite.number).enter_state()
 			
 	def update(self, dt):
-		self.activate_barriers()
-		self.start_cutscene()
-		self.collect()
-		self.exit_zone()
-		self.enemy_shot_logic()
+		if self.player.z == LAYERS['player']:
+			self.activate_barriers()
+			self.start_cutscene()
+			self.collect()
+			self.exit_zone()
+			self.enemy_shot_logic()
 
 		if ACTIONS['return']: 
 			Map(self.game, self).enter_state()
 			#self.exit_state()
+			self.game.reset_keys()
+
+		if ACTIONS['space']:
+			for sprite in self.platform_sprites:
+				if sprite.number == '0':
+					self.rendered_sprites.remove(sprite)
 			self.game.reset_keys()
 
 		self.updated_sprites.update(dt)
@@ -208,7 +216,7 @@ class Zone(State):
 		self.fade_surf.draw(screen)
 
 		self.game.render_text(str(round(self.game.clock.get_fps(), 2)), WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.1))
-		self.game.render_text(len(self.enemy_sprites), PINK, self.game.small_font, RES/2)
+		#self.game.render_text(len(self.enemy_sprites), PINK, self.game.small_font, RES/2)
 		# self.game.render_text(self.player.invincible, WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.9))
 		
 		

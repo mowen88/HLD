@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.5" tiledversion="1.7.2" name="objects" tilewidth="48" tileheight="48" tilecount="11" columns="0">
+<tileset version="1.10" tiledversion="1.10.1" name="objects" tilewidth="48" tileheight="48" tilecount="12" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0">
   <image width="48" height="48" source="objects/big tree.png"/>
@@ -33,5 +33,8 @@
  </tile>
  <tile id="10">
   <image width="16" height="32" source="assets/barrier/0.png"/>
+ </tile>
+ <tile id="11">
+  <image width="32" height="32" source="objects/platform.png"/>
  </tile>
 </tileset>

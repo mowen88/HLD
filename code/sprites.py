@@ -57,7 +57,7 @@ class Exit(pygame.sprite.Sprite):
 		self.rect = self.image.get_rect(topleft = pos)
 
 class Object(pygame.sprite.Sprite):
-	def __init__(self, game, zone, groups, pos, z, surf = pygame.Surface((TILESIZE, TILESIZE)), bloom_surf = None):
+	def __init__(self, game, zone, groups, pos, z, surf = pygame.Surface((TILESIZE, TILESIZE))):
 		super().__init__(groups)
 
 		self.zone = zone
@@ -65,7 +65,6 @@ class Object(pygame.sprite.Sprite):
 		self.image = surf
 		self.rect = self.image.get_rect(topleft = pos)
 		self.hitbox = self.rect.copy().inflate(-self.rect.width *0.1, -self.rect.height *0.4)
-
 
 class BG(Object):
 	def __init__(self, game, zone, groups, pos, z, surf, parralax_value = (0, 0)):
@@ -141,6 +140,14 @@ class AnimatedObject(pygame.sprite.Sprite):
 
 	def update(self, dt):
 		self.animate(0.2 * dt)
+
+class Platform(AnimatedObject):
+	def __init__(self, game, zone, groups, pos, z, path, number):
+		super().__init__(game, zone, groups, pos, z, path)
+
+		self.number = number
+		self.rect = self.image.get_rect(topleft = pos)
+		self.hitbox = self.rect.copy().inflate(TILESIZE * 0.5, TILESIZE * 0.5)
 
 class Door(AnimatedObject):
 	def __init__(self, game, zone, groups, pos, z, path, number):
