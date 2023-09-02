@@ -27,7 +27,7 @@ YELLOW = ((224, 225, 146))
 
 # data that is dynamic and changes throughout play
 
-PLAYER_DATA = {'current_zone': 'datacentre',
+PLAYER_DATA = {'current_zone': 'dungeon',
  				'entry_pos': '0', 
  				'keys': ['blue_door'],
  				'gun_index': 0, 

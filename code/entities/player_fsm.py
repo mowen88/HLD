@@ -6,10 +6,14 @@ class Idle:
 		player.frame_index = 0
 		self.direction = direction
 
+	def fall(self, player):
+		return FallDeath(self.direction)
+
 	def state_logic(self, player):
 		keys = pygame.key.get_pressed()
 
-		
+		if not player.on_ground:
+			return FallDeath(self.direction)
 
 		if keys[pygame.K_RCTRL] and player.game.current_juice >= GUN_DATA[player.gun]['cost']:
 			return Shoot(player, self.direction)
@@ -35,7 +39,7 @@ class Idle:
 				return Move(player, self.direction)
 
 	def update(self, dt, player):
-		player.animate(self.direction + '_idle', 0.2 * dt, 'loop')
+		player.animate(self.direction + '_idle', 0.2 * dt)
 
 class Move:
 	def __init__(self, player, direction):
@@ -44,6 +48,10 @@ class Move:
 
 	def state_logic(self, player):
 		keys = pygame.key.get_pressed()
+
+		if player.get_collide_list(player.zone.void_sprites):
+			player.on_ground = False
+			return FallDeath(self.direction)
 
 		if keys[pygame.K_RCTRL] and player.game.current_juice >= GUN_DATA[player.gun]['cost']:
 			return Shoot(player, self.direction)
@@ -85,7 +93,7 @@ class Move:
 		elif player.direction['left']: player.acc.x -= 0.2
 
 		player.physics(dt)
-		player.animate(self.direction, 0.2 * dt, 'loop')
+		player.animate(self.direction, 0.2 * dt)
 
 class Dash:
 	def __init__(self, player, direction):
@@ -98,7 +106,10 @@ class Dash:
 		
 		self.timer = 20
 		player.dashing = True
-		player.respawn_location = player.rect.center
+
+		if not player.on_platform:
+			player.respawn_location = player.rect.center
+
 		self.lunge_speed = 6
 		self.get_current_direction = pygame.mouse.get_pos()
 		player.vel = player.zone.get_distance_direction_and_angle(player.hitbox.center, self.get_current_direction)[1] * self.lunge_speed
@@ -121,7 +132,7 @@ class Dash:
 		self.timer -= dt
 
 		player.physics(dt)
-		player.animate(self.direction + '_dash', 0.2 * dt, 'loop')
+		player.animate(self.direction + '_dash', 0.2 * dt)
 
 		player.acc = pygame.math.Vector2()
 		self.lunge_speed -= 0.4 * dt
@@ -163,7 +174,7 @@ class Attack:
 		player.attackable_terrain_logic()
 
 		player.physics(dt)
-		player.animate(self.direction + '_attack', 0.2 * dt, 'loop')
+		player.animate(self.direction + '_attack', 0.2 * dt)
 		
 		self.timer -= dt
 		player.acc = pygame.math.Vector2()
@@ -239,8 +250,6 @@ class Heal:
 	def update(self, dt, player):
 		self.timer -= dt
 		player.animate(self.direction + '_heal', 0.2 * dt, 'end')
-
-
 
 class FallDeath:
 	def __init__(self, direction):

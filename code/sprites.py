@@ -89,6 +89,13 @@ class Void(Object):
 
 		self.hitbox = self.rect.copy().inflate(-self.rect.width *0.4, -self.rect.height*0.2)
 
+class Pillar(Object):
+	def __init__(self, game, zone, groups, pos, z, surf, number):
+		super().__init__(game, zone, groups, pos, z, surf)
+		
+		self.number = number
+		self.hitbox = self.rect.copy().inflate(-self.rect.width *0.1, -self.rect.height *0.4)
+
 class Tree(Object):
 	def __init__(self, game, zone, groups, pos, z, surf):
 		super().__init__(game, zone, groups, pos, z, surf)
@@ -133,9 +140,17 @@ class AnimatedObject(pygame.sprite.Sprite):
 		self.hitbox = self.rect.copy().inflate(0,0)
 		self.alive = True
 
-	def animate(self, animation_speed):
+	def animate(self, animation_speed, loop=True):
+
 		self.frame_index += animation_speed
-		self.frame_index = self.frame_index % len(self.frames)	
+
+		if loop:
+			self.frame_index = self.frame_index % len(self.frames)	
+		else:
+			if self.frame_index > len(self.frames)-1:	
+				self.frame_index = len(self.frames)-1
+
+		
 		self.image = self.frames[int(self.frame_index)]
 
 	def update(self, dt):
@@ -148,6 +163,41 @@ class Platform(AnimatedObject):
 		self.number = number
 		self.rect = self.image.get_rect(topleft = pos)
 		self.hitbox = self.rect.copy().inflate(TILESIZE * 0.5, TILESIZE * 0.5)
+		self.active = False
+		self.timer = 0
+
+	def update(self, dt):
+
+		if self.active:
+
+			if self.zone.player.hitbox.colliderect(self.rect):
+				self.zone.player.on_platform = True
+
+			self.timer += dt
+			if self.timer > 120:
+				self.timer = 0
+				self.active = False
+
+			self.frame_index += 0.2 * dt
+			if self.frame_index >= len(self.frames) -1: 
+				self.frame_index = len(self.frames) -1
+
+				self.zone.void_sprites.remove(self)
+				self.zone.rendered_sprites.add(self)
+	
+		else:
+			self.frame_index -= 0.2 * dt
+			if self.frame_index <= 0: 
+				self.frame_index = 0
+
+				if self.zone.player.hitbox.colliderect(self.rect):
+					self.zone.player.on_platform = False
+					self.zone.player.on_ground = False
+
+				self.zone.void_sprites.add(self)
+				self.zone.rendered_sprites.remove(self)
+
+		self.image = self.frames[int(self.frame_index)]
 
 class Door(AnimatedObject):
 	def __init__(self, game, zone, groups, pos, z, path, number):

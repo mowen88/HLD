@@ -12,9 +12,6 @@ class CollectionCutscene(State):
 		self.zone = zone
 		self.number = number
 		self.target = pygame.math.Vector2(self.zone.target.rect.center)
-		
-		#stop player moving
-		self.zone.target.vel = pygame.math.Vector2()
 
 		self.opening = True
 		self.bar_height = 0
@@ -81,7 +78,6 @@ class CollectionCutscene(State):
 
 		screen.blit(self.image, self.rect)
 		self.image.set_alpha(self.alpha)
-		
 
 class Cutscene(State):
 	def __init__(self, game, zone, number):
@@ -95,7 +91,7 @@ class Cutscene(State):
 		self.target_height = HEIGHT * 0.1
 		self.blackbar = pygame.Surface((WIDTH, self.bar_height))
 
-		self.target = pygame.math.Vector2(self.zone.target.rect.center)
+		self.target = pygame.math.Vector2(self.zone.target.rect.x, self.zone.target.rect.y - HALF_HEIGHT)
 		self.new_pos = pygame.math.Vector2()
 
 		self.timer = 0

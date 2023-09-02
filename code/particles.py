@@ -34,24 +34,26 @@ class Shadow(Particle):
 			self.image.set_alpha(0)
 
 class Flash(Particle):
-	def __init__(self, game, zone, groups, pos, z = LAYERS['particles']):
+	def __init__(self, game, zone, groups, pos, colour, size, z = LAYERS['foreground']):
 		super().__init__(game, zone, groups, pos, z)
 
 		self.zone = zone
+		self.colour = colour
+		self.size = size
 		self.z = z
 		self.pos = pos
 		self.alpha = 255
 		self.flash_size = [0, 0]
 		self.image = pygame.Surface((self.flash_size))
-		self.image.fill(WHITE)
+		self.image.fill(self.colour)
 		self.rect = self.image.get_rect(center = self.pos)
 
 	def update(self, dt):
 		
-		self.image.fill(WHITE)
+		self.image.fill(self.colour)
 		self.alpha -= 12 * dt
-		self.flash_size[0] += 5 * dt
-		self.flash_size[1] += 5 * dt
+		self.flash_size[0] += self.size * dt
+		self.flash_size[1] += self.size * dt
 
 		if self.alpha < 0:
 			self.kill()

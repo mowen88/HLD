@@ -26,6 +26,7 @@ class Zone(State):
 		self.melee_sprite = pygame.sprite.GroupSingle()
 		self.gun_sprite = pygame.sprite.GroupSingle()
 		self.player_bullet_sprites = pygame.sprite.Group()
+		self.beam_sprites = pygame.sprite.Group()
 		self.enemy_bullet_sprites = pygame.sprite.Group()
 
 		# sprite groups
@@ -35,6 +36,7 @@ class Zone(State):
 		self.exit_sprites = pygame.sprite.Group()
 		self.block_sprites = pygame.sprite.Group()
 		self.platform_sprites = pygame.sprite.Group()
+		self.trigger_sprites = pygame.sprite.Group()
 		self.barrier_sprites = pygame.sprite.Group()
 		self.barrier_activator_sprites = pygame.sprite.Group()
 		self.void_sprites = pygame.sprite.Group()
@@ -46,8 +48,7 @@ class Zone(State):
 		self.juice_sprites = pygame.sprite.Group()
 		self.key_sprites = pygame.sprite.Group()
 
-		self.scene = CreateZone(self.game, self)
-		self.scene.create()
+		CreateZone(self.game, self).create()
 
 		self.game.current_health = PLAYER_DATA['max_health']
 		self.screenshaking = False
@@ -71,8 +72,8 @@ class Zone(State):
 	def create_zone(self, zone):
 		Zone(self.game, zone, self.entry_point).enter_state()
 
-	def create_flash(self, pos):
-		self.flash = Flash(self.game, self, [self.updated_sprites, self.rendered_sprites], pos, LAYERS['particles'])
+	def create_flash(self, pos, colour, size):
+		self.flash = Flash(self.game, self, [self.updated_sprites, self.rendered_sprites], pos, colour, size, LAYERS['particles'])
 
 	def create_melee(self):
 		self.melee_sprite = Sword(self.game, self, [self.updated_sprites, self.rendered_sprites], self.player.hitbox.center, LAYERS['player'], '../assets/weapons/sword')
@@ -91,7 +92,7 @@ class Zone(State):
 		distance = ((x, y) - pygame.math.Vector2(self.player.hitbox.center)).magnitude()
 		point_list = self.get_equidistant_points(self.player.hitbox.center - self.rendered_sprites.offset, (x - self.rendered_sprites.offset[0], y - self.rendered_sprites.offset[1]), int(distance/6))
 		for num, point in enumerate(point_list):
-			if num < 50: self.beam = Beam(self.game, self, [self.player_bullet_sprites, self.updated_sprites, self.rendered_sprites], point + self.rendered_sprites.offset, LAYERS['particles'],  f'../assets/weapons/railgun_particle', 4)
+			if num < 50: self.beam = Beam(self.game, self, [self.player_bullet_sprites, self.beam_sprites, self.updated_sprites, self.rendered_sprites], point + self.rendered_sprites.offset, LAYERS['particles'],  f'../assets/weapons/railgun_particle', 4)
 			for sprite in self.block_sprites:
 				if sprite not in self.attackable_sprites:
 					if sprite.hitbox.collidepoint(point + self.rendered_sprites.offset):
@@ -126,7 +127,7 @@ class Zone(State):
 		if self.player.z == LAYERS['player'] and not self.cutscene_running:
 			for sprite in self.health_sprites:
 				if self.player.hitbox.colliderect(sprite.hitbox):
-					self.create_flash(sprite.rect.center)
+					self.create_flash(sprite.rect.center, LIGHT_GREEN, 4)
 					self.ui.add_health()
 					COMPLETED_DATA['health'].append(sprite.name)
 					self.cutscene_running = True
@@ -136,7 +137,7 @@ class Zone(State):
 
 			for sprite in self.juice_sprites:
 				if self.player.hitbox.colliderect(sprite.hitbox):
-					self.create_flash(sprite.rect.center)
+					self.create_flash(sprite.rect.center, CYAN, 4)
 					PLAYER_DATA['max_juice'] += 11
 					COMPLETED_DATA['juice'].append(sprite.name)
 					self.cutscene_running = True
@@ -146,7 +147,7 @@ class Zone(State):
 
 			for sprite in self.key_sprites:
 				if self.player.hitbox.colliderect(sprite.hitbox):
-					self.create_flash(sprite.rect.center)
+					self.create_flash(sprite.rect.center, PINK, 5)
 					COMPLETED_DATA['keys'].append(sprite.name)
 					self.cutscene_running = True
 					CollectionCutscene(self.game, self, f"../assets/ui_images/juice_collected/").enter_state()
@@ -157,7 +158,33 @@ class Zone(State):
 		for sprite in self.barrier_activator_sprites:
 			if self.player.hitbox.colliderect(sprite.rect):
 				self.locked_in = True
-					
+
+	def activate_platforms(self, dt):
+		for bullet in self.beam_sprites:
+			for trigger in self.trigger_sprites:
+				if bullet.rect.colliderect(trigger.rect):
+					bullet.kill()
+					self.create_flash(trigger.rect.center, YELLOW, 2)
+					for platform in self.platform_sprites:
+						if platform.number == trigger.number:
+							self.rendered_sprites.add(platform)
+							platform.active = True
+
+	def activate_cutscene(self):
+		for sprite in self.cutscene_sprites:
+			if self.player.hitbox.colliderect(sprite.rect) and sprite.number not in COMPLETED_DATA['cutscenes']:
+				COMPLETED_DATA['cutscenes'].append(sprite.number)
+				# self.target.direction.update({key: False for key in self.target.direction})
+				self.cutscene_running = True
+				Cutscene(self.game, self, sprite.number).enter_state()
+
+	def exit_zone(self):
+		for sprite in self.exit_sprites:
+			if self.player.hitbox.colliderect(sprite.rect):
+				self.exiting = True
+				self.new_zone = ZONE_DATA[self.name][sprite.name]
+				self.entry_point = sprite.name
+			
 	def get_distance_direction_and_angle(self, point_1, point_2):
 		pos_1 = pygame.math.Vector2(point_1 - self.rendered_sprites.offset)
 		pos_2 = pygame.math.Vector2(point_2)
@@ -170,25 +197,11 @@ class Zone(State):
 
 		return(distance, direction, angle)
 
-	def exit_zone(self):
-		for sprite in self.exit_sprites:
-			if self.player.hitbox.colliderect(sprite.rect):
-				self.exiting = True
-				self.new_zone = ZONE_DATA[self.name][sprite.name]
-				self.entry_point = sprite.name
-
-	def start_cutscene(self):
-		for sprite in self.cutscene_sprites:
-			if self.player.hitbox.colliderect(sprite.rect) and sprite.number not in COMPLETED_DATA['cutscenes']:
-				COMPLETED_DATA['cutscenes'].append(sprite.number)
-				# self.target.direction.update({key: False for key in self.target.direction})
-				self.cutscene_running = True
-				Cutscene(self.game, self, sprite.number).enter_state()
-			
 	def update(self, dt):
 		if self.player.z == LAYERS['player']:
+			self.activate_platforms(dt)
 			self.activate_barriers()
-			self.start_cutscene()
+			self.activate_cutscene()
 			self.collect()
 			self.exit_zone()
 			self.enemy_shot_logic()
@@ -199,9 +212,7 @@ class Zone(State):
 			self.game.reset_keys()
 
 		if ACTIONS['space']:
-			for sprite in self.platform_sprites:
-				if sprite.number == '0':
-					self.rendered_sprites.remove(sprite)
+			self.activate_platforms()
 			self.game.reset_keys()
 
 		self.updated_sprites.update(dt)
@@ -216,7 +227,7 @@ class Zone(State):
 		self.fade_surf.draw(screen)
 
 		self.game.render_text(str(round(self.game.clock.get_fps(), 2)), WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.1))
-		#self.game.render_text(len(self.enemy_sprites), PINK, self.game.small_font, RES/2)
+		self.game.render_text(self.player.on_platform, PINK, self.game.small_font, RES/2)
 		# self.game.render_text(self.player.invincible, WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.9))
 		
 		

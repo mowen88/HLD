@@ -3,7 +3,7 @@ from os import walk
 from settings import *
 from pytmx.util_pygame import load_pygame
 from map import Map
-from sprites import BG, FadeSurf, Collider, Exit, Object, AnimatedObject, Barrier, Door, Platform, Void, Collectible, Gun, Sword, Bullet, Tree, Beam, AttackableTerrain
+from sprites import BG, FadeSurf, Collider, Exit, Object, Pillar, AnimatedObject, Barrier, Door, Platform, Void, Collectible, Gun, Sword, Bullet, Tree, Beam, AttackableTerrain
 from particles import Particle, Shadow
 from entities.player import Player
 from entities.NPCs import Warrior
@@ -91,8 +91,12 @@ class CreateZone:
 			if obj.name == '2': Door(self.zone.game, self.zone, [self.zone.block_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], f'../doors/{obj.name}', obj.name)
 		
 		for obj in tmx_data.get_layer_by_name('platforms'):
-			if obj.name == '0': Platform(self.zone.game, self.zone, [self.zone.platform_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['floor'], f'../platforms/{obj.name}', obj.name)
+			if obj.name == '0': Platform(self.zone.game, self.zone, [self.zone.platform_sprites, self.zone.updated_sprites], (obj.x, obj.y), LAYERS['floor'], f'../platforms/{obj.name}', obj.name)
+			if obj.name == '1': Platform(self.zone.game, self.zone, [self.zone.platform_sprites, self.zone.updated_sprites], (obj.x, obj.y), LAYERS['floor'], f'../platforms/{obj.name}', obj.name)
 
+		for obj in tmx_data.get_layer_by_name('triggers'):
+			if obj.name == '0': Pillar(self.zone.game, self.zone, [self.zone.trigger_sprites, self.zone.block_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image, obj.name)
+			if obj.name == '1': Pillar(self.zone.game, self.zone, [self.zone.trigger_sprites, self.zone.block_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image, obj.name)
 		# tilesets
 		# for x, y, surf in tmx_data.get_layer_by_name('floor').tiles():
 		# 	Object(self.zone.game, self.zone, [self.zone.rendered_sprites], (x * TILESIZE, y * TILESIZE), LAYERS['floor'], surf)

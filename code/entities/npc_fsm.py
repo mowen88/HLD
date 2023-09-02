@@ -13,7 +13,7 @@ class Idle:
 			return Knockback(enemy)
 
 	def update(self, dt, enemy):
-		enemy.animate('idle', 0.2 * dt, 'loop')
+		enemy.animate('idle', 0.2 * dt)
 
 class Move:
 	def __init__(self, enemy):
@@ -34,7 +34,7 @@ class Move:
 		enemy.acc += enemy.zone.get_distance_direction_and_angle(enemy.hitbox.center, enemy.zone.player.hitbox.center - enemy.zone.rendered_sprites.offset)[1] * enemy.speed
 
 		enemy.physics(dt)
-		enemy.animate('idle', 0.2 * dt, 'loop')
+		enemy.animate('idle', 0.2 * dt)
 		enemy.direction = enemy.get_direction()
 
 class Telegraphing:
@@ -60,7 +60,7 @@ class Telegraphing:
 	def update(self, dt, enemy):
 		if not enemy.invincible:
 			self.timer -= dt
-		enemy.animate('telegraphing', 0.4 * dt, 'loop')
+		enemy.animate('telegraphing', 0.4 * dt)
 
 class Attack:
 	def __init__(self, enemy, attack_direction):
@@ -91,7 +91,7 @@ class Attack:
 	def update(self, dt, enemy):
 		
 		enemy.physics(dt)
-		enemy.animate('idle', 0.2 * dt, 'end')
+		enemy.animate('idle', 0.2 * dt, False)
 
 		self.timer -= dt
 
@@ -129,7 +129,7 @@ class Knockback:
 	def update(self, dt, enemy):
 		
 		enemy.physics(dt)
-		enemy.animate('death', 0.2 * dt, 'end')
+		enemy.animate('death', 0.2 * dt, False)
 		if self.current_direction == 'left': enemy.image = pygame.transform.flip(enemy.image, True, False)
 	
 		enemy.acc = pygame.math.Vector2()
@@ -149,7 +149,7 @@ class FallDeath:
 			enemy.kill()
 			
 	def update(self, dt, enemy):
-		enemy.animate('telegraphing', 0.4 * dt, 'end')
+		enemy.animate('telegraphing', 0.4 * dt, False)
 		self.timer -= dt
 		if self.timer > 0:
 			enemy.z = LAYERS['BG2']

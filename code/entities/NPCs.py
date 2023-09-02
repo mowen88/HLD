@@ -37,6 +37,7 @@ class NPC(pygame.sprite.Sprite):
 
 		self.dashing = False
 		self.on_ground = True
+		self.on_platform = False
 		self.angle = 0
 
 	def import_imgs(self):
@@ -51,11 +52,15 @@ class NPC(pygame.sprite.Sprite):
 		else: direction = 'up'
 		return direction
 
-	def animate(self, state, animation_speed, animation_type):
+	def animate(self, state, animation_speed, loop=True):
 		self.frame_index += animation_speed
-		if animation_type == 'end' and self.frame_index >= len(self.animations[state])-1: self.frame_index = len(self.animations[state])-1
-		else: self.frame_index = self.frame_index % len(self.animations[state])
+
+		if not loop and self.frame_index >= len(self.animations[state])-1: 
+			self.frame_index = len(self.animations[state])-1
+		else: 
+			self.frame_index = self.frame_index % len(self.animations[state])
 		self.image = self.animations[state][int(self.frame_index)]
+
 
 		self.mask = pygame.mask.from_surface(self.image)
 		self.mask_image = self.mask.to_surface()
@@ -95,24 +100,26 @@ class NPC(pygame.sprite.Sprite):
 			self.vel.x += self.acc.x * dt
 			self.pos.x += self.vel.x * dt + (0.5 * self.vel.x) * (dt**2)
 			self.hitbox.centerx = round(self.pos.x)
+			self.rect.centerx = self.hitbox.centerx
 			self.collisions('x', self.zone.block_sprites)
 			#if self == self.zone.player: self.collisions('x', self.zone.enemy_sprites)
 			#if self in self.zone.enemy_sprites: self.collisions('x', [self.zone.player])
 			if not self.dashing: self.collisions('x', self.zone.void_sprites)
-			self.rect.centerx = self.hitbox.centerx
+			
 			
 			#y direction
 			self.acc.y += self.vel.y * self.friction
 			self.vel.y += self.acc.y * dt
 			self.pos.y += self.vel.y * dt + (0.5 * self.vel.y) * (dt**2)
 			self.hitbox.centery = round(self.pos.y)
+			self.rect.centery = self.hitbox.centery
 			self.collisions('y', self.zone.block_sprites)
 			#if self == self.zone.player: self.collisions('y', self.zone.enemy_sprites)
 			#if self in self.zone.enemy_sprites: self.collisions('y', [self.zone.player])
 			if not self.dashing: self.collisions('y', self.zone.void_sprites)
-			self.rect.centery = self.hitbox.centery
+			
 
-			if self.acc.magnitude() > 1: self.vel = self.vel.normalize()
+			if self.vel.magnitude() > 1: self.vel = self.vel.normalize()
 
 	def invincibility(self, dt):
 		if self.invincible:
@@ -141,3 +148,4 @@ class Warrior(NPC):
 
 	def update(self, dt):
 		self.animate('idle', 0.4 * dt, 'loop')
+

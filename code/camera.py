@@ -48,14 +48,17 @@ class Camera(pygame.sprite.Group):
 		scroll = pygame.math.Vector2(target) + pygame.math.Vector2(pygame.mouse.get_pos())
 		midpoint = self.midpoint(pygame.math.Vector2(target - self.offset), pygame.math.Vector2(pygame.mouse.get_pos()))
 
-		if self.zone.cutscene_running:
-			self.camera_lag = 200
-		elif self.zone.target.dashing:
+		if self.zone.cutscene_running or self.zone.target.dashing:
 			self.camera_lag = 200
 		else:
-			self.camera_lag= 80
-		self.offset.x += (target[0] - HALF_WIDTH - (HALF_WIDTH - pygame.mouse.get_pos()[0])/4 - self.offset.x)/self.camera_lag
-		self.offset.y += (target[1] - HALF_HEIGHT - (HALF_HEIGHT - pygame.mouse.get_pos()[1])/4 - self.offset.y)/self.camera_lag
+			self.camera_lag = 80
+
+		if self.zone.cutscene_running:
+			self.offset.x += (target[0] - HALF_WIDTH - self.offset.x)/self.camera_lag
+			self.offset.y += (target[1] - HALF_HEIGHT - self.offset.y)/self.camera_lag
+		else:
+			self.offset.x += (target[0] - HALF_WIDTH - (HALF_WIDTH - pygame.mouse.get_pos()[0])/4 - self.offset.x)/self.camera_lag
+			self.offset.y += (target[1] - HALF_HEIGHT - (HALF_HEIGHT - pygame.mouse.get_pos()[1])/4 - self.offset.y)/self.camera_lag
 
 		#self.offset += (midpoint - RES - self.offset)/(distance/5)
 
