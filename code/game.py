@@ -39,7 +39,7 @@ class Game:
                     ACTIONS['escape'] = True
                     self.running = False
                
-                if event.key == pygame.K_DOWN or event.key == pygame.K_s:
+                elif event.key == pygame.K_DOWN or event.key == pygame.K_s:
                     ACTIONS['down'] = True
                 elif event.key == pygame.K_UP or event.key == pygame.K_w:
                     ACTIONS['up'] = True

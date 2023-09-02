@@ -36,17 +36,18 @@ class Camera(pygame.sprite.Group):
 				self.zone.screenshaking = False
 				self.zone.screenshake_timer = 0
 
-	def midpoint(self, p1, p2):
-		return ((p1.x + p2.x)/4, (p1.x + p2.y)/4)
+	def move_to(self, point):
+		self.offset.x += (point[0] - self.offset.x)/self.camera_lag
+		if self.offset.x < point[0]:
+			self.offset.x = point[0]
 
 	def offset_draw(self, screen, target):
 		
 		# draw parralax backgrounds
 		screen.fill(ZONE_DATA[self.zone.name]['bg_colour'])
 
-		distance = self.zone.get_distance_direction_and_angle(pygame.mouse.get_pos() - self.offset, target)[0]
-		scroll = pygame.math.Vector2(target) + pygame.math.Vector2(pygame.mouse.get_pos())
-		midpoint = self.midpoint(pygame.math.Vector2(target - self.offset), pygame.math.Vector2(pygame.mouse.get_pos()))
+		if self.zone.player.rect.x < 100:
+			self.move_to([0,0])
 
 		if self.zone.cutscene_running or self.zone.target.dashing:
 			self.camera_lag = 200

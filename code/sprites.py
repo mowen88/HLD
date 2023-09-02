@@ -157,10 +157,11 @@ class AnimatedObject(pygame.sprite.Sprite):
 		self.animate(0.2 * dt)
 
 class Platform(AnimatedObject):
-	def __init__(self, game, zone, groups, pos, z, path, number):
+	def __init__(self, game, zone, groups, pos, z, path, number, duration):
 		super().__init__(game, zone, groups, pos, z, path)
 
 		self.number = number
+		self.duration = duration
 		self.rect = self.image.get_rect(topleft = pos)
 		self.hitbox = self.rect.copy().inflate(TILESIZE * 0.5, TILESIZE * 0.5)
 		self.active = False
@@ -174,7 +175,7 @@ class Platform(AnimatedObject):
 				self.zone.player.on_platform = True
 
 			self.timer += dt
-			if self.timer > 120:
+			if self.timer > self.duration:
 				self.timer = 0
 				self.active = False
 
@@ -190,7 +191,7 @@ class Platform(AnimatedObject):
 			if self.frame_index <= 0: 
 				self.frame_index = 0
 
-				if self.zone.player.hitbox.colliderect(self.rect):
+				if self.zone.player.hitbox.colliderect(self.hitbox):
 					self.zone.player.on_platform = False
 					self.zone.player.on_ground = False
 
@@ -323,7 +324,13 @@ class Bullet(AnimatedObject):
 		self.pos = pygame.math.Vector2(self.rect.center)
 		self.damage = 1
 
+	def collide(self):
+		for sprite in self.zone.block_sprites:
+			if self.rect.colliderect(sprite.hitbox):
+				self.kill()
+
 	def update(self, dt):
+		self.collide()
 		self.animate(0.25 * dt)
 		self.pos += self.vel * dt
 		self.rect.center = self.pos
@@ -340,8 +347,12 @@ class AttackableTerrain(AnimatedObject):
 			self.frame_index = 0
 		else:
 			self.frame_index += animation_speed
-			if self.frame_index >= len(self.frames)-1: self.frame_index = len(self.frames)-1
-			else: self.frame_index = self.frame_index % len(self.frames)
+			if self.frame_index >= len(self.frames)-1: 
+				self.frame_index = len(self.frames)-1
+				self.z = LAYERS['floor']
+			else: 
+				self.frame_index = self.frame_index % len(self.frames)
+				self.z = LAYERS['particles']
 			self.zone.attackable_sprites.remove(self)
 			self.zone.block_sprites.remove(self)
 
