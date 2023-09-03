@@ -134,6 +134,7 @@ class Attack:
 
 		enemy.acc = pygame.math.Vector2()
 		self.lunge_speed -= 0.05 * dt
+		
 		if enemy.vel.magnitude() > 0.5: enemy.zone.player.enemy_attacking_logic()
 		if enemy.vel.magnitude() != 0: enemy.vel = enemy.vel.normalize() * self.lunge_speed
 		if enemy.vel.magnitude() < 0.1: enemy.vel = pygame.math.Vector2()

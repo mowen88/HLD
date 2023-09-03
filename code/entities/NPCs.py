@@ -32,8 +32,9 @@ class NPC(pygame.sprite.Sprite):
 		self.hitbox = self.rect.copy().inflate(-self.rect.width * 0.5, -self.rect.height * 0.7)
 
 		self.acc = pygame.math.Vector2()
-		self.friction = -0.2
+		self.friction = -0.15
 		self.vel = pygame.math.Vector2()
+		self.speed = 0.6
 
 		self.dashing = False
 		self.on_ground = True
@@ -95,31 +96,32 @@ class NPC(pygame.sprite.Sprite):
 
 	def physics(self, dt):
 		
-			# x direction
-			self.acc.x += self.vel.x * self.friction
-			self.vel.x += self.acc.x * dt
-			self.pos.x += self.vel.x * dt + (0.5 * self.vel.x) * (dt**2)
-			self.hitbox.centerx = round(self.pos.x)
-			self.rect.centerx = self.hitbox.centerx
-			self.collisions('x', self.zone.block_sprites)
-			#if self == self.zone.player: self.collisions('x', self.zone.enemy_sprites)
-			#if self in self.zone.enemy_sprites: self.collisions('x', [self.zone.player])
-			if not self.dashing: self.collisions('x', self.zone.void_sprites)
-			
-			
-			#y direction
-			self.acc.y += self.vel.y * self.friction
-			self.vel.y += self.acc.y * dt
-			self.pos.y += self.vel.y * dt + (0.5 * self.vel.y) * (dt**2)
-			self.hitbox.centery = round(self.pos.y)
-			self.rect.centery = self.hitbox.centery
-			self.collisions('y', self.zone.block_sprites)
-			#if self == self.zone.player: self.collisions('y', self.zone.enemy_sprites)
-			#if self in self.zone.enemy_sprites: self.collisions('y', [self.zone.player])
-			if not self.dashing: self.collisions('y', self.zone.void_sprites)
-			
-
-			if self.vel.magnitude() > 1: self.vel = self.vel.normalize()
+		# x direction
+		self.acc.x += self.vel.x * self.friction
+		self.vel.x += self.acc.x * dt
+		self.pos.x += self.vel.x * dt + (0.5 * self.vel.x) * dt
+		self.hitbox.centerx = round(self.pos.x)
+		self.rect.centerx = self.hitbox.centerx
+		self.collisions('x', self.zone.block_sprites)
+		#if self == self.zone.player: self.collisions('x', self.zone.enemy_sprites)
+		#if self in self.zone.enemy_sprites: self.collisions('x', [self.zone.player])
+		if not self.dashing: self.collisions('x', self.zone.void_sprites)
+		
+		
+		#y direction
+		self.acc.y += self.vel.y * self.friction
+		self.vel.y += self.acc.y * dt
+		self.pos.y += self.vel.y * dt + (0.5 * self.vel.y) * dt
+		self.hitbox.centery = round(self.pos.y)
+		self.rect.centery = self.hitbox.centery
+		self.collisions('y', self.zone.block_sprites)
+		#if self == self.zone.player: self.collisions('y', self.zone.enemy_sprites)
+		#if self in self.zone.enemy_sprites: self.collisions('y', [self.zone.player])
+		if not self.dashing: self.collisions('y', self.zone.void_sprites)
+		
+		if self == self.zone.player: 
+			if self.vel.magnitude() >= self.speed: 
+				self.vel = self.vel.normalize() * self.speed
 
 	def invincibility(self, dt):
 		if self.invincible:

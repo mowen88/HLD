@@ -127,7 +127,7 @@ class Zone(State):
 		if self.player.z == LAYERS['player'] and not self.cutscene_running:
 			for sprite in self.health_sprites:
 				if self.player.hitbox.colliderect(sprite.hitbox):
-					self.create_flash(sprite.rect.center, LIGHT_GREEN, 4)
+					self.create_flash(sprite.rect.center, WHITE, 4)
 					self.ui.add_health()
 					COMPLETED_DATA['health'].append(sprite.name)
 					self.cutscene_running = True
@@ -227,7 +227,7 @@ class Zone(State):
 		self.fade_surf.draw(screen)
 
 		self.game.render_text(str(round(self.game.clock.get_fps(), 2)), WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.1))
-		self.game.render_text(self.player.on_platform, PINK, self.game.small_font, RES/2)
+		self.game.render_text(self.player.invincible, WHITE, self.game.small_font, RES/2)
 		# self.game.render_text(self.player.invincible, WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.9))
 		
 		

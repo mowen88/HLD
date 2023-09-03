@@ -31,7 +31,7 @@ class Dialogue(State):
 
     def text_update(self):
         if not self.char_indices[-1] >= len(self.lines[-1]):
-            if self.timer > 2:
+            if self.timer > 1:
                 self.timer = 0
 
                 for line in range(len(self.lines)):
@@ -43,7 +43,7 @@ class Dialogue(State):
 
     def opening_box(self, dt):
         if not self.opening:
-            self.box_width -= (self.target_width - self.box_width) * 0.3 * dt
+            self.box_width -= (self.target_width - self.box_width) * 0.6 * dt
 
             if self.box_width <= 0:
                 self.box_width = 0
@@ -51,7 +51,7 @@ class Dialogue(State):
                 self.exit_state()
 
         elif self.box_width < self.target_width - 1:
-            self.box_width += (self.target_width - self.box_width) * 0.2 * dt
+            self.box_width += (self.target_width - self.box_width) * 0.3 * dt
 
         self.center = (self.sprite.rect.centerx - self.offset.x, self.sprite.rect.top - 25 - self.offset.y)
 

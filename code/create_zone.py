@@ -3,7 +3,7 @@ from os import walk
 from settings import *
 from pytmx.util_pygame import load_pygame
 from map import Map
-from sprites import BG, FadeSurf, Collider, Exit, Object, Pillar, AnimatedObject, Barrier, Door, Platform, Void, Collectible, Gun, Sword, Bullet, Tree, Beam, AttackableTerrain
+from sprites import BG, FadeSurf, Collider, Exit, Decoration, Object, Pillar, AnimatedObject, Barrier, Door, Platform, Void, Collectible, Gun, Sword, Bullet, Tree, Beam, AttackableTerrain
 from particles import Particle, Shadow
 from entities.player import Player
 from entities.NPCs import Warrior
@@ -78,10 +78,20 @@ class CreateZone:
 				if obj.name == 'health_11': Collectible(self.zone.game, self.zone, [self.zone.health_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/health', obj.name)
 
 		for obj in tmx_data.get_layer_by_name('objects'):
+			if obj.name == 'grass': Decoration(self.zone.game, self.zone, [self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['particles'], obj.image)
+			if obj.name == 'grass 1': Decoration(self.zone.game, self.zone, [self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['particles'], obj.image)
+			if obj.name == 'grass 2': Decoration(self.zone.game, self.zone, [self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['particles'], obj.image)
+			if obj.name == 'grass 3': Decoration(self.zone.game, self.zone, [self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['particles'], obj.image)
+			if obj.name == 'grass 4': Decoration(self.zone.game, self.zone, [self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['particles'], obj.image)
+			if obj.name == 'grass 5': Decoration(self.zone.game, self.zone, [self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['particles'], obj.image)
+
 			if obj.name == 'blue tree': Tree(self.zone.game, self.zone, [self.zone.block_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
 			if obj.name == 'big tree': Tree(self.zone.game, self.zone, [self.zone.block_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
 			if obj.name == 'medium tree': Tree(self.zone.game, self.zone, [self.zone.block_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
+			if obj.name == 'medium tree 2': Tree(self.zone.game, self.zone, [self.zone.block_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
+			if obj.name == 'medium tree 3': Tree(self.zone.game, self.zone, [self.zone.block_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
 			if obj.name == 'small tree': Tree(self.zone.game, self.zone, [self.zone.block_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
+			if obj.name == 'small tree 2': Tree(self.zone.game, self.zone, [self.zone.block_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
 			if obj.name == 'tall tree': Tree(self.zone.game, self.zone, [self.zone.block_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
 			if obj.name == 'red flower': AttackableTerrain(self.zone.game, self.zone, [self.zone.block_sprites, self.zone.attackable_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], f'../assets/attackable_terrain/{obj.name}')
 			if obj.name == 'blue flower': AttackableTerrain(self.zone.game, self.zone, [self.zone.block_sprites, self.zone.attackable_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], f'../assets/attackable_terrain/{obj.name}')
@@ -120,10 +130,9 @@ class CreateZone:
 		for _, __, img_files in walk(f'../zones/{self.zone.name}'):
 			for img in img_files:
 				if img == 'static_bg.png': BG(self.zone.game, self.zone, [self.zone.rendered_sprites], (0, 0), LAYERS['BG1'], pygame.image.load(f'../zones/{self.zone.name}/{img}').convert_alpha())
-				if img == 'bg.png': BG(self.zone.game, self.zone, [self.zone.updated_sprites, self.zone.rendered_sprites], (0, 0), LAYERS['BG0'], pygame.image.load(f'../zones/{self.zone.name}/{img}').convert_alpha(), (0.2, 0.2))
+				if img == 'bg.png': BG(self.zone.game, self.zone, [self.zone.updated_sprites, self.zone.rendered_sprites], (0, 0), LAYERS['BG0'], pygame.image.load(f'../zones/{self.zone.name}/{img}').convert_alpha())
 				if img == 'floor.png': BG(self.zone.game, self.zone, [self.zone.rendered_sprites], (0, 0), LAYERS['floor'], pygame.image.load(f'../zones/{self.zone.name}/{img}').convert_alpha())
-				#if img == '2x6_white.png': BG(self.zone.game, self.zone, [self.zone.updated_sprites, self.zone.rendered_sprites], (0, 0), LAYERS['foreground'], pygame.image.load(f'../zones/{self.zone.name}/{img}').convert_alpha(), (0.2, 0.2))
-				if img == 'spaceship.png': Object(self.zone.game, self.zone, [self.zone.rendered_sprites], (0, 0), LAYERS['blocks'], pygame.image.load(f'../zones/{self.zone.name}/{img}').convert_alpha())
+				if img == 'foreground.png': BG(self.zone.game, self.zone, [self.zone.updated_sprites, self.zone.rendered_sprites], (0, 0), LAYERS['foreground'], pygame.image.load(f'../zones/{self.zone.name}/{img}').convert_alpha(), (0.2, 0.2))
 
 				# if img == 'static_bg.png': Object(self.zone.game, self.zone, [self.zone.rendered_sprites], (0, 0), LAYERS['BG1'], pygame.image.load(f'../zones/{self.zone.name}/{img}').convert_alpha())
 				# #if img == 'floor.png': Object(self.zone.game, self.zone, [self.zone.rendered_sprites], (0, 0), LAYERS['floor'], pygame.image.load(f'../zones/{self.zone.name}/{img}').convert_alpha())

@@ -10,14 +10,14 @@ class Camera(pygame.sprite.Group):
 		self.offset = pygame.math.Vector2()
 		self.camera_lag = 80
 
-	# 	# fog variables
-	# 	self.dark = True
-	# 	self.main_fog = self.get_fog_image(BLUE, (self.zone.zone_size), self.zone.zone_size)
+		# # fog variables
+		# self.dark = True
+		# self.main_fog = self.get_fog_image((255, 65, 125), (100,100), self.zone.zone_size)
 
 	# def get_fog_image(self, colour, circle_size, canvas_size):
 	# 	self.fog_colour = colour
 	# 	self.fog_surf = pygame.Surface((canvas_size))
-	# 	self.light_mask = pygame.image.load(f'../zones/{self.zone.name}/2x6_white.png').convert_alpha()
+	# 	self.light_mask = pygame.image.load(f'../zones/{self.zone.name}/white.png').convert_alpha()
 	# 	self.light_mask = pygame.transform.scale(self.light_mask, (circle_size))
 	# 	self.light_rect = self.light_mask.get_rect()
 
@@ -43,16 +43,12 @@ class Camera(pygame.sprite.Group):
 
 	def offset_draw(self, screen, target):
 		
-		# draw parralax backgrounds
 		screen.fill(ZONE_DATA[self.zone.name]['bg_colour'])
 
-		if self.zone.player.rect.x < 100:
-			self.move_to([0,0])
-
 		if self.zone.cutscene_running or self.zone.target.dashing:
-			self.camera_lag = 200
+			self.camera_lag = 50
 		else:
-			self.camera_lag = 80
+			self.camera_lag = 20
 
 		if self.zone.cutscene_running:
 			self.offset.x += (target[0] - HALF_WIDTH - self.offset.x)/self.camera_lag
@@ -79,5 +75,6 @@ class Camera(pygame.sprite.Group):
 					offset = sprite.rect.topleft - self.offset
 					screen.blit(sprite.image, offset)
 
-		# if self.dark:
-		# 	self.render_fog(self.game.screen, (0 - self.offset[0] * 0.5, 0 - self.offset[1] * 0.5))
+		# screen.blit(self.light_mask, (260 - self.offset[0], 330 - self.offset[1]))
+		# # if self.dark:
+		# # 	self.render_fog(self.game.screen, (320 - self.offset[0], 320 - self.offset[1]))

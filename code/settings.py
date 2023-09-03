@@ -2,7 +2,7 @@ import pygame
 
 FPS = 60
 TILESIZE = 16
-RES = WIDTH, HEIGHT = pygame.math.Vector2(320, 180)#(360, 202.5)#(480, 270)#(640, 360)#(960, 540) or... (512, 288)
+RES = WIDTH, HEIGHT = pygame.math.Vector2(320, 180)#(320, 180)(384, 240)#(360, 202.5)#(480, 270)#(640, 360)#(960, 540) or... (512, 288)
 HALF_WIDTH, HALF_HEIGHT = RES/2
 
 #FONT = '../fonts/Pokemon Classic.ttf'
@@ -27,7 +27,7 @@ YELLOW = ((224, 225, 146))
 
 # data that is dynamic and changes throughout play
 
-PLAYER_DATA = {'current_zone': 'datacentre',
+PLAYER_DATA = {'current_zone': 'start',
  				'entry_pos': '0', 
  				'keys': ['blue_door'],
  				'gun_index': 0, 
@@ -57,12 +57,14 @@ ZONE_DATA = {
 	'garden':{'bg_colour': PINK,'1': 'start', '2': 'dungeon', '3':'datacentre'},
 	'dungeon':{'bg_colour': BLACK,'1':'garden', '2':'garden'},
 	'datacentre':{'bg_colour': GREEN,'1':'garden', '2':'garden', '3':'garden'},
+	'wood':{'bg_colour': LIGHT_GREEN,'1':'garden', '2':'dungeon', '3':'datacentre'},
 }
 MAP_DATA = {
 	'start':{'pos': (-20,-20)},
 	'garden':{'pos': (30,10)},
 	'dungeon':{'pos': (60,20)},
 	'datacentre':{'pos': (0,20)},
+	'wood':{'pos': (-20,-20)},
 }
 
 DIALOGUE = {

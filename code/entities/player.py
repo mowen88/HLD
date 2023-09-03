@@ -100,7 +100,8 @@ class Player(NPC):
 					self.reduce_health(sprite.damage)
 					self.screenshaking = True
 					self.invincible = True
-					if self.zone.melee_sprite: self.zone.melee_sprite.kill()
+					if self.zone.melee_sprite: 
+						self.zone.melee_sprite.kill()
 
 	def reduce_health(self, amount):
 		if not self.invincible:

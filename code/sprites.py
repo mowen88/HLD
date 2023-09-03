@@ -56,6 +56,13 @@ class Exit(pygame.sprite.Sprite):
 		self.image = pygame.Surface((self.size))
 		self.rect = self.image.get_rect(topleft = pos)
 
+class Decoration(pygame.sprite.Sprite):
+	def __init__(self, game, zone, groups, pos, z, surf = pygame.Surface((TILESIZE, TILESIZE))):
+		super().__init__(groups)
+		self.z = z
+		self.image = surf
+		self.rect = self.image.get_rect(topleft = pos)
+
 class Object(pygame.sprite.Sprite):
 	def __init__(self, game, zone, groups, pos, z, surf = pygame.Surface((TILESIZE, TILESIZE))):
 		super().__init__(groups)
@@ -80,8 +87,8 @@ class BG(Object):
 		self.old_hitbox = self.hitbox.copy()
 		self.pos = pygame.math.Vector2(self.rect.topleft)
 
-	def update(self, dt):
-		self.rect.topleft = (0 - self.offset[0] * self.parralax_value.x, 0 - self.offset[1] * self.parralax_value.y)
+	# def update(self, dt):
+	# 	self.rect.topleft = (0 - self.offset[0] * self.parralax_value.x, 0 - self.offset[1] * self.parralax_value.y)
 
 class Void(Object):
 	def __init__(self, game, zone, groups, pos, z, surf = pygame.Surface((TILESIZE, TILESIZE))):

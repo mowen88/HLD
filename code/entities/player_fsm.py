@@ -86,11 +86,11 @@ class Move:
 		player.acc = pygame.math.Vector2()
 
 		# y direction increment acceleration
-		if player.direction['down']: player.acc.y += 0.2
-		elif player.direction['up']: player.acc.y -= 0.2
+		if player.direction['down']: player.acc.y += 0.15
+		elif player.direction['up']: player.acc.y -= 0.15
 		# x direction increment acceleration
-		if player.direction['right']: player.acc.x += 0.2
-		elif player.direction['left']: player.acc.x -= 0.2
+		if player.direction['right']: player.acc.x += 0.15
+		elif player.direction['left']: player.acc.x -= 0.15
 
 		player.physics(dt)
 		player.animate(self.direction, 0.2 * dt)
@@ -104,13 +104,13 @@ class Dash:
 		player.dash_count += 1
 		player.dash_timer_running = True
 		
-		self.timer = 20
+		self.timer = 18
 		player.dashing = True
 
 		if not player.on_platform:
 			player.respawn_location = player.rect.center
 
-		self.lunge_speed = 6
+		self.lunge_speed = 4
 		self.get_current_direction = pygame.mouse.get_pos()
 		player.vel = player.zone.get_distance_direction_and_angle(player.hitbox.center, self.get_current_direction)[1] * self.lunge_speed
 		player.angle = player.zone.get_distance_direction_and_angle(player.hitbox.center, self.get_current_direction)[2]
@@ -125,6 +125,7 @@ class Dash:
 				return FallDeath(self.direction)
 			else: 
 				player.dashing = False
+				player.on_platform = False
 				return Idle(player, self.direction)
 
 	def update(self, dt, player):
@@ -135,9 +136,10 @@ class Dash:
 		player.animate(self.direction + '_dash', 0.2 * dt)
 
 		player.acc = pygame.math.Vector2()
-		self.lunge_speed -= 0.4 * dt
-		if player.vel.magnitude() != 0: player.vel = player.vel.normalize() * self.lunge_speed
-		if player.vel.magnitude() < 0.1: player.vel = pygame.math.Vector2()	
+		self.lunge_speed -= 0.25 * dt
+		
+		if self.timer < 0: player.vel = pygame.math.Vector2()	
+		elif player.vel.magnitude() != 0: player.vel = player.vel.normalize() * self.lunge_speed
 		
 class Attack:
 	def __init__(self, player, direction):
@@ -276,9 +278,11 @@ class FallDeath:
 
 		self.timer -= dt
 		if self.timer > 0:
-			if self.timer < 15: player.zone.screenshaking = True
-			player.z = LAYERS['BG2']
-			player.vel.y += 0.15 * dt
+			player.z = LAYERS['BG1']
+			if self.timer < 15: 
+				player.zone.screenshaking = True
+
+			player.vel.y += 0.5 * dt
 			player.pos += player.vel
 			player.hitbox.centery = player.pos.y
 			player.rect.centery = player.hitbox.centery

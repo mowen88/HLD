@@ -11,6 +11,7 @@ class CollectionCutscene(State):
 
 		self.zone = zone
 		self.number = number
+		
 		self.target = pygame.math.Vector2(self.zone.target.rect.center)
 
 		self.opening = True

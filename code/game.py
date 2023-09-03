@@ -103,8 +103,8 @@ class Game:
                     ACTIONS['scroll_up'] = False
 
     def reset_keys(self):
-        for action in ACTIONS:
-            ACTIONS[action] = False
+        for value in ACTIONS:
+            ACTIONS[value] = False
 
     def load_states(self):
         self.intro = Intro(self)
@@ -146,7 +146,7 @@ class Game:
         pygame.display.flip()
 
     def main_loop(self):
-        dt = self.clock.tick() * 0.001 * FPS
+        dt = self.clock.tick(FPS) * 60 * 0.001
         self.get_events()
         self.update(dt)
         self.draw(self.screen)        
