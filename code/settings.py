@@ -27,7 +27,7 @@ YELLOW = ((224, 225, 146))
 
 # data that is dynamic and changes throughout play
 
-PLAYER_DATA = {'current_zone': 'start',
+PLAYER_DATA = {'current_zone': 'crashsite',
  				'entry_pos': '0', 
  				'keys': ['blue_door'],
  				'gun_index': 0, 
@@ -54,17 +54,17 @@ ENEMY_DATA = {
 # entry and exit data for zones, does not change
 ZONE_DATA = {
 	'start':{'bg_colour': YELLOW, '1': 'garden', '2': 'dungeon', '3':'datacentre'},
-	'garden':{'bg_colour': PINK,'1': 'start', '2': 'dungeon', '3':'datacentre'},
+	'garden':{'bg_colour': PINK,'1': 'crashsite', '2': 'dungeon', '3':'datacentre'},
 	'dungeon':{'bg_colour': BLACK,'1':'garden', '2':'garden'},
 	'datacentre':{'bg_colour': GREEN,'1':'garden', '2':'garden', '3':'garden'},
-	'wood':{'bg_colour': LIGHT_GREEN,'1':'garden', '2':'dungeon', '3':'datacentre'},
+	'crashsite':{'bg_colour': LIGHT_GREEN,'1':'garden', '2':'dungeon', '3':'datacentre'},
 }
 MAP_DATA = {
 	'start':{'pos': (-20,-20)},
 	'garden':{'pos': (30,10)},
 	'dungeon':{'pos': (60,20)},
 	'datacentre':{'pos': (0,20)},
-	'wood':{'pos': (-20,-20)},
+	'crashsite':{'pos': (-20,-20)},
 }
 
 DIALOGUE = {
