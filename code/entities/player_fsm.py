@@ -15,7 +15,7 @@ class Idle:
 		if not player.on_ground:
 			return FallDeath(self.direction)
 
-		if ACTIONS['right_ctrl'] and player.reload_timer == 0:
+		if ACTIONS['right_ctrl'] and player.game.current_juice >= GUN_DATA[player.gun]['cost'] and player.reload_timer == 0:
 			return Shoot(player, self.direction)
 
 		if ACTIONS['space']:
@@ -53,7 +53,7 @@ class Move:
 			player.on_ground = False
 			return FallDeath(self.direction)
 
-		if ACTIONS['right_ctrl'] and player.reload_timer == 0:
+		if ACTIONS['right_ctrl'] and player.game.current_juice >= GUN_DATA[player.gun]['cost'] and player.reload_timer == 0:
 			return Shoot(player, self.direction)
 
 		if ACTIONS['space']:

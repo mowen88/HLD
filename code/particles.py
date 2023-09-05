@@ -1,4 +1,5 @@
 import pygame
+from sprites import AnimatedObject
 from settings import *
 
 class Particle(pygame.sprite.Sprite):
@@ -9,6 +10,21 @@ class Particle(pygame.sprite.Sprite):
 		self.z = z
 		self.image = pygame.Surface((TILESIZE, TILESIZE))
 		self.rect = self.image.get_rect(topleft = pos)
+
+class Explosion(AnimatedObject):
+	def __init__(self, game, zone, groups, pos, z, path):
+		super().__init__(game, zone, groups, pos, z, path)
+
+	def animate(self, animation_speed):
+
+		self.frame_index += animation_speed
+		self.frame_index = self.frame_index % len(self.frames)	
+		self.image = self.frames[int(self.frame_index)]
+		if self.frame_index > len(self.frames)-1:	
+			self.kill()
+
+	def update(self, dt):
+		self.animate(0.2 * dt)
 
 class Shadow(Particle):
 	def __init__(self, game, zone, groups, pos, z, sprite, size):

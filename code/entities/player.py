@@ -151,6 +151,9 @@ class Player(NPC):
 		if self.game.current_juice > PLAYER_DATA['max_juice']: self.game.current_juice = PLAYER_DATA['max_juice']
 
 	def update(self, dt):
+		if ACTIONS['right_ctrl']:
+			self.zone.create_player_grenade()
+			self.game.reset_keys()
 		self.invincibility(dt)
 		self.attack_timer_logic(dt)
 		self.dash_timer_logic(dt)

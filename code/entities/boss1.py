@@ -43,6 +43,9 @@ class Idle:
 
 	def state_logic(self, npc):
 		if npc.alive:
+
+			npc.explosion_damage_logic()
+
 			if npc.zone.get_distance_direction_and_angle(npc.hitbox.center, npc.zone.player.hitbox.center - npc.zone.rendered_sprites.offset)[0] < npc.pursue_radius:
 				return Move(npc)
 		else:
@@ -57,6 +60,8 @@ class Move:
 
 	def state_logic(self, npc):
 		if npc.alive:
+
+			npc.explosion_damage_logic()
 
 			if npc.zone.get_distance_direction_and_angle(npc.hitbox.center, npc.zone.player.hitbox.center - npc.zone.rendered_sprites.offset)[0] > npc.pursue_radius:
 				return Idle(npc)
@@ -83,6 +88,9 @@ class Telegraphing:
 
 	def state_logic(self, npc):
 		if npc.alive:
+
+			npc.explosion_damage_logic()
+
 			if npc.zone.get_distance_direction_and_angle(npc.hitbox.center, npc.zone.player.hitbox.center - npc.zone.rendered_sprites.offset)[0] > npc.pursue_radius:
 				return Move(npc)
 
@@ -145,6 +153,7 @@ class Landing:
 
 	def state_logic(self, npc):
 		if npc.alive:
+
 			if self.timer < 0:
 				return Idle(npc)
 		else:

@@ -4,8 +4,8 @@ from settings import *
 from state import State
 from camera import Camera
 from create_zone import CreateZone
-from particles import Flash
-from sprites import Sword, Gun, Bullet, Beam
+from particles import Shadow, Flash, Explosion
+from sprites import Sword, Gun, Bullet, Grenade, Beam
 from cutscenes.cutscene_manager import Cutscene, CollectionCutscene
 from ui import UI
 from map import Map
@@ -29,6 +29,8 @@ class Zone(State):
 		self.player_bullet_sprites = pygame.sprite.Group()
 		self.beam_sprites = pygame.sprite.Group()
 		self.enemy_bullet_sprites = pygame.sprite.Group()
+		self.grenade_sprites = pygame.sprite.Group()
+		self.explosion_sprites = pygame.sprite.Group()
 
 		# sprite groups
 		self.rendered_sprites = Camera(self.game, self)
@@ -85,6 +87,14 @@ class Zone(State):
 	def create_player_bullet(self):
 		self.bullet = Bullet(self.game, self, [self.updated_sprites, self.rendered_sprites], self.player.hitbox.center, LAYERS['player'], f'../assets/weapons/{self.player.gun}_bullet')
 		self.player_bullet_sprites.add(self.bullet)
+
+	def create_player_grenade(self):
+		self.grenade = Grenade(self.game, self, [self.updated_sprites, self.rendered_sprites], self.player.hitbox.center, LAYERS['player'], f'../assets/weapons/grenade')
+		self.grenade_sprites.add(self.grenade)
+
+	def create_explosion(self, pos):
+		self.explosion = Explosion(self.game, self, [self.updated_sprites, self.rendered_sprites], pos, LAYERS['player'], f'../assets/particles/explosion')
+		self.explosion_sprites.add(self.explosion)
 
 	def create_railgun_beam(self):
 		angle = math.atan2(pygame.mouse.get_pos()[1]-self.player.hitbox.centery + self.rendered_sprites.offset[1], pygame.mouse.get_pos()[0]-self.player.hitbox.centerx + self.rendered_sprites.offset[0])

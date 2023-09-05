@@ -7,6 +7,9 @@ class Idle:
 
 	def state_logic(self, npc):
 		if npc.alive:
+
+			npc.explosion_damage_logic()
+			
 			if npc.zone.get_distance_direction_and_angle(npc.hitbox.center, npc.zone.player.hitbox.center - npc.zone.rendered_sprites.offset)[0] < npc.pursue_radius:
 				return Move(npc)
 		else:
@@ -21,6 +24,8 @@ class Move:
 
 	def state_logic(self, npc):
 		if npc.alive:
+
+			npc.explosion_damage_logic()
 
 			if npc.zone.melee_sprite or npc.zone.gun_sprite:
 				return Evade(npc)

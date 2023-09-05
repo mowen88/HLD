@@ -344,6 +344,35 @@ class Bullet(AnimatedObject):
 		self.pos += self.vel * dt
 		self.rect.center = self.pos
 
+class Grenade(AnimatedObject):
+	def __init__(self, game, zone, groups, pos, z, path):
+		super().__init__(game, zone, groups, pos, z, path)
+
+		self.speed = 6
+		self.vel = self.zone.get_distance_direction_and_angle(self.rect.center, pygame.mouse.get_pos())[1] * self.speed
+		self.pos = pygame.math.Vector2(self.rect.center)
+		self.damage = 1
+
+	def collide(self):
+		for sprite in self.zone.block_sprites:
+			if self.rect.colliderect(sprite.hitbox):
+				self.vel = self.vel * -1
+
+	def animate(self, animation_speed):
+		self.frame_index += animation_speed
+		self.image = self.frames[int(self.frame_index)]
+		if self.frame_index >= len(self.frames) -1:
+			self.zone.create_explosion(self.rect.center)
+			self.zone.screenshaking = True
+			self.kill()
+
+	def update(self, dt):
+		self.collide()
+		self.animate(0.25 * dt)
+		self.vel *= 0.95
+		self.pos += self.vel * dt
+		self.rect.center = self.pos
+
 class AttackableTerrain(AnimatedObject):
 	def __init__(self, game, zone, groups, pos, z, path):
 		super().__init__(game, zone, groups, pos, z, path)

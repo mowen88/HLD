@@ -3,7 +3,7 @@ from os import walk
 from settings import *
 from pytmx.util_pygame import load_pygame
 from map import Map
-from sprites import BG, FadeSurf, Collider, Exit, Decoration, Object, Pillar, AnimatedObject, Barrier, Door, Platform, Void, Collectible, Gun, Sword, Bullet, Tree, Beam, AttackableTerrain
+from sprites import BG, FadeSurf, Collider, Exit, Decoration, Object, Pillar, AnimatedObject, Barrier, Door, Platform, Void, Collectible, Gun, Sword, Tree, Beam, AttackableTerrain
 from particles import Particle, Shadow
 from entities.player import Player
 from entities.NPCs import Warrior
@@ -154,7 +154,6 @@ class CreateZone:
 			Shadow(self.zone.game, self.zone, [self.zone.updated_sprites, self.zone.rendered_sprites], (sprite.hitbox.midbottom), LAYERS['particles'], sprite, 'small')
 		for sprite in self.zone.juice_sprites:
 			Shadow(self.zone.game, self.zone, [self.zone.updated_sprites, self.zone.rendered_sprites], (sprite.hitbox.midbottom), LAYERS['particles'], sprite, 'small')
-
 
 		# add static image layers
 		for _, __, img_files in walk(f'../zones/{self.zone.name}'):

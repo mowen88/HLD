@@ -63,11 +63,7 @@ class UI:
 							if box < self.zone.boss.health:
 								box *= self.offset
 								pygame.draw.rect(screen, PINK, (start_x + box, HEIGHT - 20, 10, 10), border_radius=2)
-					else:
-						screen.blit(self.mask_image, (start_x + box * self.offset, HEIGHT - 20, 10, 10))
-						self.mask_image.set_alpha(self.alpha)
-		
-			
+
 	def flash_icon(self):
 		if self.zone.player.invincible:
 			self.game.screen.blit(self.mask_image, (self.padding + self.box_list[self.game.current_health], self.padding))

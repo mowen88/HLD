@@ -72,6 +72,15 @@ class NPC(pygame.sprite.Sprite):
 			self.image = self.mask_image
 			self.vel = pygame.math.Vector2()
 
+	def explosion_damage_logic(self):
+		for sprite in self.zone.explosion_sprites:
+			if not self.invincible and self.alive and sprite.frame_index < 4:
+				if self.zone.get_distance_direction_and_angle(self.rect.center, sprite.rect.center)[0] < 80:
+					self.health -= 1
+					self.invincible = True
+					if self.health <= 0:
+						self.alive = False
+
 	def knockback(self, other_sprite):
 		self.zone.get_distance_direction_and_angle(other_sprite.rect.center, self.rect.center)[1]
 

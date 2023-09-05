@@ -30,7 +30,7 @@ class Camera(pygame.sprite.Group):
 	def screenshake(self):
 		if self.zone.screenshaking:
 			self.zone.screenshake_timer += 1
-			if self.zone.screenshake_timer < 120: 
+			if self.zone.screenshake_timer < 30: 
 				self.offset += [random.randint(-1, 1), random.randint(-1, 1)]
 			else: 
 				self.zone.screenshaking = False
