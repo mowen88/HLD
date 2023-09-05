@@ -2,7 +2,6 @@ import math
 from settings import *
 from entities.npc_fsm import Idle
 
-
 class NPC(pygame.sprite.Sprite):
 	def __init__(self, game, zone, groups, pos, z, name):
 		super().__init__(groups)
@@ -15,7 +14,7 @@ class NPC(pygame.sprite.Sprite):
 		self.invincible = False
 		self.invincibility_timer = 0
 		self.alive = True
-		self.animations = {'idle':[], 'telegraphing':[], 'death':[]}
+		self.animations = {'idle':[], 'telegraphing':[], 'death':[], 'jumping':[], 'landing':[]}
 
 		if self.name: self.import_imgs()
 		self.animation_type = 'loop'
@@ -47,10 +46,12 @@ class NPC(pygame.sprite.Sprite):
 			self.animations[animation] = self.game.get_folder_images(full_path)
 
 	def get_direction(self):
+
 		if 45 < self.angle < 135: direction = 'right'
 		elif 135 < self.angle < 225: direction = 'down'
 		elif 225 < self.angle < 315: direction = 'left'
 		else: direction = 'up'
+
 		return direction
 
 	def animate(self, state, animation_speed, loop=True):
@@ -94,8 +95,9 @@ class NPC(pygame.sprite.Sprite):
 			if sprite.hitbox.colliderect(self.hitbox): hitlist.append(sprite)
 		return hitlist
 
+
 	def physics(self, dt):
-		
+
 		# x direction
 		self.acc.x += self.vel.x * self.friction
 		self.vel.x += self.acc.x * dt
@@ -106,7 +108,6 @@ class NPC(pygame.sprite.Sprite):
 		#if self == self.zone.player: self.collisions('x', self.zone.enemy_sprites)
 		#if self in self.zone.enemy_sprites: self.collisions('x', [self.zone.player])
 		if not self.dashing: self.collisions('x', self.zone.void_sprites)
-		
 		
 		#y direction
 		self.acc.y += self.vel.y * self.friction

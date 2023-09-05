@@ -8,13 +8,13 @@
  <tileset firstgid="50" source="../../objects.tsx"/>
  <tileset firstgid="66" source="../../tilesets/decoration.tsx"/>
  <tileset firstgid="71" source="../../tilesets/rockface.tsx"/>
- <imagelayer id="17" name="bg">
+ <imagelayer id="17" name="bg" visible="0">
   <image source="../wood/bg.png" width="640" height="580"/>
  </imagelayer>
- <imagelayer id="14" name="floor">
+ <imagelayer id="14" name="floor" visible="0">
   <image source="../wood/floor.png" width="640" height="580"/>
  </imagelayer>
- <layer id="2" name="void" width="40" height="36" offsetx="0" offsety="16">
+ <layer id="2" name="void" width="40" height="36" visible="0" offsetx="0" offsety="16">
   <data encoding="csv">
 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
@@ -54,7 +54,7 @@
 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 </data>
  </layer>
- <layer id="3" name="walls" width="40" height="36">
+ <layer id="3" name="walls" width="40" height="36" visible="0">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -94,8 +94,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup id="4" name="entities"/>
- <objectgroup id="5" name="entries">
+ <objectgroup id="5" name="entries" visible="0">
   <object id="4" name="3" x="32" y="400">
    <point/>
   </object>
@@ -106,17 +105,18 @@
    <point/>
   </object>
  </objectgroup>
- <objectgroup id="6" name="exits">
+ <objectgroup id="4" name="entities" visible="0"/>
+ <objectgroup id="6" name="exits" visible="0">
   <object id="1" name="3" x="-96" y="368" width="96" height="64"/>
   <object id="3" name="1" x="448" y="160" width="64" height="64"/>
  </objectgroup>
- <objectgroup id="7" name="cutscenes"/>
- <objectgroup id="8" name="doors"/>
- <objectgroup id="9" name="triggers"/>
- <objectgroup id="10" name="platforms"/>
- <objectgroup id="11" name="collectibles"/>
- <objectgroup id="12" name="barriers"/>
- <objectgroup id="13" name="objects">
+ <objectgroup id="7" name="cutscenes" visible="0"/>
+ <objectgroup id="8" name="doors" visible="0"/>
+ <objectgroup id="9" name="triggers" visible="0"/>
+ <objectgroup id="10" name="platforms" visible="0"/>
+ <objectgroup id="11" name="collectibles" visible="0"/>
+ <objectgroup id="12" name="barriers" visible="0"/>
+ <objectgroup id="13" name="objects" visible="0">
   <object id="7" name="big tree" gid="50" x="256" y="400" width="48" height="48"/>
   <object id="9" name="small tree" gid="54" x="389.333" y="375" width="16" height="16"/>
   <object id="10" name="tall tree" gid="55" x="432.667" y="363.333" width="16" height="32"/>

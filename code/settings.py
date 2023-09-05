@@ -2,7 +2,7 @@ import pygame
 
 FPS = 60
 TILESIZE = 16
-RES = WIDTH, HEIGHT = pygame.math.Vector2(320, 180)#(320, 180)(384, 240)#(360, 202.5)#(480, 270)#(640, 360)#(960, 540) or... (512, 288)
+RES = WIDTH, HEIGHT = pygame.math.Vector2(512, 288)#(384, 216)#(512, 288)#(320, 180)#(480, 270)#(640, 360)#(960, 540)#(512, 288)
 HALF_WIDTH, HALF_HEIGHT = RES/2
 
 #FONT = '../fonts/Pokemon Classic.ttf'
@@ -27,7 +27,7 @@ YELLOW = ((224, 225, 146))
 
 # data that is dynamic and changes throughout play
 
-PLAYER_DATA = {'current_zone': 'crashsite',
+PLAYER_DATA = {'current_zone': 'boss_room_1',
  				'entry_pos': '0', 
  				'keys': ['blue_door'],
  				'gun_index': 0, 
@@ -49,7 +49,8 @@ GUN_DATA = {
 
 ENEMY_DATA = {
 	'grunt':{'speed': 0.1, 'lunge_speed': 2, 'knockback_speed': 1, 'damage': 1, 'health': 3, 'telegraphing_time': 20, 'attack_radius': 30, 'pursue_radius': 110},
-	'hound':{'speed': 0.2, 'lunge_speed': 3, 'knockback_speed': 2, 'damage': 1, 'health': 2, 'telegraphing_time': 15, 'attack_radius': 60, 'pursue_radius': 90}
+	'hound':{'speed': 0.2, 'lunge_speed': 3, 'knockback_speed': 2, 'damage': 1, 'health': 2, 'telegraphing_time': 15, 'attack_radius': 60, 'pursue_radius': 90},
+	'boss1':{'speed': 0.1, 'lunge_speed': 3, 'knockback_speed': 2, 'damage': 0, 'health': 10, 'telegraphing_time': 50, 'attack_radius': 70, 'pursue_radius': 200}
 }
 # entry and exit data for zones, does not change
 ZONE_DATA = {
@@ -58,6 +59,7 @@ ZONE_DATA = {
 	'dungeon':{'bg_colour': BLACK,'1':'garden', '2':'garden'},
 	'datacentre':{'bg_colour': GREEN,'1':'garden', '2':'garden', '3':'garden'},
 	'crashsite':{'bg_colour': LIGHT_GREEN,'1':'garden', '2':'dungeon', '3':'datacentre'},
+	'boss_room_1':{'bg_colour': YELLOW, '1': 'garden', '2': 'dungeon', '3':'garden'}
 }
 MAP_DATA = {
 	'start':{'pos': (-20,-20)},
@@ -65,6 +67,7 @@ MAP_DATA = {
 	'dungeon':{'pos': (60,20)},
 	'datacentre':{'pos': (0,20)},
 	'crashsite':{'pos': (-20,-20)},
+	'boss_room_1':{'pos': (-50,-50)},
 }
 
 DIALOGUE = {

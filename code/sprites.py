@@ -301,7 +301,9 @@ class Sword(AnimatedObject):
 
 	def animate(self, animation_speed):
 		self.frame_index += animation_speed
-		if self.frame_index >= len(self.frames)-1: self.kill()
+		if self.frame_index >= len(self.frames)-1: 
+			self.kill()
+			self.zone.melee_sprite = None
 		
 		if self.zone.player.attack_count % 2 == 0: self.image = self.opposite_frames[int(self.frame_index)]
 		else: self.image = self.frames[int(self.frame_index)]

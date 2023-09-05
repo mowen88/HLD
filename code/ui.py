@@ -21,7 +21,7 @@ class UI:
 		self.box_list = []
 		self.gun_icon_size = [0, 0]
 
-		self.gun_surf = pygame.image.load(f'../assets/ui_images/{self.zone.player.gun}.png').convert_alpha()
+		self.gun_surf = pygame.image.load(f'../assets/ui_images/{self.zone.target.gun}.png').convert_alpha()
 		self.gun_rect = self.gun_surf.get_rect(center = (self.offset + 5, self.padding + 28))
 
 		self.gun_flash_surf = pygame.Surface((self.gun_icon_size))
@@ -30,7 +30,6 @@ class UI:
 
 		self.juice_bar_length = 47
 		self.juice_bar_ratio = PLAYER_DATA['max_juice'] / self.juice_bar_length
-	
 
 	def health_display(self, screen):
 		
@@ -49,7 +48,26 @@ class UI:
 
 			if box == self.game.current_health:
 				box *= self.offset
+
+	def boss_health_display(self, screen):
+		if 'boss' in self.zone.name:
+
+			health_bar_width = self.zone.boss.max_health * self.offset
+			start_x = (WIDTH - health_bar_width)//2
+
+			for box in range(self.zone.boss.max_health):
+				if self.zone.boss.alive:
+					pygame.draw.rect(screen, BLACK, (start_x + box * self.offset, HEIGHT - 20, 10, 10), border_radius=2)
+					for box in range(self.zone.boss.health):
+						if box < self.zone.boss.health:
+							box *= self.offset
+							pygame.draw.rect(screen, PINK, (start_x + box, HEIGHT - 20, 10, 10), border_radius=2)
+				else:
+					screen.blit(self.mask_image, (start_x + box * self.offset, HEIGHT - 20, 10, 10))
+					self.mask_image.set_alpha(self.alpha)
+
 				
+			
 	def flash_icon(self):
 		if self.zone.player.invincible:
 			self.game.screen.blit(self.mask_image, (self.padding + self.box_list[self.game.current_health], self.padding))
@@ -86,12 +104,13 @@ class UI:
 			return
 	
 	def update(self, dt):
-		if self.zone.player.changing_weapon:
+		if self.zone.player.changing_weapon or ('boss' in self.zone.name and not self.zone.boss.alive):
 			self.alpha -= 12 * dt
 			self.gun_icon_size[0] += 4 * dt
 			self.gun_icon_size[1] += 4 * dt
 
 	def draw(self, screen):
+		self.boss_health_display(screen)
 		self.health_display(screen)
 		self.flash_icon()
 		self.gun_icon(screen)

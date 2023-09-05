@@ -23,8 +23,8 @@ class Zone(State):
 		COMPLETED_DATA['visited_zones'].append(self.name)
 
 		#sprites
-		self.melee_sprite = pygame.sprite.GroupSingle()
-		self.gun_sprite = pygame.sprite.GroupSingle()
+		self.melee_sprite = None
+		self.gun_sprite = None
 		self.player_bullet_sprites = pygame.sprite.Group()
 		self.beam_sprites = pygame.sprite.Group()
 		self.enemy_bullet_sprites = pygame.sprite.Group()
@@ -41,9 +41,9 @@ class Zone(State):
 		self.barrier_activator_sprites = pygame.sprite.Group()
 		self.void_sprites = pygame.sprite.Group()
 		self.enemy_sprites = pygame.sprite.Group()
+		self.boss_sprites = pygame.sprite.Group()
 		self.npc_sprites = pygame.sprite.Group()
 		self.attackable_sprites = pygame.sprite.Group()
-		self.gun_sprites = pygame.sprite.Group()
 		self.health_sprites = pygame.sprite.Group()
 		self.juice_sprites = pygame.sprite.Group()
 		self.key_sprites = pygame.sprite.Group()
@@ -189,13 +189,18 @@ class Zone(State):
 		pos_1 = pygame.math.Vector2(point_1 - self.rendered_sprites.offset)
 		pos_2 = pygame.math.Vector2(point_2)
 		distance = (pos_2 - pos_1).magnitude()
+
 		if (pos_2 - pos_1).magnitude() != 0: direction = (pos_2 - pos_1).normalize()
 		else: direction = pygame.math.Vector2(0.1,0.1)
+
 		radians = atan2(-(point_1[0] - (pos_2.x + self.rendered_sprites.offset.x)), (point_1[1] - (pos_2.y + self.rendered_sprites.offset.y)))
 		radians %= 2*pi
 		angle = int(degrees(radians))
 
-		return(distance, direction, angle)
+		dot_product_left = pygame.math.Vector2(direction.y, -direction.x).normalize()
+		dot_product_right = pygame.math.Vector2(-direction.y, direction.x).normalize()
+
+		return(distance, direction, angle, dot_product_left, dot_product_right)
 
 	def update(self, dt):
 		if self.player.z == LAYERS['player']:
@@ -227,7 +232,7 @@ class Zone(State):
 		self.fade_surf.draw(screen)
 
 		self.game.render_text(str(round(self.game.clock.get_fps(), 2)), WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.1))
-		self.game.render_text(self.player.invincible, WHITE, self.game.small_font, RES/2)
+		self.game.render_text(self.player.state, WHITE, self.game.small_font, RES/2)
 		# self.game.render_text(self.player.invincible, WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.9))
 		
 		

@@ -84,7 +84,7 @@ class Player(NPC):
 		if self.zone.melee_sprite:
 			for target in self.zone.enemy_sprites:
 				if self.zone.melee_sprite.rect.colliderect(target.hitbox) and self.zone.melee_sprite.frame_index < 1:
-					if not target.invincible and target.alive:
+					if not target.invincible and target.alive and not target.dashing:
 						target.invincible = True
 						self.add_subtract_juice(11, 'add')
 						target.health -= 1

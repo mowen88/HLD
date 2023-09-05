@@ -162,7 +162,8 @@ class Attack:
 	def state_logic(self, player):
 
 		if ACTIONS['right_click']:
-			player.zone.melee_sprite.kill()
+			if player.zone.melee_sprite:
+				player.zone.melee_sprite.kill() 
 			return Dash(player, self.direction)
 
 		if self.timer < 0:
@@ -204,11 +205,14 @@ class Shoot:
 	def state_logic(self, player):
 
 		if ACTIONS['right_click']:
-			player.zone.gun_sprite.kill()
+			if player.zone.gun_sprite:
+				player.zone.gun_sprite.kill()
+			player.zone.gun_sprite = None
 			return Dash(player, self.direction)
 
 		if self.timer < 0:
 			player.zone.gun_sprite.kill()
+			player.zone.gun_sprite = None
 			return Idle(player, self.direction)
 
 	def get_direction(self, player):

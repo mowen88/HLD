@@ -21,12 +21,13 @@ class Shadow(Particle):
 		self.rect = self.image.get_rect(center = pos)
 
 	def update(self, dt):
-		if self.sprite in self.zone.enemy_sprites or self.sprite == self.zone.player: 
+		if self.sprite in self.zone.enemy_sprites or self.sprite in self.zone.enemy_sprites or self.sprite == self.zone.player: 
 			if self.sprite.get_collide_list(self.zone.void_sprites) or not self.sprite.on_ground:
 				self.image.set_alpha(0)
 			else:
 				self.image.set_alpha(80)
 				self.rect = self.image.get_rect(center = (self.sprite.hitbox.midbottom[0], self.sprite.hitbox.midbottom[1] + self.rect.height))
+
 		elif self.sprite.alive:
 			self.image.set_alpha(80)
 			self.rect = self.image.get_rect(center = (self.sprite.hitbox.midbottom[0], self.sprite.hitbox.midbottom[1] + self.rect.height))
