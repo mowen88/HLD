@@ -40,6 +40,16 @@ class Player(NPC):
 		self.dash_timer = 0
 		self.dash_cooldown = 100
 
+		#guns out
+		self.guns_out_timer_running = False
+		self.guns_out_timer = 0
+		self.guns_out_cooldown = 200
+		self.reload_timer = 0
+
+		# invincibility 
+		self.invincile_time = 20
+
+
 	def attack_timer_logic(self, dt):
 		if self.attack_timer_running: 
 			self.attack_timer += dt
@@ -55,6 +65,24 @@ class Player(NPC):
 			self.dash_timer_running = False
 			self.dash_count = 0
 			self.dash_timer = 0
+
+	def guns_out_timer_logic(self, dt):
+		if self.guns_out_timer > 0: 
+			self.guns_out_timer -= dt 
+		else:
+			self.guns_out_timer = 0
+			self.kill_gun()
+
+		if self.reload_timer > 0:
+			self.reload_timer -= dt
+		else:
+			self.reload_timer = 0
+
+
+	def kill_gun(self):
+		if self.zone.gun_sprite:
+			self.zone.gun_sprite.kill()
+			self.zone.gun_sprite = None
 
 	def change_gun(self, direction):
 		if direction == 'scroll_down':
@@ -84,7 +112,7 @@ class Player(NPC):
 		if self.zone.melee_sprite:
 			for target in self.zone.enemy_sprites:
 				if self.zone.melee_sprite.rect.colliderect(target.hitbox) and self.zone.melee_sprite.frame_index < 1:
-					if not target.invincible and target.alive and not target.dashing:
+					if not target.invincible and target.alive:
 						target.invincible = True
 						self.add_subtract_juice(11, 'add')
 						target.health -= 1
@@ -92,6 +120,8 @@ class Player(NPC):
 							target.alive = False
 							target.invincible = False
 							self.zone.enemy_sprites.remove(target)
+							if target in self.zone.boss_sprites:
+								COMPLETED_DATA['bosses_defeated'].append(target.name)
 
 	def enemy_attacking_logic(self):
 		for sprite in self.zone.enemy_sprites:
@@ -124,6 +154,7 @@ class Player(NPC):
 		self.invincibility(dt)
 		self.attack_timer_logic(dt)
 		self.dash_timer_logic(dt)
+		self.guns_out_timer_logic(dt)
 		if not (self.zone.exiting or self.zone.entering): self.state_logic()
 		self.state.update(dt, self)
 		

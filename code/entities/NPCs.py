@@ -13,6 +13,7 @@ class NPC(pygame.sprite.Sprite):
 		self.state = Idle('idle')
 		self.invincible = False
 		self.invincibility_timer = 0
+		self.invincile_time = 6
 		self.alive = True
 		self.animations = {'idle':[], 'telegraphing':[], 'death':[], 'jumping':[], 'landing':[]}
 
@@ -24,7 +25,6 @@ class NPC(pygame.sprite.Sprite):
 		self.mask = pygame.mask.from_surface(self.image)
 		self.mask_image = self.mask.to_surface()
 		self.mask_image.set_colorkey((0, 0, 0))
-
 
 		self.rect = self.image.get_rect(center = pos)
 		self.pos = pygame.math.Vector2(self.rect.center)
@@ -127,7 +127,7 @@ class NPC(pygame.sprite.Sprite):
 	def invincibility(self, dt):
 		if self.invincible:
 			self.invincibility_timer += dt
-			if self.invincibility_timer >= 15:
+			if self.invincibility_timer >= self.invincile_time:
 				self.invincible = False
 				self.invincibility_timer = 0
 

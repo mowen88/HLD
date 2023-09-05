@@ -25,6 +25,7 @@ class Zone(State):
 		#sprites
 		self.melee_sprite = None
 		self.gun_sprite = None
+		self.boss = None
 		self.player_bullet_sprites = pygame.sprite.Group()
 		self.beam_sprites = pygame.sprite.Group()
 		self.enemy_bullet_sprites = pygame.sprite.Group()
@@ -232,7 +233,7 @@ class Zone(State):
 		self.fade_surf.draw(screen)
 
 		self.game.render_text(str(round(self.game.clock.get_fps(), 2)), WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.1))
-		self.game.render_text(self.player.state, WHITE, self.game.small_font, RES/2)
+		self.game.render_text(self.gun_sprite, WHITE, self.game.small_font, RES/2)
 		# self.game.render_text(self.player.invincible, WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.9))
 		
 		

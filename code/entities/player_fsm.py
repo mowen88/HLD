@@ -15,7 +15,7 @@ class Idle:
 		if not player.on_ground:
 			return FallDeath(self.direction)
 
-		if keys[pygame.K_RCTRL] and player.game.current_juice >= GUN_DATA[player.gun]['cost']:
+		if ACTIONS['right_ctrl'] and player.reload_timer == 0:
 			return Shoot(player, self.direction)
 
 		if ACTIONS['space']:
@@ -53,7 +53,7 @@ class Move:
 			player.on_ground = False
 			return FallDeath(self.direction)
 
-		if keys[pygame.K_RCTRL] and player.game.current_juice >= GUN_DATA[player.gun]['cost']:
+		if ACTIONS['right_ctrl'] and player.reload_timer == 0:
 			return Shoot(player, self.direction)
 
 		if ACTIONS['space']:
@@ -158,6 +158,7 @@ class Attack:
 		self.direction = player.get_direction()
 
 		player.zone.create_melee()
+		player.kill_gun()
 
 	def state_logic(self, player):
 
@@ -189,44 +190,53 @@ class Shoot:
 	def __init__(self, player, direction):
 
 		player.frame_index = 0
-		self.timer = GUN_DATA[player.gun]['cooldown']
+
+		# if gun not automatic reset shoot button
+		ACTIONS['right_ctrl'] = False
+	
 		self.lunge_speed = GUN_DATA[player.gun]['knockback']
 		self.get_current_direction = pygame.mouse.get_pos()
 		player.vel = player.zone.get_distance_direction_and_angle(player.hitbox.center, self.get_current_direction)[1] * self.lunge_speed * -1
 		player.angle = player.zone.get_distance_direction_and_angle(player.hitbox.center, self.get_current_direction)[2]
 		self.direction = player.get_direction()
 
-		player.zone.create_gun()
-		
+		# emit bullets
 		player.add_subtract_juice(GUN_DATA[player.gun]['cost'], 'sub')
 		if player.gun == 'pistol': player.zone.create_player_bullet()			
 		else: player.zone.create_railgun_beam()
+
+		# create gun sprite
+		player.kill_gun()
+		player.zone.create_gun()
+		player.guns_out_timer = 100
+		player.reload_timer = GUN_DATA[player.gun]['cooldown']
 		
 	def state_logic(self, player):
 
+		if ACTIONS['left_click'] and player.attack_count < 3:
+			return Attack(player, self.direction)
+
 		if ACTIONS['right_click']:
 			if player.zone.gun_sprite:
-				player.zone.gun_sprite.kill()
-			player.zone.gun_sprite = None
+				player.kill_gun()
 			return Dash(player, self.direction)
 
-		if self.timer < 0:
-			player.zone.gun_sprite.kill()
-			player.zone.gun_sprite = None
+		if player.vel.magnitude() < 0.1:
 			return Idle(player, self.direction)
 
 	def get_direction(self, player):
-		if 45 < player.zone.gun_sprite.angle < 135: self.direction = 'right'
-		elif 135 < player.zone.gun_sprite.angle < 225: self.direction = 'down'
-		elif 225 < player.zone.gun_sprite.angle < 315: self.direction = 'left'
-		else: self.direction = 'up'
+		if player.zone.gun_sprite is not None:
+			if 45 < player.zone.gun_sprite.angle < 135: self.direction = 'right'
+			elif 135 < player.zone.gun_sprite.angle < 225: self.direction = 'down'
+			elif 225 < player.zone.gun_sprite.angle < 315: self.direction = 'left'
+			else: self.direction = 'up'
+		else:
+			self.direction = player.get_direction()
 
 	def update(self, dt, player):
 		self.get_direction(player)
 		player.physics(dt)
 		player.animate(self.direction + '_dash', 0.2 * dt, 'end')
-		
-		self.timer -= dt
 
 		player.acc = pygame.math.Vector2()
 		self.lunge_speed -= 0.1 * dt

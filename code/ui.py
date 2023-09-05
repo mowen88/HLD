@@ -50,23 +50,23 @@ class UI:
 				box *= self.offset
 
 	def boss_health_display(self, screen):
-		if 'boss' in self.zone.name:
+		if self.zone.boss is not None: 
+			if self.zone.boss.name not in COMPLETED_DATA['bosses_defeated']:
 
-			health_bar_width = self.zone.boss.max_health * self.offset
-			start_x = (WIDTH - health_bar_width)//2
+				health_bar_width = self.zone.boss.max_health * self.offset
+				start_x = (WIDTH - health_bar_width)//2
 
-			for box in range(self.zone.boss.max_health):
-				if self.zone.boss.alive:
-					pygame.draw.rect(screen, BLACK, (start_x + box * self.offset, HEIGHT - 20, 10, 10), border_radius=2)
-					for box in range(self.zone.boss.health):
-						if box < self.zone.boss.health:
-							box *= self.offset
-							pygame.draw.rect(screen, PINK, (start_x + box, HEIGHT - 20, 10, 10), border_radius=2)
-				else:
-					screen.blit(self.mask_image, (start_x + box * self.offset, HEIGHT - 20, 10, 10))
-					self.mask_image.set_alpha(self.alpha)
-
-				
+				for box in range(self.zone.boss.max_health):
+					if self.zone.boss.alive:
+						pygame.draw.rect(screen, BLACK, (start_x + box * self.offset, HEIGHT - 20, 10, 10), border_radius=2)
+						for box in range(self.zone.boss.health):
+							if box < self.zone.boss.health:
+								box *= self.offset
+								pygame.draw.rect(screen, PINK, (start_x + box, HEIGHT - 20, 10, 10), border_radius=2)
+					else:
+						screen.blit(self.mask_image, (start_x + box * self.offset, HEIGHT - 20, 10, 10))
+						self.mask_image.set_alpha(self.alpha)
+		
 			
 	def flash_icon(self):
 		if self.zone.player.invincible:
@@ -104,7 +104,7 @@ class UI:
 			return
 	
 	def update(self, dt):
-		if self.zone.player.changing_weapon or ('boss' in self.zone.name and not self.zone.boss.alive):
+		if self.zone.player.changing_weapon or (self.zone.boss is not None and not self.zone.boss.alive):
 			self.alpha -= 12 * dt
 			self.gun_icon_size[0] += 4 * dt
 			self.gun_icon_size[1] += 4 * dt

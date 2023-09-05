@@ -2,7 +2,7 @@ import pygame
 
 FPS = 60
 TILESIZE = 16
-RES = WIDTH, HEIGHT = pygame.math.Vector2(512, 288)#(384, 216)#(512, 288)#(320, 180)#(480, 270)#(640, 360)#(960, 540)#(512, 288)
+RES = WIDTH, HEIGHT = pygame.math.Vector2(320, 180)#(384, 216)#(512, 288)#(320, 180)#(480, 270)#(640, 360)#(960, 540)#(512, 288)
 HALF_WIDTH, HALF_HEIGHT = RES/2
 
 #FONT = '../fonts/Pokemon Classic.ttf'
@@ -40,11 +40,12 @@ COMPLETED_DATA = {'cutscenes': [],
 				  'visited_zones': [],
 				  'health': [],
 				  'juice': [],
-				  'keys':[]}
+				  'keys':[],
+				  'bosses_defeated':[]}
 
 GUN_DATA = {
-	'pistol':{'cost': 11, 'damage': 1, 'cooldown': 20, 'knockback': 1},
-	'railgun':{'cost': 33, 'damage': 2, 'cooldown': 50, 'knockback': 2}
+	'pistol':{'cost': 11, 'damage': 1, 'cooldown': 10, 'knockback': 1},
+	'railgun':{'cost': 33, 'damage': 2, 'cooldown': 100, 'knockback': 2}
 }
 
 ENEMY_DATA = {
@@ -55,7 +56,7 @@ ENEMY_DATA = {
 # entry and exit data for zones, does not change
 ZONE_DATA = {
 	'start':{'bg_colour': YELLOW, '1': 'garden', '2': 'dungeon', '3':'datacentre'},
-	'garden':{'bg_colour': PINK,'1': 'crashsite', '2': 'dungeon', '3':'datacentre'},
+	'garden':{'bg_colour': PINK, '1': 'boss_room_1', '2': 'dungeon', '3':'datacentre'},
 	'dungeon':{'bg_colour': BLACK,'1':'garden', '2':'garden'},
 	'datacentre':{'bg_colour': GREEN,'1':'garden', '2':'garden', '3':'garden'},
 	'crashsite':{'bg_colour': LIGHT_GREEN,'1':'garden', '2':'dungeon', '3':'datacentre'},
@@ -97,6 +98,6 @@ LAYERS = {
 
 # key events
 ACTIONS = {'escape': False, 'space': False, 'up': False, 'down': False, 'left': False,
-			'right': False, 'return': False, 'right_shift': False, 'backspace': False, 'left_click': False, 
+			'right': False, 'return': False, 'right_ctrl': False, 'backspace': False, 'left_click': False, 
 			'right_click': False, 'scroll_up': False, 'scroll_down': False}
 

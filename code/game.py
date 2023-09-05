@@ -49,8 +49,8 @@ class Game:
                     ACTIONS['right'] = True
                 elif event.key == pygame.K_SPACE:
                     ACTIONS['space'] = True
-                elif event.key == pygame.K_RSHIFT:
-                    ACTIONS['right_shift'] = True
+                elif event.key == pygame.K_RCTRL:
+                    ACTIONS['right_ctrl'] = True
                 elif event.key == pygame.K_RETURN:
                     ACTIONS['return'] = True
                 elif event.key == pygame.K_BACKSPACE:
@@ -67,8 +67,8 @@ class Game:
                     ACTIONS['right'] = False
                 elif event.key == pygame.K_SPACE:
                     ACTIONS['space'] = False
-                elif event.key == pygame.K_RSHIFT:
-                    ACTIONS['right_shift'] = False
+                elif event.key == pygame.K_RCTRL:
+                    ACTIONS['right_ctrl'] = False
                 elif event.key == pygame.K_RETURN:
                     ACTIONS['return'] = False
                 elif event.key == pygame.K_BACKSPACE:

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="20" height="12" tilewidth="16" tileheight="16" infinite="0" nextlayerid="25" nextobjectid="65">
+<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="20" height="12" tilewidth="16" tileheight="16" infinite="0" nextlayerid="25" nextobjectid="67">
  <editorsettings>
   <export target="boss_room_1.csv" format="csv"/>
  </editorsettings>
@@ -56,10 +56,13 @@
  </objectgroup>
  <objectgroup id="24" name="triggers"/>
  <objectgroup id="5" name="entries">
-  <object id="44" name="0" x="64" y="144">
+  <object id="45" name="3" x="272" y="64">
    <point/>
   </object>
-  <object id="45" name="3" x="272" y="64">
+  <object id="65" name="0" x="97.6667" y="137">
+   <point/>
+  </object>
+  <object id="66" name="1" x="32" y="128">
    <point/>
   </object>
  </objectgroup>
