@@ -358,7 +358,7 @@ class Grenade(AnimatedObject):
 
 	def grenade_falling(self):
 		for sprite in self.zone.void_sprites:
-			if sprite.hitbox.colliderect(self.rect):
+			if sprite.hitbox.colliderect(self.rect) and abs(self.vel.x) < 0.1:
 				self.falling = True
 
 	def collisions(self, direction):
