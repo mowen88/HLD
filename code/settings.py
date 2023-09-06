@@ -27,7 +27,7 @@ YELLOW = ((224, 225, 146))
 
 # data that is dynamic and changes throughout play
 
-PLAYER_DATA = {'current_zone': 'boss_room_1',
+PLAYER_DATA = {'current_zone': 'garden',
  				'entry_pos': '0', 
  				'keys': ['blue_door'],
  				'gun_index': 0, 
@@ -49,7 +49,7 @@ GUN_DATA = {
 }
 
 ENEMY_DATA = {
-	'grunt':{'speed': 0.1, 'lunge_speed': 2, 'knockback_speed': 1, 'damage': 1, 'health': 3, 'telegraphing_time': 20, 'attack_radius': 30, 'pursue_radius': 110},
+	'grunt':{'speed': 0.1, 'lunge_speed': 2, 'knockback_speed': 1, 'damage': 1, 'health': 6, 'telegraphing_time': 40, 'attack_radius': 30, 'pursue_radius': 110},
 	'hound':{'speed': 0.2, 'lunge_speed': 3, 'knockback_speed': 2, 'damage': 1, 'health': 2, 'telegraphing_time': 15, 'attack_radius': 60, 'pursue_radius': 90},
 	'boss1':{'speed': 0.1, 'lunge_speed': 3, 'knockback_speed': 2, 'damage': 0, 'health': 10, 'telegraphing_time': 50, 'attack_radius': 70, 'pursue_radius': 200}
 }

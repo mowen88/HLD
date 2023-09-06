@@ -19,6 +19,7 @@ class Grunt(NPC):
 
 
 	def update(self, dt):
+		self.explosion_damage_logic()
 		self.invincibility(dt)
 		if not self.zone.cutscene_running: self.state_logic()
 		self.state.update(dt, self)

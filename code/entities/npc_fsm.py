@@ -9,7 +9,9 @@ class Idle:
 		if npc.alive:
 
 			npc.explosion_damage_logic()
-			
+			if npc.knocked_back:
+				return Knockback(npc)
+
 			if npc.zone.get_distance_direction_and_angle(npc.hitbox.center, npc.zone.player.hitbox.center - npc.zone.rendered_sprites.offset)[0] < npc.pursue_radius:
 				return Move(npc)
 		else:
@@ -26,6 +28,9 @@ class Move:
 		if npc.alive:
 
 			npc.explosion_damage_logic()
+
+			if npc.knocked_back:
+				return Knockback(npc)
 
 			if npc.zone.melee_sprite or npc.zone.gun_sprite:
 				return Evade(npc)
@@ -55,6 +60,10 @@ class Evade:
 
 	def state_logic(self, npc):
 		if npc.alive:
+
+			npc.explosion_damage_logic()
+			if npc.knocked_back:
+				return Knockback(npc)
 
 			if self.timer <= 0:
 				return Move(npc)
@@ -89,6 +98,11 @@ class Telegraphing:
 
 	def state_logic(self, npc):
 		if npc.alive:
+
+			npc.explosion_damage_logic()
+			if npc.knocked_back:
+				return Knockback(npc)
+
 			if npc.zone.get_distance_direction_and_angle(npc.hitbox.center, npc.zone.player.hitbox.center - npc.zone.rendered_sprites.offset)[0] > npc.pursue_radius:
 				return Move(npc)
 
@@ -118,6 +132,11 @@ class Attack:
 
 	def state_logic(self, npc):
 		if npc.alive:
+
+			npc.explosion_damage_logic()
+			if npc.knocked_back:
+				return Knockback(npc)
+
 			if self.timer < 0 or npc.vel.magnitude() < 0.1:
 				if npc.get_collide_list(npc.zone.void_sprites):
 					npc.dashing = False
@@ -192,11 +211,13 @@ class Jump:
 
 class Knockback:
 	def __init__(self, npc):
+
 		npc.dashing = True
 		self.frame_index = 0
+		self.timer = 100
 		self.current_direction = self.get_direction(npc)
 		self.knockback_speed = npc.knockback_speed
-		self.get_current_direction = npc.zone.player.hitbox.center - npc.zone.rendered_sprites.offset #npc.zone.player.rect.center - npc.zone.rendered_sprites.offset
+		self.get_current_direction = npc.knockback_direction - npc.zone.rendered_sprites.offset #npc.zone.player.rect.center - npc.zone.rendered_sprites.offset
 		npc.vel = npc.zone.get_distance_direction_and_angle(npc.hitbox.center, self.get_current_direction)[1] * self.knockback_speed *-1
 		npc.angle = npc.zone.get_distance_direction_and_angle(npc.hitbox.center, self.get_current_direction)[2]
 
@@ -206,6 +227,10 @@ class Knockback:
 		return direction
 
 	def state_logic(self, npc):
+		if self.timer <= 0 and npc.alive:
+			npc.knocked_back = False
+			npc.knockback_direction = (0,0)
+			return Idle(npc)
 
 		if npc.vel.magnitude() < 0.1:
 			if npc.get_collide_list(npc.zone.void_sprites):
@@ -216,6 +241,8 @@ class Knockback:
 				npc.vel = pygame.math.Vector2()
 
 	def update(self, dt, npc):
+
+		self.timer -= dt
 		
 		npc.physics(dt)
 		npc.animate('death', 0.2 * dt, False)

@@ -349,29 +349,71 @@ class Grenade(AnimatedObject):
 		super().__init__(game, zone, groups, pos, z, path)
 
 		self.speed = 6
-		self.vel = self.zone.get_distance_direction_and_angle(self.rect.center, pygame.mouse.get_pos())[1] * self.speed
-		self.pos = pygame.math.Vector2(self.rect.center)
-		self.damage = 1
+		self.vel = self.zone.get_distance_direction_and_angle(self.rect.center, pygame.mouse.get_pos())[1]
+		self.pos = pygame.math.Vector2(self.rect.topleft)
+		self.damage = 2
+		self.knockback_power = 5
+		self.falling = False
+		self.old_rect = self.rect.copy()
 
-	def collide(self):
+	def grenade_falling(self):
+		for sprite in self.zone.void_sprites:
+			if sprite.hitbox.colliderect(self.rect):
+				self.falling = True
+
+	def collisions(self, direction):
 		for sprite in self.zone.block_sprites:
-			if self.rect.colliderect(sprite.hitbox):
-				self.vel = self.vel * -1
+			if sprite.hitbox.colliderect(self.rect) and not self.falling:
+				if direction == 'x':
+					if self.rect.right >= sprite.hitbox.left and self.old_rect.right <= sprite.hitbox.right:
+						self.rect.right = sprite.hitbox.left
+						self.pos.x = self.rect.x
+						self.vel.x *= -1
+
+					if self.rect.left <= sprite.hitbox.right and self.old_rect.left >= sprite.hitbox.right:
+						self.rect.left = sprite.hitbox.right
+						self.pos.x = self.rect.x
+						self.vel.x *= -1
+
+				if direction == 'y':
+					if self.rect.bottom >= sprite.hitbox.top and self.old_rect.bottom <= sprite.hitbox.top:
+						self.rect.bottom = sprite.hitbox.top
+						self.pos.y = self.rect.y
+						self.vel.y *= -1
+
+					if self.rect.top <= sprite.hitbox.bottom and self.old_rect.top >= sprite.hitbox.bottom:
+						self.rect.top = sprite.hitbox.bottom
+						self.pos.y = self.rect.y
+						self.vel.y *= -1
 
 	def animate(self, animation_speed):
 		self.frame_index += animation_speed
 		self.image = self.frames[int(self.frame_index)]
 		if self.frame_index >= len(self.frames) -1:
-			self.zone.create_explosion(self.rect.center)
+			self.zone.create_explosion(self.rect.center, self.damage, self.knockback_power)
 			self.zone.screenshaking = True
 			self.kill()
 
 	def update(self, dt):
-		self.collide()
+		self.old_rect = self.rect.copy()
+		
+		self.grenade_falling()
+		if self.falling:
+			self.z = LAYERS['BG2']
+			self.vel.y += 0.5 * dt
+
+		self.speed *= 0.95
+
+		self.pos.x += self.vel.x * self.speed * dt
+		self.rect.centerx = round(self.pos.x)
+		self.collisions('x')
+		self.pos.y += self.vel.y * self.speed * dt
+		self.rect.centery = round(self.pos.y)
+		self.collisions('y')
+
+		
 		self.animate(0.25 * dt)
-		self.vel *= 0.95
-		self.pos += self.vel * dt
-		self.rect.center = self.pos
+		
 
 class AttackableTerrain(AnimatedObject):
 	def __init__(self, game, zone, groups, pos, z, path):

@@ -12,8 +12,11 @@ class Particle(pygame.sprite.Sprite):
 		self.rect = self.image.get_rect(topleft = pos)
 
 class Explosion(AnimatedObject):
-	def __init__(self, game, zone, groups, pos, z, path):
+	def __init__(self, game, zone, groups, pos, z, path, damage, knockback_power):
 		super().__init__(game, zone, groups, pos, z, path)
+
+		self.damage = damage
+		self.knockback_power = knockback_power
 
 	def animate(self, animation_speed):
 

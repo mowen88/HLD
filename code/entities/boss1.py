@@ -14,7 +14,7 @@ class Boss1(NPC):
 		self.lunge_speed = self.data['lunge_speed']
 		self.knockback_speed = self.data['knockback_speed']
 		self.health = self.data['health']
-		self.max_health = self.data['health']
+		self.max_health = self.health
 		self.damage = self.data['damage']
 		self.attack_radius = self.data['attack_radius']
 		self.pursue_radius = self.data['pursue_radius']
@@ -177,7 +177,7 @@ class Knockback:
 		self.frame_index = 0
 		self.current_direction = self.get_direction(npc)
 		self.knockback_speed = npc.knockback_speed
-		self.get_current_direction = npc.zone.player.hitbox.center - npc.zone.rendered_sprites.offset #npc.zone.player.rect.center - npc.zone.rendered_sprites.offset
+		self.get_current_direction = npc.knockback_direction - npc.zone.rendered_sprites.offset #npc.zone.player.rect.center - npc.zone.rendered_sprites.offset
 		npc.vel = npc.zone.get_distance_direction_and_angle(npc.hitbox.center, self.get_current_direction)[1] * self.knockback_speed *-1
 		npc.angle = npc.zone.get_distance_direction_and_angle(npc.hitbox.center, self.get_current_direction)[2]
 

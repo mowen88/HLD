@@ -14,6 +14,8 @@ class NPC(pygame.sprite.Sprite):
 		self.invincible = False
 		self.invincibility_timer = 0
 		self.invincile_time = 6
+		self.knocked_back = False
+		self.knockback_direction = (0,0)
 		self.alive = True
 		self.animations = {'idle':[], 'telegraphing':[], 'death':[], 'jumping':[], 'landing':[]}
 
@@ -35,10 +37,12 @@ class NPC(pygame.sprite.Sprite):
 		self.vel = pygame.math.Vector2()
 		self.speed = 0.6
 
+
 		self.dashing = False
 		self.on_ground = True
 		self.on_platform = False
 		self.angle = 0
+
 
 	def import_imgs(self):
 		for animation in self.animations.keys():
@@ -73,16 +77,23 @@ class NPC(pygame.sprite.Sprite):
 			self.vel = pygame.math.Vector2()
 
 	def explosion_damage_logic(self):
-		for sprite in self.zone.explosion_sprites:
-			if not self.invincible and self.alive and sprite.frame_index < 4:
-				if self.zone.get_distance_direction_and_angle(self.rect.center, sprite.rect.center)[0] < 80:
-					self.health -= 1
+		hits = pygame.sprite.spritecollide(self, self.zone.explosion_sprites, False, pygame.sprite.collide_circle_ratio(0.8))
+		if not self.invincible and self.alive:
+			for sprite in self.zone.explosion_sprites:
+				if hits and sprite.frame_index < 1:
+					self.health -= sprite.damage
 					self.invincible = True
+					self.get_knockback(sprite)
 					if self.health <= 0:
 						self.alive = False
+						self.invincible = False
+						self.zone.enemy_sprites.remove(self)
+						if self in self.zone.boss_sprites:
+							COMPLETED_DATA['bosses_defeated'].append(self.name)
 
-	def knockback(self, other_sprite):
-		self.zone.get_distance_direction_and_angle(other_sprite.rect.center, self.rect.center)[1]
+	def get_knockback(self, other_sprite):
+		self.knocked_back = True
+		self.knockback_direction = other_sprite.rect.center
 
 	def collisions(self, direction, group):
 		hitlist = self.get_collide_list(group)
@@ -103,7 +114,6 @@ class NPC(pygame.sprite.Sprite):
 		for sprite in group:
 			if sprite.hitbox.colliderect(self.hitbox): hitlist.append(sprite)
 		return hitlist
-
 
 	def physics(self, dt):
 

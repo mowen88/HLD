@@ -89,12 +89,11 @@ class Zone(State):
 		self.player_bullet_sprites.add(self.bullet)
 
 	def create_player_grenade(self):
-		self.grenade = Grenade(self.game, self, [self.updated_sprites, self.rendered_sprites], self.player.hitbox.center, LAYERS['player'], f'../assets/weapons/grenade')
-		self.grenade_sprites.add(self.grenade)
+		Grenade(self.game, self, [self.grenade_sprites, self.updated_sprites, self.rendered_sprites], self.player.hitbox.center, LAYERS['player'], f'../assets/weapons/grenade')
 
-	def create_explosion(self, pos):
-		self.explosion = Explosion(self.game, self, [self.updated_sprites, self.rendered_sprites], pos, LAYERS['player'], f'../assets/particles/explosion')
-		self.explosion_sprites.add(self.explosion)
+	def create_explosion(self, pos, damage, knockback_power):
+		Explosion(self.game, self, [self.explosion_sprites, self.updated_sprites, self.rendered_sprites], pos, LAYERS['player'], f'../assets/particles/explosion', damage, knockback_power)
+
 
 	def create_railgun_beam(self):
 		angle = math.atan2(pygame.mouse.get_pos()[1]-self.player.hitbox.centery + self.rendered_sprites.offset[1], pygame.mouse.get_pos()[0]-self.player.hitbox.centerx + self.rendered_sprites.offset[0])
@@ -125,14 +124,20 @@ class Zone(State):
 							target.health -= bullet.damage
 							bullet.kill()
 							target.invincible = True
+							if bullet.damage > 2:
+								target.get_knockback(self.player)
 							if target.health <= 0:
+								target.get_knockback(self.player)
 								target.invincible = False
 								target.alive = False
 								self.enemy_sprites.remove(target)
+								if target in self.boss_sprites:
+									COMPLETED_DATA['bosses_defeated'].append(target.name)
 
 				for sprite in self.block_sprites:
 					if bullet.rect.colliderect(sprite.hitbox) and sprite not in self.attackable_sprites:
 						bullet.kill()
+
 
 	def collect(self):
 		if self.player.z == LAYERS['player'] and not self.cutscene_running:
@@ -225,10 +230,6 @@ class Zone(State):
 		if ACTIONS['return']: 
 			Map(self.game, self).enter_state()
 			#self.exit_state()
-			self.game.reset_keys()
-
-		if ACTIONS['space']:
-			self.activate_platforms()
 			self.game.reset_keys()
 
 		self.updated_sprites.update(dt)

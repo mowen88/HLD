@@ -111,12 +111,13 @@ class Player(NPC):
 	def player_attacking_logic(self):
 		if self.zone.melee_sprite:
 			for target in self.zone.enemy_sprites:
-				if self.zone.melee_sprite.rect.colliderect(target.hitbox) and self.zone.melee_sprite.frame_index < 1:
+				if self.zone.melee_sprite.rect.colliderect(target.hitbox) and self.zone.melee_sprite.frame_index < 2:
 					if not target.invincible and target.alive:
 						target.invincible = True
 						self.add_subtract_juice(11, 'add')
 						target.health -= 1
 						if target.health <= 0:
+							target.knockback_direction = self.rect.center
 							target.alive = False
 							target.invincible = False
 							self.zone.enemy_sprites.remove(target)
@@ -151,7 +152,7 @@ class Player(NPC):
 		if self.game.current_juice > PLAYER_DATA['max_juice']: self.game.current_juice = PLAYER_DATA['max_juice']
 
 	def update(self, dt):
-		if ACTIONS['right_ctrl']:
+		if ACTIONS['space']:
 			self.zone.create_player_grenade()
 			self.game.reset_keys()
 		self.invincibility(dt)
