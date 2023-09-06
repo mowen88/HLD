@@ -27,7 +27,7 @@ YELLOW = ((224, 225, 146))
 
 # data that is dynamic and changes throughout play
 
-PLAYER_DATA = {'current_zone': 'garden',
+PLAYER_DATA = {'current_zone': 'boss_room_1',
  				'entry_pos': '0', 
  				'keys': ['blue_door'],
  				'gun_index': 0, 
@@ -98,6 +98,6 @@ LAYERS = {
 
 # key events
 ACTIONS = {'escape': False, 'space': False, 'up': False, 'down': False, 'left': False,
-			'right': False, 'return': False, 'right_ctrl': False, 'backspace': False, 'left_click': False, 
+			'right': False, 'return': False, 'right_ctrl': False, 'backspace': False, 'g': False, 'left_click': False, 
 			'right_click': False, 'scroll_up': False, 'scroll_down': False}
 

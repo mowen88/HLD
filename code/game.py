@@ -55,6 +55,8 @@ class Game:
                     ACTIONS['return'] = True
                 elif event.key == pygame.K_BACKSPACE:
                     ACTIONS['backspace'] = True
+                elif event.key == pygame.K_g:
+                    ACTIONS['g'] = True
 
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_DOWN or event.key == pygame.K_s:
@@ -73,6 +75,8 @@ class Game:
                     ACTIONS['return'] = False
                 elif event.key == pygame.K_BACKSPACE:
                     ACTIONS['backspace'] = False
+                elif event.key == pygame.K_g:
+                    ACTIONS['g'] = False
 
             if event.type == pygame.MOUSEWHEEL:
                 if event.y == 1:

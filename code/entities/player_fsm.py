@@ -15,6 +15,9 @@ class Idle:
 		if not player.on_ground:
 			return FallDeath(self.direction)
 
+		if ACTIONS['g']:
+			player.zone.create_player_grenade()
+
 		if ACTIONS['right_ctrl'] and player.game.current_juice >= GUN_DATA[player.gun]['cost'] and player.reload_timer == 0:
 			return Shoot(player, self.direction)
 
@@ -52,6 +55,9 @@ class Move:
 		if player.get_collide_list(player.zone.void_sprites):
 			player.on_ground = False
 			return FallDeath(self.direction)
+
+		if ACTIONS['g']:
+			player.zone.create_player_grenade()
 
 		if ACTIONS['right_ctrl'] and player.game.current_juice >= GUN_DATA[player.gun]['cost'] and player.reload_timer == 0:
 			return Shoot(player, self.direction)
