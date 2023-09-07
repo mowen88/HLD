@@ -1,7 +1,7 @@
 import pygame, sys
 from settings import *
 from os import walk
-from intro import Intro
+from main_menu import MainMenu
 
 class Game:
     def __init__(self):
@@ -11,7 +11,7 @@ class Game:
         self.clock = pygame.time.Clock()
 
         self.monitor_size = [pygame.display.Info().current_w, pygame.display.Info().current_h]
-        self.screen = pygame.display.set_mode((RES), pygame.FULLSCREEN|pygame.SCALED)
+        self.screen = pygame.display.set_mode((RES))#, pygame.FULLSCREEN|pygame.SCALED)
 
         self.running = True
 
@@ -111,8 +111,8 @@ class Game:
             ACTIONS[value] = False
 
     def load_states(self):
-        self.intro = Intro(self)
-        self.stack.append(self.intro)
+        self.start_menu = MainMenu(self)
+        self.stack.append(self.start_menu)
 
     def get_folder_images(self, path):
         surf_list = []
