@@ -26,14 +26,15 @@ MAGENTA = ((153, 60, 139))
 YELLOW = ((224, 225, 146))
 
 # data that is dynamic and changes throughout play
-PLAYER_DATA = {'current_zone': 'scene_2',
+PLAYER_DATA = {'current_zone': 'crashsite',
  				'entry_pos': '0', 
- 				'keys': ['blue_door'],
+ 				'keys': [],
  				'gun_index': 0, 
  				'max_health': 4,
  				'max_juice': 99,
  				'heal_cost': 11,
- 				'partial_healths': 0}
+ 				'partial_healths': 0,
+ 				'time': 0}
 
 COMPLETED_DATA = {'cutscenes': [],
 				  'visited_zones': [],

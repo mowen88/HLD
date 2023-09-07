@@ -16,11 +16,13 @@ class Zone(State):
 
 		self.game = game
 		self.name = name
+		
 		self.entry_point = entry_point
 		self.zone_size = self.get_zone_size()
 		
 		PLAYER_DATA.update({'current_zone': self.name, 'entry_pos': self.entry_point})
-		COMPLETED_DATA['visited_zones'].append(self.name)
+		if self.name not in COMPLETED_DATA['visited_zones']:
+			COMPLETED_DATA['visited_zones'].append(self.name)
 
 		#sprites
 		self.melee_sprite = None

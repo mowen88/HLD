@@ -1,6 +1,7 @@
 import pygame, sys, json
 from settings import *
 from os import walk
+from timer import Timer
 from main_menu import MainMenu
 
 class Game:
@@ -11,7 +12,7 @@ class Game:
         self.clock = pygame.time.Clock()
 
         self.monitor_size = [pygame.display.Info().current_w, pygame.display.Info().current_h]
-        self.screen = pygame.display.set_mode((RES))#, pygame.FULLSCREEN|pygame.SCALED)
+        self.screen = pygame.display.set_mode((RES), pygame.FULLSCREEN|pygame.SCALED)
 
         self.running = True
 
@@ -26,9 +27,23 @@ class Game:
         #stats
         self.current_health = PLAYER_DATA['max_health']
         self.current_juice = PLAYER_DATA['max_juice']
+        
+        self.last_time = PLAYER_DATA['time']
+        self.timer = Timer(self)
+        
+        # slot info
+        self.visited_zones = len(COMPLETED_DATA['visited_zones'])
+        self.max_zones = len(ZONE_DATA.keys())
+        self.percent_complete = f"{int(self.visited_zones/self.max_zones * 100)} %"
 
-        # active slot
-        self.slot = 1
+        self.slot = None
+        
+        self.slot_data = {
+                        '1':{"time_spent": None, "percent complete": f"{int(self.visited_zones/self.max_zones * 100)} %"},
+                        '2':{"time_spent": None, "percent complete": f"{int(self.visited_zones/self.max_zones * 100)} %"},
+                        '3':{"time_spent": None, "percent complete": f"{int(self.visited_zones/self.max_zones * 100)} %"}
+                        }
+
 
     def write_data(self, dictionary, data_type):
         with open(f"{data_type}_save_file_{self.slot}", "w") as outfile:
@@ -43,7 +58,19 @@ class Game:
                 elif data_type == 'completed_data':
                     COMPLETED_DATA.update(json_object)
 
+                self.visited_zones = len(COMPLETED_DATA['visited_zones'])
+                self.slot_data[self.slot]['percent complete'] = f"{int(self.visited_zones/self.max_zones * 100)} % complete"
+
             print(json_object)
+
+    def quit_game_write_data(self):
+        if self.slot is not None and self.slot in "123":
+            self.slot_data[self.slot]["time_spent"] = self.timer.add_times(str(PLAYER_DATA['time']), self.timer.get_elapsed_time()) 
+            PLAYER_DATA.update({'time': self.slot_data[self.slot]["time_spent"]})
+            self.write_data(PLAYER_DATA, 'player_data')
+            self.write_data(COMPLETED_DATA,'completed_data')
+        print(PLAYER_DATA)
+        self.running = False
  
     def get_events(self):
         for event in pygame.event.get(): 
@@ -55,10 +82,7 @@ class Game:
 
                 if event.key == pygame.K_ESCAPE:
                     ACTIONS['escape'] = True
-                    self.write_data(PLAYER_DATA, 'player_data')
-                    self.write_data(COMPLETED_DATA,'completed_data')
-                    self.running = False
-               
+                    self.quit_game_write_data()
                 elif event.key == pygame.K_DOWN or event.key == pygame.K_s:
                     ACTIONS['down'] = True
                 elif event.key == pygame.K_UP or event.key == pygame.K_w:
@@ -162,16 +186,25 @@ class Game:
 
     def update(self, dt):
         pygame.display.set_caption(str(round(self.clock.get_fps(), 2)))
+        self.timer.update(dt)
         self.stack[-1].update(dt)
+
+        if ACTIONS['space']:
+            self.timer.get_elapsed_time()
 
     def draw(self, screen): 
         #scaled_screen = pygame.transform.scale(self.screen, (self.window.get_size()))
         self.stack[-1].draw(screen)
-        self.render_text(self.slot, CYAN, self.big_font, RES/2) 
+        #if self.slot is not None:
+
+        self.render_text(PLAYER_DATA['time'], CYAN, self.big_font, RES/2)
+        self.render_text(self.timer.get_elapsed_time(), CYAN, self.big_font, (HALF_WIDTH, HALF_HEIGHT + 20))
+        self.render_text(self.slot, CYAN, self.big_font, (HALF_WIDTH, HALF_HEIGHT + 40))  
+        #self.render_text(self.slot, CYAN, self.big_font, RES/2) 
         pygame.display.flip()
 
     def main_loop(self):
-        dt = self.clock.tick() * 60 * 0.001
+        dt = self.clock.tick(FPS) * 60 * 0.001
         self.get_events()
         self.update(dt)
         self.draw(self.screen) 
