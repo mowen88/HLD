@@ -49,7 +49,7 @@ class MainMenu(State):
 			OptionsMenu(self.game).enter_state()
 		elif state == 'main_menu':
 			MainMenu(self.game).enter_state()
-		elif state == 'start_game_menu':
+		elif state in '123':
 			StartGameMenu(self.game).enter_state()
 		else:
 			Zone(self.game, PLAYER_DATA['current_zone'], PLAYER_DATA['entry_pos']).enter_state()
@@ -72,16 +72,25 @@ class SlotMenu(MainMenu):
 		super().__init__(game)
 
 		self.buttons = {
-				'Slot 1': [(HALF_WIDTH, HALF_HEIGHT - self.padding * 1.5), 'start_game_menu'],
-				'Slot 2': [(HALF_WIDTH, HALF_HEIGHT - self.padding * 0.5), 'start_game_menu'],
-				'Slot 3': [(HALF_WIDTH, HALF_HEIGHT + self.padding * 0.5), 'start_game_menu'],
+				'Slot 1': [(HALF_WIDTH, HALF_HEIGHT - self.padding * 1.5), '1'],
+				'Slot 2': [(HALF_WIDTH, HALF_HEIGHT - self.padding * 0.5), '2'],
+				'Slot 3': [(HALF_WIDTH, HALF_HEIGHT + self.padding * 0.5), '3'],
 				'Back': [(HALF_WIDTH, HALF_HEIGHT + self.padding * 1.5), 'main_menu'],
 				}
 
+	def get_slot(self):
+		self.game.slot = self.next_menu
+		self.game.read_data('player_data')
+		self.game.read_data('completed_data')
+		print(PLAYER_DATA)
+		print(COMPLETED_DATA)
+
 	def update(self, dt):
+		self.game.slot = self.next_menu
 		self.transition_screen.update(dt)
 		if self.next_menu is not None:
 			self.transitioning = True
+			self.get_slot()
 
 	def draw(self, screen):
 		screen.fill(BLACK)
@@ -120,7 +129,7 @@ class StartGameMenu(MainMenu):
 		super().__init__(game)
 
 		self.buttons = {
-				'Continue': [(HALF_WIDTH, HALF_HEIGHT - self.padding * 0.5), 'start_game'],
+				'Continue': [(HALF_WIDTH, HALF_HEIGHT - self.padding * 0.5), 'GO!!!'],
 				'Back': [(HALF_WIDTH, HALF_HEIGHT + self.padding * 0.5), 'slot_menu']
 				}
 

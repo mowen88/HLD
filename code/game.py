@@ -1,4 +1,4 @@
-import pygame, sys
+import pygame, sys, json
 from settings import *
 from os import walk
 from main_menu import MainMenu
@@ -26,6 +26,24 @@ class Game:
         #stats
         self.current_health = PLAYER_DATA['max_health']
         self.current_juice = PLAYER_DATA['max_juice']
+
+        # active slot
+        self.slot = 1
+
+    def write_data(self, dictionary, data_type):
+        with open(f"{data_type}_save_file_{self.slot}", "w") as outfile:
+            json.dump(dictionary, outfile)
+
+    def read_data(self, data_type):
+        if self.slot is not None:
+            with open(f"{data_type}_save_file_{self.slot}", 'r') as readfile:
+                json_object = json.load(readfile)
+                if data_type == 'player_data':
+                    PLAYER_DATA.update(json_object)
+                elif data_type == 'completed_data':
+                    COMPLETED_DATA.update(json_object)
+
+            print(json_object)
  
     def get_events(self):
         for event in pygame.event.get(): 
@@ -37,6 +55,8 @@ class Game:
 
                 if event.key == pygame.K_ESCAPE:
                     ACTIONS['escape'] = True
+                    self.write_data(PLAYER_DATA, 'player_data')
+                    self.write_data(COMPLETED_DATA,'completed_data')
                     self.running = False
                
                 elif event.key == pygame.K_DOWN or event.key == pygame.K_s:
@@ -147,13 +167,15 @@ class Game:
     def draw(self, screen): 
         #scaled_screen = pygame.transform.scale(self.screen, (self.window.get_size()))
         self.stack[-1].draw(screen)
+        self.render_text(self.slot, CYAN, self.big_font, RES/2) 
         pygame.display.flip()
 
     def main_loop(self):
         dt = self.clock.tick() * 60 * 0.001
         self.get_events()
         self.update(dt)
-        self.draw(self.screen)        
+        self.draw(self.screen) 
+
 
 if __name__ == "__main__":
     game = Game()
