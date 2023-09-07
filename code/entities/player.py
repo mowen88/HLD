@@ -111,7 +111,7 @@ class Player(NPC):
 	def player_attacking_logic(self):
 		if self.zone.melee_sprite:
 			for target in self.zone.enemy_sprites:
-				if self.zone.melee_sprite.rect.colliderect(target.hitbox) and self.zone.melee_sprite.frame_index < 2:
+				if self.zone.melee_sprite.rect.colliderect(target.hitbox) and self.zone.melee_sprite.frame_index < 1:
 					if not target.invincible and target.alive:
 						target.invincible = True
 						self.add_subtract_juice(11, 'add')

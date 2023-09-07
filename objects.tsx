@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.5" tiledversion="1.7.2" name="objects" tilewidth="48" tileheight="48" tilecount="15" columns="0">
+<tileset version="1.5" tiledversion="1.7.2" name="objects" tilewidth="48" tileheight="48" tilecount="16" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0">
   <image width="48" height="48" source="objects/big tree.png"/>
@@ -45,5 +45,8 @@
  </tile>
  <tile id="15">
   <image width="32" height="32" source="objects/medium tree 3.png"/>
+ </tile>
+ <tile id="16">
+  <image width="16" height="32" source="objects/small_bust.png"/>
  </tile>
 </tileset>

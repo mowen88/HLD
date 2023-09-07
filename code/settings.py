@@ -27,7 +27,7 @@ YELLOW = ((224, 225, 146))
 
 # data that is dynamic and changes throughout play
 
-PLAYER_DATA = {'current_zone': 'boss_room_1',
+PLAYER_DATA = {'current_zone': 'scene_2',
  				'entry_pos': '0', 
  				'keys': ['blue_door'],
  				'gun_index': 0, 
@@ -59,7 +59,8 @@ ZONE_DATA = {
 	'garden':{'bg_colour': PINK, '1': 'boss_room_1', '2': 'dungeon', '3':'datacentre'},
 	'dungeon':{'bg_colour': BLACK,'1':'garden', '2':'garden'},
 	'datacentre':{'bg_colour': GREEN,'1':'garden', '2':'garden', '3':'garden'},
-	'crashsite':{'bg_colour': LIGHT_GREEN,'1':'garden', '2':'dungeon', '3':'datacentre'},
+	'crashsite':{'bg_colour': LIGHT_GREEN,'1':'garden', '2':'dungeon', '3':'scene_2'},
+	'scene_2':{'bg_colour': LIGHT_GREEN,'1':'garden', '2':'garden', '3':'crashsite'},
 	'boss_room_1':{'bg_colour': YELLOW, '1': 'garden', '2': 'dungeon', '3':'garden'}
 }
 MAP_DATA = {
@@ -68,6 +69,7 @@ MAP_DATA = {
 	'dungeon':{'pos': (60,20)},
 	'datacentre':{'pos': (0,20)},
 	'crashsite':{'pos': (-20,-20)},
+	'scene_2':{'pos': (-50,-50)},
 	'boss_room_1':{'pos': (-50,-50)},
 }
 

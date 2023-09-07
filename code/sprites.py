@@ -90,6 +90,20 @@ class BG(Object):
 	# def update(self, dt):
 	# 	self.rect.topleft = (0 - self.offset[0] * self.parralax_value.x, 0 - self.offset[1] * self.parralax_value.y)
 
+class Cloud(BG):
+	def __init__(self, game, zone, groups, pos, z, surf, speed):
+		super().__init__(game, zone, groups, pos, z, surf)
+
+		self.speed = speed
+		self.vel = pygame.math.Vector2(self.speed)
+
+	def update(self, dt):
+		self.pos.x += self.vel.x * dt
+		self.rect.topleft = self.pos
+
+		if self.rect.x > self.zone.zone_size[0]:
+			self.pos.x = -self.rect.width
+
 class Void(Object):
 	def __init__(self, game, zone, groups, pos, z, surf = pygame.Surface((TILESIZE, TILESIZE))):
 		super().__init__(game, zone, groups, pos, z, surf)
@@ -358,7 +372,7 @@ class Grenade(AnimatedObject):
 
 	def grenade_falling(self):
 		for sprite in self.zone.void_sprites:
-			if sprite.hitbox.colliderect(self.rect) and abs(self.vel.x) < 0.1:
+			if sprite.hitbox.colliderect(self.rect):
 				self.falling = True
 
 	def collisions(self, direction):
@@ -429,10 +443,9 @@ class AttackableTerrain(AnimatedObject):
 			self.frame_index += animation_speed
 			if self.frame_index >= len(self.frames)-1: 
 				self.frame_index = len(self.frames)-1
-				self.z = LAYERS['floor']
+				self.z = LAYERS['particles']
 			else: 
 				self.frame_index = self.frame_index % len(self.frames)
-				self.z = LAYERS['particles']
 			self.zone.attackable_sprites.remove(self)
 			self.zone.block_sprites.remove(self)
 

@@ -37,15 +37,19 @@ class Camera(pygame.sprite.Group):
 				self.zone.screenshake_timer = 0
 
 	def move_to(self, point):
-		self.offset.x += (point[0] - self.offset.x)/self.camera_lag
-		if self.offset.x < point[0]:
-			self.offset.x = point[0]
+		self.offset.y += (point[1] - self.offset.y)/self.camera_lag
+		if self.offset.y < point[1]:
+			self.offset.y = point[1]
 
 	def offset_draw(self, screen, target):
 		
 		screen.fill(ZONE_DATA[self.zone.name]['bg_colour'])
 
-		if self.zone.cutscene_running or self.zone.target.dashing:
+		if target[1] < 190 and self.zone.name == 'scene_2':
+			self.camera_lag = 80
+			self.move_to([0,-HALF_WIDTH])
+
+		elif self.zone.cutscene_running or self.zone.target.dashing:
 			self.camera_lag = 50
 		else:
 			self.camera_lag = 20
