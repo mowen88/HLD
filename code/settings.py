@@ -6,27 +6,28 @@ RES = WIDTH, HEIGHT = pygame.math.Vector2(320, 180)#(384, 216)#(512, 288)#(320, 
 HALF_WIDTH, HALF_HEIGHT = RES/2
 
 #FONT = '../fonts/Pokemon Classic.ttf'
-FONT = '../fonts/Typori-Regular.ttf'
+#FONT = '../fonts/Typori-Regular.ttf'
+FONT = '../fonts/Mecha-GXPg.ttf'
 
 # game colours
 BLACK = ((20, 14, 30))
 GREY = ((91,83,145))
 LIGHT_GREY = ((146, 143, 184))
-WHITE = ((223, 234, 228)) 
+WHITE = ((250, 255, 255)) 
 BLUE = ((20, 68, 145))
 LIGHT_BLUE = ((113, 181, 219))
 RED = ((112, 21, 31))
 ORANGE = ((227, 133, 36))
-PINK = ((195, 67, 92))
+PINK = ((214, 26, 136))
 GREEN = ((88, 179, 150))
 LIGHT_GREEN = ((106, 226, 145))
-PURPLE = ((66, 0, 78))
+PURPLE = ((57, 41, 70))
 CYAN = ((0, 255, 255))
 MAGENTA = ((153, 60, 139))
 YELLOW = ((224, 225, 146))
 
 # data that is dynamic and changes throughout play
-PLAYER_DATA = {'current_zone': 'crashsite',
+PLAYER_DATA = {'current_zone': 'start',
  				'entry_pos': '0', 
  				'keys': [],
  				'gun_index': 0, 

@@ -115,7 +115,6 @@ class Map(State):
 		self.map_bg_surf.set_alpha(self.alpha)
 
 		#blit map surface with details
-		
 		if self.alpha >= self.max_alpha:
 			screen.blit(self.map_surf, self.map_rect)
 			self.draw_map(self.map_surf, screen)
@@ -124,7 +123,7 @@ class Map(State):
 		self.game.render_text('MAP', WHITE, self.game.small_font, (HALF_WIDTH, TILESIZE * 2))
 		pygame.draw.rect(screen, WHITE, (self.map_rect.x -3, self.map_rect.y -3, self.map_rect.width + 6, self.map_rect.height + 6), 2)
 
-		# draw keys
+		# draw the keys collected icon and number
 		if len(COMPLETED_DATA['keys']) > 0:
 			pygame.draw.rect(screen, BLACK, (self.key_rect.x -2, self.key_rect.y -2, self.key_rect.width + 4, self.key_rect.height + 4), border_radius=2)
 			self.game.render_text('x' + str(len(COMPLETED_DATA['keys'])), WHITE, self.game.small_font, (self.key_rect.x - TILESIZE, TILESIZE * 2))

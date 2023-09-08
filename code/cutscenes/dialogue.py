@@ -17,12 +17,12 @@ class Dialogue(State):
         self.opening = True
 
         # text box variables
-        self.box_colour = PURPLE
-        self.text_colour = CYAN
+        self.box_colour = GREY
+        self.text_colour = WHITE
         self.box_width = 0
         self.center = (self.sprite.rect.centerx - self.offset.x, self.sprite.rect.top - 25 - self.offset.y)
         self.target_width = TILESIZE * 10
-        self.line_spacing = 10
+        self.line_spacing = 11
 
         self.lines = DIALOGUE[self.cutscene_number][self.dialog_number]
         self.char_indices = [0] * len(self.lines)

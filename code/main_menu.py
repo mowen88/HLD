@@ -1,7 +1,7 @@
 
 from state import State
 from zone import Zone
-from cutscenes.transition import MenuTransition
+from cutscenes.transition import MenuTransition, MenuBG
 from sprites import FadeSurf
 from settings import *
 
@@ -10,35 +10,11 @@ class Intro(State):
 		State.__init__(self, game)
 
 		self.game = game
-		self.alpha = 255
-		self.next_menu = None
-		self.padding = 20
-
-		self.buttons = {
-						'Start': [(HALF_WIDTH, HALF_HEIGHT - self.padding), 'slot_menu'],
-						}
+		self.timer = 120
 
 		# menu transitioning
 		self.transitioning = False
 		self.transition_screen = MenuTransition(self)
-
-	def render_button(self, screen, current_menu, text_colour, button_colour, hover_colour, pos):
-		mx, my = pygame.mouse.get_pos()
-
-		colour = text_colour
-
-		surf = self.game.small_font.render(current_menu, False, colour)
-		rect = pygame.Rect(0,0, HALF_WIDTH, surf.get_height() * 1.5)
-		rect.center = pos
-
-		if rect.collidepoint(mx, my) and not self.transitioning:
-			pygame.draw.rect(screen, hover_colour, rect, border_radius=4)#int(HEIGHT * 0.05))
-			self.game.render_text(current_menu, text_colour, self.game.small_font, pos)
-			if ACTIONS['left_click']:
-				self.transitioning = True
-		else:
-			pygame.draw.rect(screen, button_colour, rect, border_radius=4)#int(HEIGHT * 0.05))
-			self.game.render_text(current_menu, text_colour, self.game.small_font, pos)
 
 	def go_to(self, state):
 		MainMenu(self.game).enter_state()
@@ -46,10 +22,16 @@ class Intro(State):
 	def update(self, dt):
 		self.transition_screen.update(dt)
 
-	def draw(self, screen):
-		screen.fill(BLACK)
+		self.timer -= dt
+		if self.timer <= 0:
+			self.next_menu = 'main_menu'
+			self.transitioning = True
+			self.game.reset_keys()
 
-		self.render_button(screen, 'Press Enter', BLACK, LIGHT_GREEN, PINK, RES/2)
+	def draw(self, screen):
+		screen.fill(WHITE)
+
+		self.game.render_text('Made by Mowen', BLACK, self.game.big_font, RES/2)
 
 		self.transition_screen.draw(screen)
 
@@ -74,6 +56,13 @@ class MainMenu(State):
 		# menu transitioning
 		self.transitioning = False
 		self.transition_screen = MenuTransition(self)
+		self.boxes = self.get_boxes()
+
+	def get_boxes(self):
+		boxes = []
+		for x in range(int(RES.magnitude()//2)):
+			boxes.append(MenuBG(self))
+		return boxes
 
 	def render_button(self, screen, current_menu, next_menu, text_colour, button_colour, hover_colour, pos):
 		mx, my = pygame.mouse.get_pos()
@@ -85,12 +74,12 @@ class MainMenu(State):
 		rect.center = pos
 
 		if rect.collidepoint(mx, my) and not self.transitioning:
-			pygame.draw.rect(screen, hover_colour, rect, border_radius=4)#int(HEIGHT * 0.05))
+			pygame.draw.rect(screen, hover_colour, rect)#int(HEIGHT * 0.05))
 			self.game.render_text(current_menu, text_colour, self.game.small_font, pos)
 			if ACTIONS['left_click']:
 				self.next_menu = next_menu
 		else:
-			pygame.draw.rect(screen, button_colour, rect, border_radius=4)#int(HEIGHT * 0.05))
+			#pygame.draw.rect(screen, button_colour, rect)#int(HEIGHT * 0.05))
 			self.game.render_text(current_menu, text_colour, self.game.small_font, pos)
 
 	def go_to(self, state):
@@ -113,7 +102,17 @@ class MainMenu(State):
 		else:
 			Zone(self.game, PLAYER_DATA['current_zone'], PLAYER_DATA['entry_pos']).enter_state()
 
+	def draw_bounding_box(self, screen):
+		box = pygame.Rect(0,0,HALF_WIDTH, HEIGHT - 20)
+		box.center = RES/2
+		pygame.draw.rect(screen, WHITE, (box), 2)
+
+
 	def update(self, dt):
+
+		for box in self.boxes:
+			box.update(dt)
+
 		self.transition_screen.update(dt)
 		if self.next_menu is not None:
 			self.transitioning = True
@@ -121,8 +120,13 @@ class MainMenu(State):
 	def draw(self, screen):
 		screen.fill(BLACK)
 
+		for box in self.boxes:
+			box.draw(screen)
+
 		for name, values in self.buttons.items():
-			self.render_button(screen, name, values[1], BLACK, LIGHT_GREEN, PINK, values[0])
+			self.render_button(screen, name, values[1], WHITE, LIGHT_GREEN, PINK, values[0])
+
+		self.draw_bounding_box(screen)
 
 		self.transition_screen.draw(screen)
 
@@ -144,7 +148,12 @@ class SlotMenu(MainMenu):
 			self.game.read_data('completed_data')
 
 	def update(self, dt):
+	
+		for box in self.boxes:
+			box.update(dt)
+
 		self.get_slot()
+
 		self.transition_screen.update(dt)
 		if self.next_menu is not None:
 			self.transitioning = True
@@ -152,8 +161,13 @@ class SlotMenu(MainMenu):
 	def draw(self, screen):
 		screen.fill(BLACK)
 
+		for box in self.boxes:
+			box.draw(screen)
+
 		for name, values in self.buttons.items():
-			self.render_button(screen, name, values[1], BLACK, LIGHT_GREEN, PINK, values[0])
+			self.render_button(screen, name, values[1], WHITE, LIGHT_GREEN, PINK, values[0])
+
+		self.draw_bounding_box(screen)
 
 		self.transition_screen.draw(screen)
 
@@ -168,15 +182,23 @@ class OptionsMenu(MainMenu):
 				}
 
 	def update(self, dt):
+		for box in self.boxes:
+			box.update(dt)
+
 		self.transition_screen.update(dt)
 		if self.next_menu is not None:
 			self.transitioning = True
 
 	def draw(self, screen):
 		screen.fill(BLACK)
+
+		for box in self.boxes:
+			box.draw(screen)
 		
 		for name, values in self.buttons.items():
-			self.render_button(screen, name, values[1], BLACK, LIGHT_GREEN, PINK, values[0])
+			self.render_button(screen, name, values[1], WHITE, LIGHT_GREEN, PINK, values[0])
+
+		self.draw_bounding_box(screen)
 
 		self.transition_screen.draw(screen)
 
@@ -185,21 +207,27 @@ class StartGameMenu(MainMenu):
 		super().__init__(game)
 
 		self.buttons = {
-				'Continue': [(HALF_WIDTH, HALF_HEIGHT - self.padding), 'GO!!!'],
-				'Clear Data': [(HALF_WIDTH, HALF_HEIGHT), 'DELETE_SLOT'],
-				'Back': [(HALF_WIDTH, HALF_HEIGHT + self.padding), 'slot_menu']
+				'Continue': [(HALF_WIDTH, HALF_HEIGHT + self.padding * 0.5), 'GO!!!'],
+				'Delete Data': [(HALF_WIDTH, HALF_HEIGHT + self.padding * 1.5), 'DELETE_SLOT'],
+				'Back': [(HALF_WIDTH, HALF_HEIGHT + self.padding * 2.5), 'slot_menu']
 				}
 
 	def show_stats(self):
 		if self.game.slot is not None:
-			self.game.render_text(self.game.slot_data[self.game.slot]['percent complete'], WHITE, self.game.small_font, (HALF_WIDTH, HALF_HEIGHT - self.padding * 2))
-			self.game.render_text(PLAYER_DATA['time'], WHITE, self.game.small_font, (HALF_WIDTH, HALF_HEIGHT - self.padding * 3))
+			self.game.render_text(f"Slot {self.game.slot}", WHITE, self.game.small_font, (HALF_WIDTH, HALF_HEIGHT - self.padding * 3))
+			self.game.render_text(PLAYER_DATA['time'], WHITE, self.game.small_font, (HALF_WIDTH, HALF_HEIGHT - self.padding * 2))
+			self.game.render_text(self.game.slot_data[self.game.slot]['percent complete'], WHITE, self.game.small_font, (HALF_WIDTH, HALF_HEIGHT - self.padding))
+			
 
 	def start_timer(self):
 		if self.next_menu == 'GO!!!' and self.alpha >= 255:
 			self.game.timer.stop_start()
 
 	def update(self, dt):
+
+		for box in self.boxes:
+			box.update(dt)
+
 		self.transition_screen.update(dt)
 		if self.next_menu is not None:
 			self.start_timer()
@@ -208,10 +236,15 @@ class StartGameMenu(MainMenu):
 	def draw(self, screen):
 		screen.fill(BLACK)
 
-		self.show_stats()
-		
+		for box in self.boxes:
+			box.draw(screen)
+
+
 		for name, values in self.buttons.items():
-			self.render_button(screen, name, values[1], BLACK, LIGHT_GREEN, PINK, values[0])
+			self.render_button(screen, name, values[1], WHITE, LIGHT_GREEN, PINK, values[0])
+
+		self.show_stats()
+		self.draw_bounding_box(screen)
 
 		self.transition_screen.draw(screen)
 
@@ -221,8 +254,8 @@ class AreYouSureMenu(MainMenu):
 		super().__init__(game)
 
 		self.buttons = {
-				'Delete Data': [(HALF_WIDTH, HALF_HEIGHT - self.padding * 0.5), 'delete_confirmed'],
-				'Back': [(HALF_WIDTH, HALF_HEIGHT + self.padding * 0.5), 'slot_menu']
+				'Confirm': [(HALF_WIDTH, HALF_HEIGHT), 'delete_confirmed'],
+				'Back': [(HALF_WIDTH, HALF_HEIGHT + self.padding), 'slot_menu']
 				}
 
 	def delete_data(self):
@@ -247,6 +280,10 @@ class AreYouSureMenu(MainMenu):
 			self.game.write_data(COMPLETED_DATA,'completed_data')
 
 	def update(self, dt):
+
+		for box in self.boxes:
+			box.update(dt)
+
 		self.transition_screen.update(dt)
 		if self.next_menu is not None:
 			self.delete_data()
@@ -254,9 +291,15 @@ class AreYouSureMenu(MainMenu):
 
 	def draw(self, screen):
 		screen.fill(BLACK)
+
+		for box in self.boxes:
+			box.draw(screen)
 		
 		for name, values in self.buttons.items():
-			self.render_button(screen, name, values[1], BLACK, LIGHT_GREEN, PINK, values[0])
+			self.render_button(screen, name, values[1], WHITE, LIGHT_GREEN, PINK, values[0])
+
+		self.game.render_text(f"Delete slot {self.game.slot} data?", WHITE, self.game.small_font, (HALF_WIDTH, HALF_HEIGHT - self.padding * 1.5))
+		self.draw_bounding_box(screen)
 
 		self.transition_screen.draw(screen)
 
@@ -269,6 +312,10 @@ class Confirmation(MainMenu):
 				}
 
 	def update(self, dt):
+
+		for box in self.boxes:
+			box.update(dt)
+
 		self.transition_screen.update(dt)
 		if self.next_menu is not None:
 			self.transitioning = True
@@ -276,11 +323,16 @@ class Confirmation(MainMenu):
 	def draw(self, screen):
 		screen.fill(BLACK)
 
+		for box in self.boxes:
+			box.draw(screen)
+
 		# slot deleted confirmation message
-		self.game.render_text(f"Slot {self.game.slot} deleted", WHITE, self.game.small_font, (HALF_WIDTH, HALF_HEIGHT - self.padding * 0.5))
+		self.game.render_text(f"Slot {self.game.slot} deleted!", WHITE, self.game.small_font, (HALF_WIDTH, HALF_HEIGHT - self.padding))
 		
 		for name, values in self.buttons.items():
-			self.render_button(screen, name, values[1], BLACK, LIGHT_GREEN, PINK, values[0])
+			self.render_button(screen, name, values[1], WHITE, LIGHT_GREEN, PINK, values[0])
+
+		self.draw_bounding_box(screen)
 
 		self.transition_screen.draw(screen)
 

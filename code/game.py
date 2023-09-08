@@ -17,8 +17,8 @@ class Game:
         self.running = True
 
         #font
-        self.big_font =  pygame.font.Font(FONT, 18)
-        self.small_font = pygame.font.Font(FONT, 10)
+        self.big_font =  pygame.font.Font(FONT, 24)
+        self.small_font = pygame.font.Font(FONT, 12)
 
         # states
         self.stack = []
