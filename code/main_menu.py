@@ -5,9 +5,60 @@ from cutscenes.transition import MenuTransition
 from sprites import FadeSurf
 from settings import *
 
+class Intro(State):
+	def __init__(self, game):
+		State.__init__(self, game)
+
+		self.game = game
+		self.alpha = 255
+		self.next_menu = None
+		self.padding = 20
+
+		self.buttons = {
+						'Start': [(HALF_WIDTH, HALF_HEIGHT - self.padding), 'slot_menu'],
+						}
+
+		# menu transitioning
+		self.transitioning = False
+		self.transition_screen = MenuTransition(self)
+
+	def render_button(self, screen, current_menu, text_colour, button_colour, hover_colour, pos):
+		mx, my = pygame.mouse.get_pos()
+
+		colour = text_colour
+
+		surf = self.game.small_font.render(current_menu, False, colour)
+		rect = pygame.Rect(0,0, HALF_WIDTH, surf.get_height() * 1.5)
+		rect.center = pos
+
+		if rect.collidepoint(mx, my) and not self.transitioning:
+			pygame.draw.rect(screen, hover_colour, rect, border_radius=4)#int(HEIGHT * 0.05))
+			self.game.render_text(current_menu, text_colour, self.game.small_font, pos)
+			if ACTIONS['left_click']:
+				self.transitioning = True
+		else:
+			pygame.draw.rect(screen, button_colour, rect, border_radius=4)#int(HEIGHT * 0.05))
+			self.game.render_text(current_menu, text_colour, self.game.small_font, pos)
+
+	def go_to(self, state):
+		MainMenu(self.game).enter_state()
+
+	def update(self, dt):
+		self.transition_screen.update(dt)
+
+	def draw(self, screen):
+		screen.fill(BLACK)
+
+		self.render_button(screen, 'Press Enter', BLACK, LIGHT_GREEN, PINK, RES/2)
+
+		self.transition_screen.draw(screen)
+
 class MainMenu(State):
 	def __init__(self, game):
 		State.__init__(self, game)
+
+		if len(self.game.stack) > 1:
+			self.game.stack.pop()
 
 		self.game = game
 		self.alpha = 255
@@ -44,7 +95,9 @@ class MainMenu(State):
 
 	def go_to(self, state):
 		if state == 'quit':
-			self.game.quit_game_write_data()
+			self.game.quit_write_data()
+			self.game.running = False
+
 		elif state == 'slot_menu':
 			SlotMenu(self.game).enter_state()
 		elif state == 'options_menu':
@@ -103,7 +156,6 @@ class SlotMenu(MainMenu):
 			self.render_button(screen, name, values[1], BLACK, LIGHT_GREEN, PINK, values[0])
 
 		self.transition_screen.draw(screen)
-
 
 class OptionsMenu(MainMenu):
 	def __init__(self, game):

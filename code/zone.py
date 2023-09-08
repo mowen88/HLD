@@ -9,6 +9,7 @@ from sprites import Sword, Gun, Bullet, Grenade, Beam
 from cutscenes.cutscene_manager import Cutscene, CollectionCutscene
 from ui import UI
 from map import Map
+from pause import PauseMenu
 
 class Zone(State):
 	def __init__(self, game, name, entry_point):
@@ -16,7 +17,6 @@ class Zone(State):
 
 		self.game = game
 		self.name = name
-		
 		self.entry_point = entry_point
 		self.zone_size = self.get_zone_size()
 		
@@ -65,6 +65,7 @@ class Zone(State):
 		self.new_zone = None
 
 		self.ui = UI(self.game, self)
+		self.pause = PauseMenu(self.game)
 
 	def get_zone_size(self):
 		with open(f'../zones/{self.name}/{self.name}_walls.csv', newline='') as csvfile:
@@ -234,13 +235,20 @@ class Zone(State):
 			#self.exit_state()
 			self.game.reset_keys()
 
+		if ACTIONS['p']:
+			self.pause.enter_state()
+			self.game.reset_keys()
+			# self.game.quit_write_data()
+			# self.exit_state()
+			# self.prev_state.exit_state()
+			# self.game.reset_keys()
+
 		self.updated_sprites.update(dt)
 		self.ui.update(dt)
 
 	def draw(self, screen):
 		screen.fill(GREEN)
 		self.rendered_sprites.offset_draw(screen, self.target.rect.center)
-		self.game.custom_cursor(screen)
 
 		self.ui.draw(screen)
 		self.fade_surf.draw(screen)

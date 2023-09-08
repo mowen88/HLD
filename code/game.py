@@ -2,7 +2,7 @@ import pygame, sys, json
 from settings import *
 from os import walk
 from timer import Timer
-from main_menu import MainMenu
+from main_menu import Intro
 
 class Game:
     def __init__(self):
@@ -26,6 +26,7 @@ class Game:
 
         #stats
         self.current_health = PLAYER_DATA['max_health']
+
         self.current_juice = PLAYER_DATA['max_juice']
         
         self.last_time = PLAYER_DATA['time']
@@ -44,7 +45,6 @@ class Game:
                         '3':{"time_spent": None, "percent complete": f"{int(self.visited_zones/self.max_zones * 100)} %"}
                         }
 
-
     def write_data(self, dictionary, data_type):
         with open(f"{data_type}_save_file_{self.slot}", "w") as outfile:
             json.dump(dictionary, outfile)
@@ -61,28 +61,29 @@ class Game:
                 self.visited_zones = len(COMPLETED_DATA['visited_zones'])
                 self.slot_data[self.slot]['percent complete'] = f"{int(self.visited_zones/self.max_zones * 100)} % complete"
 
-            print(json_object)
+            #print(json_object)
 
-    def quit_game_write_data(self):
+    def quit_write_data(self):
         if self.slot is not None and self.slot in "123":
             self.slot_data[self.slot]["time_spent"] = self.timer.add_times(str(PLAYER_DATA['time']), self.timer.get_elapsed_time()) 
             PLAYER_DATA.update({'time': self.slot_data[self.slot]["time_spent"]})
             self.write_data(PLAYER_DATA, 'player_data')
             self.write_data(COMPLETED_DATA,'completed_data')
-        print(PLAYER_DATA)
-        self.running = False
+        #print(PLAYER_DATA)
+        
  
     def get_events(self):
         for event in pygame.event.get(): 
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-                
             if event.type == pygame.KEYDOWN:
 
                 if event.key == pygame.K_ESCAPE:
                     ACTIONS['escape'] = True
-                    self.quit_game_write_data()
+                    self.quit_write_data()
+                    self.running = False
+                    
                 elif event.key == pygame.K_DOWN or event.key == pygame.K_s:
                     ACTIONS['down'] = True
                 elif event.key == pygame.K_UP or event.key == pygame.K_w:
@@ -101,6 +102,8 @@ class Game:
                     ACTIONS['backspace'] = True
                 elif event.key == pygame.K_g:
                     ACTIONS['g'] = True
+                elif event.key == pygame.K_p:
+                    ACTIONS['p'] = True
 
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_DOWN or event.key == pygame.K_s:
@@ -121,6 +124,8 @@ class Game:
                     ACTIONS['backspace'] = False
                 elif event.key == pygame.K_g:
                     ACTIONS['g'] = False
+                elif event.key == pygame.K_p:
+                    ACTIONS['p'] = False
 
             if event.type == pygame.MOUSEWHEEL:
                 if event.y == 1:
@@ -155,8 +160,8 @@ class Game:
             ACTIONS[value] = False
 
     def load_states(self):
-        self.start_menu = MainMenu(self)
-        self.stack.append(self.start_menu)
+        self.intro = Intro(self)
+        self.stack.append(self.intro)
 
     def get_folder_images(self, path):
         surf_list = []
@@ -189,18 +194,18 @@ class Game:
         self.timer.update(dt)
         self.stack[-1].update(dt)
 
-        if ACTIONS['space']:
-            self.timer.get_elapsed_time()
 
     def draw(self, screen): 
         #scaled_screen = pygame.transform.scale(self.screen, (self.window.get_size()))
         self.stack[-1].draw(screen)
         #if self.slot is not None:
 
-        self.render_text(PLAYER_DATA['time'], CYAN, self.big_font, RES/2)
-        self.render_text(self.timer.get_elapsed_time(), CYAN, self.big_font, (HALF_WIDTH, HALF_HEIGHT + 20))
-        self.render_text(self.slot, CYAN, self.big_font, (HALF_WIDTH, HALF_HEIGHT + 40))  
+        self.render_text(len(self.stack), CYAN, self.big_font, RES/2)
+        #self.render_text(PLAYER_DATA['time'], CYAN, self.big_font, RES/2)
+        # self.render_text(self.timer.get_elapsed_time(), CYAN, self.big_font, (HALF_WIDTH, HALF_HEIGHT + 20))
+        # self.render_text(self.slot, CYAN, self.big_font, (HALF_WIDTH, HALF_HEIGHT + 40))  
         #self.render_text(self.slot, CYAN, self.big_font, RES/2) 
+        self.custom_cursor(screen)
         pygame.display.flip()
 
     def main_loop(self):
