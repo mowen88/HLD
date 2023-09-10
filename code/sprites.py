@@ -24,7 +24,7 @@ class Bloom(pygame.sprite.Sprite):
 
 	def draw(self, screen):
 		self.fog_surf.fill(self.colour)
-		self.bloom_rect.center = (self.zone.player.rect.center - self.zone.rendered_sprites.offset)
+		self.bloom_rect.topleft = (0,0) - self.zone.rendered_sprites.offset
 		self.fog_surf.blit(self.bloom_surf, self.bloom_rect)
 		screen.blit(self.fog_surf, (0,0), special_flags = pygame.BLEND_MULT)
 
