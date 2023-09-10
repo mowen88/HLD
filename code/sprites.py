@@ -383,7 +383,7 @@ class ShotgunShell(Bullet):
 
 	def update(self, dt):
 		self.collide()
-		self.animate(0.6 * dt)
+		self.animate(0.4 * dt)
 		self.disperse(dt)
 		self.pos += self.vel * dt
 		self.rect.center = self.pos
