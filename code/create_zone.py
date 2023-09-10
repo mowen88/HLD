@@ -6,7 +6,7 @@ from map import Map
 from sprites import BG, Cloud, FadeSurf, Collider, Exit, Decoration, Object, Pillar, AnimatedObject, Barrier, Door, Platform, Void, Collectible, Gun, Sword, Tree, Beam, AttackableTerrain
 from particles import Particle, Shadow
 from entities.player import Player
-from entities.NPCs import Warrior
+from entities.NPCs import Warrior, Mercenary
 from entities.enemy import Grunt, Hound
 from entities.boss1 import Boss1
 
@@ -57,7 +57,7 @@ class CreateZone:
 				if obj.name == 'hound': self.zone.hound = Hound(self.zone.game, self.zone, [self.zone.enemy_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.name)
 				#NPCs
 				if obj.name == 'warrior': self.zone.warrior = Warrior(self.zone.game, self.zone, [self.zone.npc_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.name)
-
+				if obj.name == 'mercenary': self.zone.mercenary = Mercenary(self.zone.game, self.zone, [self.zone.npc_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.name)
 				#bosses
 				if obj.name == 'boss1' and obj.name not in COMPLETED_DATA['bosses_defeated']: self.zone.boss = Boss1(self.zone.game, self.zone, [self.zone.boss_sprites, self.zone.enemy_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.name)
 
@@ -116,6 +116,11 @@ class CreateZone:
 				if obj.name == 'red flower': AttackableTerrain(self.zone.game, self.zone, [self.zone.block_sprites, self.zone.attackable_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], f'../assets/attackable_terrain/{obj.name}')
 				if obj.name == 'blue flower': AttackableTerrain(self.zone.game, self.zone, [self.zone.block_sprites, self.zone.attackable_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], f'../assets/attackable_terrain/{obj.name}')
 				if obj.name == 'small_bust': Tree(self.zone.game, self.zone, [self.zone.block_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
+				if obj.name == 'post': Object(self.zone.game, self.zone, [self.zone.block_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
+				if obj.name == 'post_right': Object(self.zone.game, self.zone, [self.zone.block_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
+				if obj.name == 'post_left': Object(self.zone.game, self.zone, [self.zone.block_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
+				if obj.name == 'post_left_right': Object(self.zone.game, self.zone, [self.zone.block_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
+				if obj.name == 'post_middle': Object(self.zone.game, self.zone, [self.zone.block_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
 
 
 		if 'doors' in self.layers:
@@ -161,11 +166,11 @@ class CreateZone:
 				Shadow(self.zone.game, self.zone, [self.zone.updated_sprites, self.zone.rendered_sprites], (sprite.hitbox.midbottom), LAYERS['particles'], sprite, 'medium')
 
 		for sprite in self.zone.health_sprites:
-			Shadow(self.zone.game, self.zone, [self.zone.updated_sprites, self.zone.rendered_sprites], (sprite.hitbox.midbottom), LAYERS['particles'], sprite, 'small')
+			Shadow(self.zone.game, self.zone, [self.zone.updated_sprites, self.zone.rendered_sprites], (sprite.hitbox.midbottom), LAYERS['particles'], sprite, 'medium')
 		for sprite in self.zone.juice_sprites:
-			Shadow(self.zone.game, self.zone, [self.zone.updated_sprites, self.zone.rendered_sprites], (sprite.hitbox.midbottom), LAYERS['particles'], sprite, 'small')
+			Shadow(self.zone.game, self.zone, [self.zone.updated_sprites, self.zone.rendered_sprites], (sprite.hitbox.midbottom), LAYERS['particles'], sprite, 'medium')
 		for sprite in self.zone.gun_pickup_sprites:
-			Shadow(self.zone.game, self.zone, [self.zone.updated_sprites, self.zone.rendered_sprites], (sprite.hitbox.midbottom), LAYERS['particles'], sprite, 'small')
+			Shadow(self.zone.game, self.zone, [self.zone.updated_sprites, self.zone.rendered_sprites], (sprite.hitbox.midbottom), LAYERS['particles'], sprite, 'medium')
 
 		# add static image layers
 		for _, __, img_files in walk(f'../zones/{self.zone.name}'):

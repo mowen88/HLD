@@ -65,6 +65,7 @@ class NPC(pygame.sprite.Sprite):
 			self.frame_index = len(self.animations[state])-1
 		else: 
 			self.frame_index = self.frame_index % len(self.animations[state])
+
 		self.image = self.animations[state][int(self.frame_index)]
 
 
@@ -170,4 +171,16 @@ class Warrior(NPC):
 
 	def update(self, dt):
 		self.animate('idle', 0.4 * dt, 'loop')
+
+class Mercenary(NPC):
+	def __init__(self, game, zone, groups, pos, z, name):
+		super().__init__(game, zone, groups, pos, z, name)
+
+		self.mask = pygame.mask.from_surface(self.image)
+		self.mask_image = self.mask.to_surface()
+		self.mask_image.set_colorkey((0, 0, 0))
+
+
+	def update(self, dt):
+		self.animate('idle', 0.2 * dt, 'loop')
 

@@ -295,7 +295,7 @@ class Collectible(AnimatedObject):
 		self.original_image = self.frames[int(self.frame_index)]
 
 	def rotation(self, dt):
-		self.rotate += 3 * dt
+		self.rotate -= 3 * dt
 		self.rotate = self.rotate % 360
 
 		self.image = pygame.transform.rotate(self.original_image, self.rotate)
@@ -465,6 +465,7 @@ class AttackableTerrain(AnimatedObject):
 
 		self.hitbox = self.rect.copy().inflate(-self.rect.width * 0.5, -self.rect.height * 0.7)
 		self.alive = True
+		self.health = 1
 
 	def animate(self, animation_speed):
 		if self.alive:

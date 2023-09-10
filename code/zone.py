@@ -142,10 +142,6 @@ class Zone(State):
 								if target in self.boss_sprites:
 									COMPLETED_DATA['bosses_defeated'].append(target.name)
 
-				for sprite in self.block_sprites:
-					if bullet.rect.colliderect(sprite.hitbox) and sprite not in self.attackable_sprites:
-						bullet.kill()
-
 
 	def collect(self):
 		if self.player.z == LAYERS['player'] and not self.cutscene_running:
