@@ -3,7 +3,7 @@ from os import walk
 from settings import *
 from pytmx.util_pygame import load_pygame
 from map import Map
-from sprites import BG, Cloud, FadeSurf, Collider, Exit, Decoration, Object, Pillar, AnimatedObject, Barrier, Door, Platform, Void, Collectible, Gun, Sword, Tree, Beam, AttackableTerrain
+from sprites import Bloom, BG, Cloud, FadeSurf, Collider, Exit, Decoration, Object, Pillar, AnimatedObject, Barrier, Door, Platform, Void, Collectible, Gun, Sword, Tree, Beam, AttackableTerrain
 from particles import Particle, Shadow
 from entities.player import Player
 from entities.NPCs import Warrior, Mercenary
@@ -16,6 +16,7 @@ class CreateZone:
 		self.zone = zone
 
 		self.zone.fade_surf = FadeSurf(self.game, self.zone, [self.zone.updated_sprites], (0,0))
+		self.zone.bloom_surf = Bloom(self.zone, [self.zone.updated_sprites, self.zone.rendered_sprites], (0,0), LAYERS['BG1'], '../white_circle.png', BLUE)
 
 		self.layers = []
 
@@ -187,6 +188,7 @@ class CreateZone:
 				if img == 'cloud2.png': Cloud(self.zone.game, self.zone, [self.zone.updated_sprites, self.zone.rendered_sprites], (self.zone.zone_size[0]*0.6, 90), LAYERS['BG1'], pygame.image.load(f'../zones/{self.zone.name}/{img}').convert_alpha(), (0.1, 0))
 				if img == 'cloud3.png': Cloud(self.zone.game, self.zone, [self.zone.updated_sprites, self.zone.rendered_sprites], (self.zone.zone_size[0]*0.2, 166), LAYERS['BG1'], pygame.image.load(f'../zones/{self.zone.name}/{img}').convert_alpha(), (0.2, 0))
 
+		
 				# if img == 'static_bg.png': Object(self.zone.game, self.zone, [self.zone.rendered_sprites], (0, 0), LAYERS['BG1'], pygame.image.load(f'../zones/{self.zone.name}/{img}').convert_alpha())
 				# #if img == 'floor.png': Object(self.zone.game, self.zone, [self.zone.rendered_sprites], (0, 0), LAYERS['floor'], pygame.image.load(f'../zones/{self.zone.name}/{img}').convert_alpha())
 				# if img == 'spaceship.png': Object(self.zone.game, self.zone, [self.zone.rendered_sprites], (0, 0), LAYERS['foreground'], pygame.image.load(f'../zones/{self.zone.name}/{img}').convert_alpha())

@@ -9,6 +9,25 @@ class Collider(pygame.sprite.Sprite):
 		self.rect = pygame.Rect(rect)
 		self.number = int(number)
 
+class Bloom(pygame.sprite.Sprite):
+	def __init__(self, zone, groups, pos, z, bloom_surf_path, colour):
+
+		self.zone = zone
+		self.image = pygame.Surface((self.zone.zone_size))
+		self.z = z
+		self.colour = colour
+		self.rect = self.image.get_rect(topleft = pos)
+
+		self.fog_surf = pygame.Surface((self.zone.zone_size))
+		self.bloom_surf = pygame.image.load(bloom_surf_path).convert_alpha()
+		self.bloom_rect = self.bloom_surf.get_rect()
+
+	def draw(self, screen):
+		self.fog_surf.fill(self.colour)
+		self.bloom_rect.center = (self.zone.player.rect.center - self.zone.rendered_sprites.offset)
+		self.fog_surf.blit(self.bloom_surf, self.bloom_rect)
+		screen.blit(self.fog_surf, (0,0), special_flags = pygame.BLEND_MULT)
+
 class FadeSurf(pygame.sprite.Sprite):
 	def __init__(self, game, zone, groups, pos, alpha = 255, z = LAYERS['foreground']):
 		super().__init__(groups)
@@ -44,8 +63,10 @@ class FadeSurf(pygame.sprite.Sprite):
 	def draw(self, screen):
 		self.image.set_alpha(self.alpha)
 		screen.blit(self.image, (0,0))
+
 		if self.loading_text:
 			self.game.render_text('Loading...', WHITE, self.game.small_font, (RES/2 * 1.75))
+
 
 class Exit(pygame.sprite.Sprite):
 	def __init__(self, groups, pos, size, name):
