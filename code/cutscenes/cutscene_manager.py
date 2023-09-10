@@ -140,6 +140,6 @@ class Cutscene(State):
 		self.prev_state.rendered_sprites.offset_draw(screen, self.target)
 		self.draw_blackbars(screen)
 
-		self.game.render_text(str(round(self.game.clock.get_fps(), 2)), WHITE, self.game.small_font, RES/2)
+		#self.game.render_text(str(round(self.game.clock.get_fps(), 2)), WHITE, self.game.small_font, RES/2)
 
 

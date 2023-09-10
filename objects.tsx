@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.5" tiledversion="1.7.2" name="objects" tilewidth="48" tileheight="48" tilecount="16" columns="0">
+<tileset version="1.5" tiledversion="1.7.2" name="objects" tilewidth="48" tileheight="48" tilecount="18" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0">
   <image width="48" height="48" source="objects/big tree.png"/>
@@ -48,5 +48,11 @@
  </tile>
  <tile id="16">
   <image width="16" height="32" source="objects/small_bust.png"/>
+ </tile>
+ <tile id="17">
+  <image width="20" height="20" source="assets/collectibles/pistol/0.png"/>
+ </tile>
+ <tile id="18">
+  <image width="20" height="20" source="assets/collectibles/railgun/0.png"/>
  </tile>
 </tileset>

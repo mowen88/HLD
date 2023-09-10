@@ -17,8 +17,8 @@ class Game:
         self.running = True
 
         #font
-        self.big_font =  pygame.font.Font(FONT, 24)
-        self.small_font = pygame.font.Font(FONT, 12)
+        self.big_font =  pygame.font.Font(FONT, 20)
+        self.small_font = pygame.font.Font(FONT, 10)
 
         # states
         self.stack = []
@@ -104,6 +104,10 @@ class Game:
                     ACTIONS['g'] = True
                 elif event.key == pygame.K_p:
                     ACTIONS['p'] = True
+                elif event.key == pygame.K_n:
+                    ACTIONS['n'] = True
+                elif event.key == pygame.K_m:
+                    ACTIONS['m'] = True
 
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_DOWN or event.key == pygame.K_s:
@@ -126,6 +130,10 @@ class Game:
                     ACTIONS['g'] = False
                 elif event.key == pygame.K_p:
                     ACTIONS['p'] = False
+                elif event.key == pygame.K_n:
+                    ACTIONS['n'] = False
+                elif event.key == pygame.K_m:
+                    ACTIONS['m'] = False
 
             if event.type == pygame.MOUSEWHEEL:
                 if event.y == 1:
@@ -199,8 +207,7 @@ class Game:
         #scaled_screen = pygame.transform.scale(self.screen, (self.window.get_size()))
         self.stack[-1].draw(screen)
         #if self.slot is not None:
-
-        self.render_text(len(self.stack), CYAN, self.big_font, RES/2)
+        # self.render_text(len(self.stack), CYAN, self.big_font, RES/2)
         #self.render_text(PLAYER_DATA['time'], CYAN, self.big_font, RES/2)
         # self.render_text(self.timer.get_elapsed_time(), CYAN, self.big_font, (HALF_WIDTH, HALF_HEIGHT + 20))
         # self.render_text(self.slot, CYAN, self.big_font, (HALF_WIDTH, HALF_HEIGHT + 40))  

@@ -7,7 +7,7 @@ HALF_WIDTH, HALF_HEIGHT = RES/2
 
 #FONT = '../fonts/Pokemon Classic.ttf'
 #FONT = '../fonts/Typori-Regular.ttf'
-FONT = '../fonts/Mecha-GXPg.ttf'
+FONT = '../fonts/homespun.ttf'
 
 # game colours
 BLACK = ((20, 14, 30))
@@ -27,7 +27,8 @@ MAGENTA = ((153, 60, 139))
 YELLOW = ((224, 225, 146))
 
 # data that is dynamic and changes throughout play
-PLAYER_DATA = {'current_zone': 'start',
+PLAYER_DATA = {'current_zone': 'crashsite',
+				'current_gun': 'nogun',
  				'entry_pos': '0', 
  				'keys': [],
  				'gun_index': 0, 
@@ -39,12 +40,14 @@ PLAYER_DATA = {'current_zone': 'start',
 
 COMPLETED_DATA = {'cutscenes': [],
 				  'visited_zones': [],
+				  'guns': [],
 				  'health': [],
 				  'juice': [],
 				  'keys':[],
 				  'bosses_defeated':[]}
 
 GUN_DATA = {
+	'Nogun':{'cost': 0, 'damage': 0, 'cooldown': 0, 'knockback': 0},
 	'pistol':{'cost': 11, 'damage': 1, 'cooldown': 10, 'knockback': 1},
 	'railgun':{'cost': 33, 'damage': 2, 'cooldown': 100, 'knockback': 2}
 }
@@ -56,16 +59,17 @@ ENEMY_DATA = {
 }
 # entry and exit data for zones, does not change
 ZONE_DATA = {
-	'start':{'bg_colour': YELLOW, '1': 'garden', '2': 'dungeon', '3':'datacentre'},
-	'garden':{'bg_colour': PINK, '1': 'boss_room_1', '2': 'dungeon', '3':'datacentre'},
+	'garden':{'bg_colour': PINK, '1': 'boss_room_1', '2': 'first_dungeon', '3':'datacentre'},
 	'dungeon':{'bg_colour': BLACK,'1':'garden', '2':'garden'},
 	'datacentre':{'bg_colour': GREEN,'1':'garden', '2':'garden', '3':'garden'},
+	# actual levels start here !!!
 	'crashsite':{'bg_colour': LIGHT_GREEN,'1':'garden', '2':'dungeon', '3':'scene_2'},
-	'scene_2':{'bg_colour': LIGHT_GREEN,'1':'garden', '2':'garden', '3':'crashsite'},
+	'scene_2':{'bg_colour': LIGHT_GREEN,'1':'garden', '2':'first_dungeon', '3':'crashsite'},
+	'first_dungeon':{'bg_colour': BLACK, '1': 'garden', '2': 'scene_2', '3':'datacentre'},
 	'boss_room_1':{'bg_colour': YELLOW, '1': 'garden', '2': 'dungeon', '3':'garden'}
 }
 MAP_DATA = {
-	'start':{'pos': (-20,-20)},
+	'first_dungeon':{'pos': (-20,-20)},
 	'garden':{'pos': (30,10)},
 	'dungeon':{'pos': (60,20)},
 	'datacentre':{'pos': (0,20)},
@@ -101,6 +105,6 @@ LAYERS = {
 
 # key events
 ACTIONS = {'escape': False, 'space': False, 'up': False, 'down': False, 'left': False,
-			'right': False, 'return': False, 'right_ctrl': False, 'backspace': False, 'g': False, 'p': False, 'left_click': False, 
+			'right': False, 'return': False, 'right_ctrl': False, 'backspace': False, 'g': False, 'p': False, 'n': False, 'm': False, 'left_click': False, 
 			'right_click': False, 'scroll_up': False, 'scroll_down': False}
 

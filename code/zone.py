@@ -52,6 +52,7 @@ class Zone(State):
 		self.health_sprites = pygame.sprite.Group()
 		self.juice_sprites = pygame.sprite.Group()
 		self.key_sprites = pygame.sprite.Group()
+		self.gun_pickup_sprites = pygame.sprite.Group()
 
 		CreateZone(self.game, self).create()
 
@@ -173,6 +174,16 @@ class Zone(State):
 					sprite.alive = False
 					sprite.kill()
 
+			for sprite in self.gun_pickup_sprites:
+				if self.player.hitbox.colliderect(sprite.hitbox):
+					self.create_flash(sprite.rect.center, PINK, 5)
+					COMPLETED_DATA['guns'].append(sprite.name)
+					self.cutscene_running = True
+					CollectionCutscene(self.game, self, f"../assets/ui_images/juice_collected/").enter_state()
+					sprite.alive = False
+					sprite.kill()
+					self.player.gun = COMPLETED_DATA['guns'][PLAYER_DATA['gun_index']]
+
 	def activate_barriers(self):
 		for sprite in self.barrier_activator_sprites:
 			if self.player.hitbox.colliderect(sprite.rect):
@@ -254,7 +265,7 @@ class Zone(State):
 		self.fade_surf.draw(screen)
 
 		self.game.render_text(str(round(self.game.clock.get_fps(), 2)), WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.1))
-		self.game.render_text(None, WHITE, self.game.small_font, RES/2)
-		# self.game.render_text(self.player.invincible, WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.9))
+		self.game.render_text(self.player.gun, WHITE, self.game.small_font, RES/2)
+		self.game.render_text(COMPLETED_DATA['guns'], WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.9))
 		
 		

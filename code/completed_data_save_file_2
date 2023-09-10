@@ -1,1 +1,1 @@
-{"cutscenes": [0], "visited_zones": ["crashsite", "scene_2", "garden", "boss_room_1", "dungeon", "datacentre"], "health": ["health_1", "health_4"], "juice": [], "keys": [], "bosses_defeated": ["boss1"]}
+{"cutscenes": [], "visited_zones": ["crashsite", "scene_2", "first_dungeon"], "guns": ["railgun"], "health": ["health_1"], "juice": [], "keys": [], "bosses_defeated": []}

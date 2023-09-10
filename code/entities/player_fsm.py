@@ -18,7 +18,7 @@ class Idle:
 		if ACTIONS['g']:
 			player.zone.create_player_grenade()
 
-		if ACTIONS['right_ctrl'] and player.game.current_juice >= GUN_DATA[player.gun]['cost'] and player.reload_timer == 0:
+		if ACTIONS['right_ctrl'] and player.game.current_juice >= GUN_DATA[player.gun]['cost'] and player.reload_timer == 0 and COMPLETED_DATA['guns'] != []:
 			return Shoot(player, self.direction)
 
 		if ACTIONS['space']:
@@ -26,7 +26,7 @@ class Idle:
 
 		if ACTIONS['scroll_down']:
 			player.change_gun('scroll_down')
-
+			
 		if ACTIONS['scroll_up']:
 			player.change_gun('scroll_up')
 
@@ -59,7 +59,7 @@ class Move:
 		if ACTIONS['g']:
 			player.zone.create_player_grenade()
 
-		if ACTIONS['right_ctrl'] and player.game.current_juice >= GUN_DATA[player.gun]['cost'] and player.reload_timer == 0:
+		if ACTIONS['right_ctrl'] and player.game.current_juice >= GUN_DATA[player.gun]['cost'] and player.reload_timer == 0 and COMPLETED_DATA['guns'] != []:
 			return Shoot(player, self.direction)
 
 		if ACTIONS['space']:

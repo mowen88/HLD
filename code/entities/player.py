@@ -16,7 +16,7 @@ class Player(NPC):
 		self.direction = {'up': False, 'down': False, 'left': False, 'right': False}
 		
 		self.gun_index = PLAYER_DATA['gun_index']
-		self.gun = list(GUN_DATA.keys())[self.gun_index]
+		self.gun = PLAYER_DATA['current_gun']
 		self.changing_weapon = False
 	
 		self.import_imgs()
@@ -43,7 +43,7 @@ class Player(NPC):
 		#guns out
 		self.guns_out_timer_running = False
 		self.guns_out_timer = 0
-		self.guns_out_cooldown = 200
+		self.guns_out_cooldown = 120
 		self.reload_timer = 0
 
 		# invincibility 
@@ -85,21 +85,14 @@ class Player(NPC):
 			self.zone.gun_sprite = None
 
 	def change_gun(self, direction):
-		if direction == 'scroll_down':
-			ACTIONS['scroll_down'] = False
-			if not self.changing_weapon:
-				if PLAYER_DATA['gun_index'] < len(list(GUN_DATA.keys()))-1: PLAYER_DATA['gun_index'] += 1
-			else: PLAYER_DATA['gun_index'] = 0
-			self.gun = list(GUN_DATA.keys())[PLAYER_DATA['gun_index']]
+
+		if COMPLETED_DATA['guns']:
+			ACTIONS[direction] = False
+			num_guns = len(COMPLETED_DATA['guns'])
+			PLAYER_DATA['gun_index'] = (PLAYER_DATA['gun_index'] + 1) % num_guns if direction == 'scroll_down' else (PLAYER_DATA['gun_index'] - 1) % num_guns
+			self.gun = COMPLETED_DATA['guns'][PLAYER_DATA['gun_index']]
+			PLAYER_DATA['current_gun'] = self.gun
 			self.changing_weapon = True
-			
-		elif direction == 'scroll_up':
-			ACTIONS['scroll_up'] = False
-			if not self.changing_weapon:
-				if PLAYER_DATA['gun_index'] > 0: PLAYER_DATA['gun_index'] -= 1
-				else: PLAYER_DATA['gun_index'] = len(list(GUN_DATA.keys()))-1
-				self.gun = list(GUN_DATA.keys())[PLAYER_DATA['gun_index']]
-				self.changing_weapon = True
 
 	def attackable_terrain_logic(self):
 		if self.zone.melee_sprite:

@@ -10,7 +10,11 @@ class Intro(State):
 		State.__init__(self, game)
 
 		self.game = game
-		self.timer = 120
+		self.timer = 60
+
+		# logo
+		self.logo_surf = pygame.image.load('../assets/pygame_logo.png').convert_alpha()
+		self.logo_rect = self.logo_surf.get_rect(center = (HALF_WIDTH, HEIGHT * 0.6))
 
 		# menu transitioning
 		self.transitioning = False
@@ -31,7 +35,9 @@ class Intro(State):
 	def draw(self, screen):
 		screen.fill(WHITE)
 
-		self.game.render_text('Made by Mowen', BLACK, self.game.big_font, RES/2)
+		screen.blit(self.logo_surf, self.logo_rect)
+
+		self.game.render_text('Made with', BLACK, self.game.small_font, (HALF_WIDTH, HEIGHT * 0.3))
 
 		self.transition_screen.draw(screen)
 
@@ -261,6 +267,7 @@ class AreYouSureMenu(MainMenu):
 	def delete_data(self):
 		if self.next_menu == 'delete_confirmed':
 			PLAYER_DATA.update({'current_zone': 'crashsite',
+								'current_gun': 'nogun',
 				 				'entry_pos': '0', 
 				 				'keys': [],
 				 				'gun_index': 0, 
@@ -271,6 +278,7 @@ class AreYouSureMenu(MainMenu):
 				 				'time': "00:00:00"})
 			COMPLETED_DATA.update({'cutscenes': [],
 								  'visited_zones': [],
+								  'guns': [],
 								  'health': [],
 								  'juice': [],
 								  'keys':[],

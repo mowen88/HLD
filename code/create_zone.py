@@ -68,6 +68,9 @@ class CreateZone:
 
 		if 'collectibles' in self.layers:
 			for obj in tmx_data.get_layer_by_name('collectibles'):
+				if obj.name not in COMPLETED_DATA['guns']:
+					if obj.name == 'pistol': Collectible(self.zone.game, self.zone, [self.zone.gun_pickup_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/pistol', obj.name)
+					if obj.name == 'railgun': Collectible(self.zone.game, self.zone, [self.zone.gun_pickup_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/railgun', obj.name)
 				if obj.name not in COMPLETED_DATA['keys']:
 					if obj.name == 'key_0': Collectible(self.zone.game, self.zone, [self.zone.key_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/key', obj.name)
 					if obj.name == 'key_1': Collectible(self.zone.game, self.zone, [self.zone.key_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/key', obj.name)
@@ -134,7 +137,11 @@ class CreateZone:
 
 		if 'walls' in self.layers:
 			for x, y, surf in tmx_data.get_layer_by_name('walls').tiles():
-				Object(self.zone.game, self.zone, [self.zone.block_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (x * TILESIZE, y * TILESIZE), LAYERS['player'], surf)
+				Object(self.zone.game, self.zone, [self.zone.block_sprites, self.zone.rendered_sprites], (x * TILESIZE, y * TILESIZE), LAYERS['player'], surf)
+
+		# if 'floor' in self.layers:
+		# 	for x, y, surf in tmx_data.get_layer_by_name('floor').tiles():
+		# 		Object(self.zone.game, self.zone, [self.zone.rendered_sprites], (x * TILESIZE, y * TILESIZE), LAYERS['floor'], surf)
 			
 		if 'void' in self.layers:
 			for x, y, surf in tmx_data.get_layer_by_name('void').tiles():
@@ -156,6 +163,8 @@ class CreateZone:
 			Shadow(self.zone.game, self.zone, [self.zone.updated_sprites, self.zone.rendered_sprites], (sprite.hitbox.midbottom), LAYERS['particles'], sprite, 'small')
 		for sprite in self.zone.juice_sprites:
 			Shadow(self.zone.game, self.zone, [self.zone.updated_sprites, self.zone.rendered_sprites], (sprite.hitbox.midbottom), LAYERS['particles'], sprite, 'small')
+		for sprite in self.zone.gun_pickup_sprites:
+			Shadow(self.zone.game, self.zone, [self.zone.updated_sprites, self.zone.rendered_sprites], (sprite.hitbox.midbottom), LAYERS['particles'], sprite, 'small')
 
 		# add static image layers
 		for _, __, img_files in walk(f'../zones/{self.zone.name}'):
@@ -163,7 +172,9 @@ class CreateZone:
 				if img == 'static_bg.png': BG(self.zone.game, self.zone, [self.zone.rendered_sprites], (0, 0), LAYERS['BG1'], pygame.image.load(f'../zones/{self.zone.name}/{img}').convert_alpha())
 				if img == 'bg.png': BG(self.zone.game, self.zone, [self.zone.updated_sprites, self.zone.rendered_sprites], (0, 0), LAYERS['BG0'], pygame.image.load(f'../zones/{self.zone.name}/{img}').convert_alpha())
 				if img == 'floor.png': BG(self.zone.game, self.zone, [self.zone.rendered_sprites], (0, 0), LAYERS['floor'], pygame.image.load(f'../zones/{self.zone.name}/{img}').convert_alpha())
-				if img == 'foreground.png': BG(self.zone.game, self.zone, [self.zone.updated_sprites, self.zone.rendered_sprites], (0, 0), LAYERS['foreground'], pygame.image.load(f'../zones/{self.zone.name}/{img}').convert_alpha())
+				if img == 'foreground.png': BG(self.zone.game, self.zone, [self.zone.updated_sprites, self.zone.rendered_sprites], (0,0), LAYERS['foreground'], pygame.image.load(f'../zones/{self.zone.name}/{img}').convert_alpha())
+				# if img == 'foreground.png': BG(self.zone.game, self.zone, [self.zone.updated_sprites, self.zone.rendered_sprites], (16 * TILESIZE, TILESIZE), LAYERS['foreground'], pygame.image.load(f'../zones/{self.zone.name}/{img}').convert_alpha())
+				# if img == 'foreground.png': BG(self.zone.game, self.zone, [self.zone.updated_sprites, self.zone.rendered_sprites], (21 * TILESIZE, TILESIZE), LAYERS['foreground'], pygame.image.load(f'../zones/{self.zone.name}/{img}').convert_alpha())
 				# moving bgs clouds
 				if img == 'cloud.png': Cloud(self.zone.game, self.zone, [self.zone.updated_sprites, self.zone.rendered_sprites], (self.zone.zone_size[0]*0.3, 32), LAYERS['BG1'], pygame.image.load(f'../zones/{self.zone.name}/{img}').convert_alpha(), (0.05, 0))
 				if img == 'cloud2.png': Cloud(self.zone.game, self.zone, [self.zone.updated_sprites, self.zone.rendered_sprites], (0, 120), LAYERS['BG1'], pygame.image.load(f'../zones/{self.zone.name}/{img}').convert_alpha(), (0.1, 0))
