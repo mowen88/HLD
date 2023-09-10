@@ -71,6 +71,7 @@ class CreateZone:
 				if obj.name not in COMPLETED_DATA['guns']:
 					if obj.name == 'pistol': Collectible(self.zone.game, self.zone, [self.zone.gun_pickup_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/pistol', obj.name)
 					if obj.name == 'railgun': Collectible(self.zone.game, self.zone, [self.zone.gun_pickup_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/railgun', obj.name)
+					if obj.name == 'shotgun': Collectible(self.zone.game, self.zone, [self.zone.gun_pickup_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/shotgun', obj.name)
 				if obj.name not in COMPLETED_DATA['keys']:
 					if obj.name == 'key_0': Collectible(self.zone.game, self.zone, [self.zone.key_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/key', obj.name)
 					if obj.name == 'key_1': Collectible(self.zone.game, self.zone, [self.zone.key_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], '../assets/collectibles/key', obj.name)

@@ -345,7 +345,7 @@ class Bullet(AnimatedObject):
 		self.vel = self.zone.get_distance_direction_and_angle(self.rect.center, pygame.mouse.get_pos())[1] * self.speed
 		self.vel = self.vel.rotate(random.randrange(-10, 10))
 		self.pos = pygame.math.Vector2(self.rect.center)
-		self.damage = 1
+		self.damage = GUN_DATA[self.zone.player.gun]['damage']
 
 	def collide(self):
 		for sprite in self.zone.block_sprites:
@@ -355,6 +355,36 @@ class Bullet(AnimatedObject):
 	def update(self, dt):
 		self.collide()
 		self.animate(0.25 * dt)
+		self.pos += self.vel * dt
+		self.rect.center = self.pos
+
+class ShotgunShell(Bullet):
+	def __init__(self, game, zone, groups, pos, z, path):
+		super().__init__(game, zone, groups, pos, z, path)
+
+		self.speed = 7
+		self.vel = self.zone.get_distance_direction_and_angle(self.rect.center, pygame.mouse.get_pos())[1] * self.speed
+		self.vel = self.vel.rotate(random.randrange(-10, 10))
+		self.pos = pygame.math.Vector2(self.rect.center)
+		self.damage = GUN_DATA[self.zone.player.gun]['damage']
+		self.size = 0
+
+	def collide(self):
+		hits = pygame.sprite.spritecollide(self, self.zone.block_sprites, False, pygame.sprite.collide_rect_ratio(0.6))
+		if hits:
+			self.kill()
+
+	def disperse(self, dt):
+		self.size += 5 * dt
+		self.image = pygame.transform.scale(self.image, (self.size, self.size))
+		self.rect = self.image.get_rect(center = self.pos)
+		if self.size > TILESIZE * 3:
+			self.kill()
+
+	def update(self, dt):
+		self.collide()
+		self.animate(0.6 * dt)
+		self.disperse(dt)
 		self.pos += self.vel * dt
 		self.rect.center = self.pos
 

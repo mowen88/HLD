@@ -209,7 +209,8 @@ class Shoot:
 		# emit bullets
 		player.add_subtract_juice(GUN_DATA[player.gun]['cost'], 'sub')
 		if player.gun == 'pistol': player.zone.create_player_bullet()			
-		else: player.zone.create_railgun_beam()
+		elif player.gun == 'railgun': player.zone.create_railgun_beam()
+		else: player.zone.create_shotgun_shell()
 
 		# create gun sprite
 		player.kill_gun()

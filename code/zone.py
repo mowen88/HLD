@@ -5,7 +5,7 @@ from state import State
 from camera import Camera
 from create_zone import CreateZone
 from particles import Shadow, Flash, Explosion
-from sprites import Sword, Gun, Bullet, Grenade, Beam
+from sprites import Sword, Gun, Bullet, ShotgunShell, Grenade, Beam
 from cutscenes.cutscene_manager import Cutscene, CollectionCutscene
 from ui import UI
 from map import Map
@@ -29,6 +29,7 @@ class Zone(State):
 		self.gun_sprite = None
 		self.boss = None
 		self.player_bullet_sprites = pygame.sprite.Group()
+		self.shotgun_shell_sprites = pygame.sprite.Group()
 		self.beam_sprites = pygame.sprite.Group()
 		self.enemy_bullet_sprites = pygame.sprite.Group()
 		self.grenade_sprites = pygame.sprite.Group()
@@ -89,8 +90,10 @@ class Zone(State):
 		self.gun_sprite = Gun(self.game, self, [self.updated_sprites, self.rendered_sprites], self.player.hitbox.center, LAYERS['player'], pygame.image.load(f'../assets/weapons/{self.player.gun}.png').convert_alpha())
 
 	def create_player_bullet(self):
-		self.bullet = Bullet(self.game, self, [self.updated_sprites, self.rendered_sprites], self.player.hitbox.center, LAYERS['player'], f'../assets/weapons/{self.player.gun}_bullet')
-		self.player_bullet_sprites.add(self.bullet)
+		self.bullet = Bullet(self.game, self, [self.player_bullet_sprites, self.updated_sprites, self.rendered_sprites], self.player.hitbox.center, LAYERS['player'], f'../assets/weapons/{self.player.gun}_bullet')
+
+	def create_shotgun_shell(self):
+		self.shotgun_shell = ShotgunShell(self.game, self, [self.player_bullet_sprites, self.shotgun_shell_sprites, self.updated_sprites, self.rendered_sprites], self.player.hitbox.center, LAYERS['player'], f'../assets/weapons/{self.player.gun}_bullet')
 
 	def create_player_grenade(self):
 		Grenade(self.game, self, [self.grenade_sprites, self.updated_sprites, self.rendered_sprites], self.player.hitbox.center, LAYERS['player'], f'../assets/weapons/grenade')
@@ -126,9 +129,10 @@ class Zone(State):
 					if not target.invincible and target.alive:
 						if not hasattr(bullet, 'alpha') or (hasattr(bullet, 'alpha') and bullet.alpha >= 255):
 							target.health -= bullet.damage
-							bullet.kill()
+							if bullet not in self.shotgun_shell_sprites:
+								bullet.kill()
 							target.invincible = True
-							if bullet.damage > 2:
+							if bullet.damage > 3:
 								target.get_knockback(self.player)
 							if target.health <= 0:
 								target.get_knockback(self.player)
@@ -265,7 +269,7 @@ class Zone(State):
 		self.fade_surf.draw(screen)
 
 		self.game.render_text(str(round(self.game.clock.get_fps(), 2)), WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.1))
-		self.game.render_text(self.player.gun, WHITE, self.game.small_font, RES/2)
+		self.game.render_text(self.grunt.health, WHITE, self.game.small_font, RES/2)
 		self.game.render_text(COMPLETED_DATA['guns'], WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.9))
 		
 		
