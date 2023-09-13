@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="40" height="24" tilewidth="16" tileheight="16" infinite="0" nextlayerid="20" nextobjectid="131">
+<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="40" height="24" tilewidth="16" tileheight="16" infinite="0" nextlayerid="21" nextobjectid="131">
  <editorsettings>
   <export target="dungeon_exit.csv" format="csv"/>
  </editorsettings>
@@ -108,11 +108,11 @@
   <object id="75" name="post_middle" gid="75" x="560" y="144" width="16" height="16"/>
   <object id="76" name="post_left" gid="73" x="576" y="144" width="16" height="16"/>
   <object id="77" name="post_right" gid="74" x="544" y="144" width="16" height="16"/>
-  <object id="79" name="medium tree" gid="52" x="325.333" y="270" width="32" height="32"/>
+  <object id="79" name="medium tree" gid="52" x="225.333" y="339.5" width="32" height="32"/>
   <object id="80" name="medium tree" gid="52" x="40" y="313.333" width="32" height="32"/>
   <object id="82" name="medium tree 2" gid="64" x="64" y="326" width="32" height="32"/>
-  <object id="83" name="medium tree 2" gid="64" x="326.667" y="346.667" width="32" height="32"/>
-  <object id="84" name="medium tree 3" gid="65" x="310" y="291.333" width="32" height="32"/>
+  <object id="83" name="medium tree 2" gid="64" x="251.667" y="351.167" width="32" height="32"/>
+  <object id="84" name="medium tree 3" gid="65" x="262.5" y="328.833" width="32" height="32"/>
   <object id="85" name="medium tree 3" gid="65" x="160" y="240" width="32" height="32"/>
   <object id="86" name="big tree" gid="50" x="176.667" y="264.667" width="48" height="48"/>
   <object id="87" name="big tree" gid="50" x="423.333" y="212.667" width="48" height="48"/>

@@ -66,10 +66,10 @@ class Camera(pygame.sprite.Group):
 		#self.offset += self.self.zone.get_distance_direction_and_angle(pygame.math.Vector2(target.rect.center), pygame.math.Vector2(pygame.mouse.get_pos()))[1]
 	
 		#limit offset to stop at edges
-		if self.offset[0] <= 0: self.offset[0] = 0
-		elif self.offset[0] >= self.zone.zone_size[0] - WIDTH: self.offset[0] = self.zone.zone_size[0] - WIDTH
-		if self.offset[1] <= 0: self.offset[1] = 0
-		elif self.offset[1] >= self.zone.zone_size[1] - HEIGHT: self.offset[1] = self.zone.zone_size[1] - HEIGHT
+		if self.offset[0] < 0: self.offset[0] = 0
+		elif self.offset[0] > self.zone.zone_size[0] - WIDTH: self.offset[0] = self.zone.zone_size[0] - WIDTH
+		if self.offset[1] < 0: self.offset[1] = 0
+		elif self.offset[1] > self.zone.zone_size[1] - HEIGHT: self.offset[1] = self.zone.zone_size[1] - HEIGHT
 
 		self.screenshake()
 
@@ -77,7 +77,7 @@ class Camera(pygame.sprite.Group):
 			for sprite in sorted(self.zone.rendered_sprites, key = lambda sprite: sprite.rect.centery):
 				if sprite.z == layer:
 					offset = sprite.rect.topleft - self.offset
-					screen.blit(sprite.image, offset)
+					screen.blit(sprite.image, (offset))
 
 		# screen.blit(self.light_mask, (260 - self.offset[0], 330 - self.offset[1]))
 		# # if self.dark:

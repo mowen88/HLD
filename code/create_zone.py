@@ -16,7 +16,7 @@ class CreateZone:
 		self.zone = zone
 
 		self.zone.fade_surf = FadeSurf(self.game, self.zone, [self.zone.updated_sprites], (0,0))
-		self.zone.bloom_surf = Bloom(self.zone, [self.zone.updated_sprites, self.zone.rendered_sprites], (0,0), LAYERS['BG1'], '../white_circle.png', WHITE)
+		#self.zone.bloom_surf = Bloom(self.zone, [self.zone.updated_sprites, self.zone.rendered_sprites], (0,0))
 
 		self.layers = []
 

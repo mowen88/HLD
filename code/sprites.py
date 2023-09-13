@@ -10,23 +10,13 @@ class Collider(pygame.sprite.Sprite):
 		self.number = int(number)
 
 class Bloom(pygame.sprite.Sprite):
-	def __init__(self, zone, groups, pos, z, bloom_surf_path, colour):
+	def __init__(self, zone, groups, pos, z = LAYERS['particles']):
+		super().__init__(groups)
 
 		self.zone = zone
-		self.image = pygame.Surface((self.zone.zone_size))
-		self.z = z
-		self.colour = colour
+		self.image = pygame.image.load('../CIRCLE.png').convert_alpha()
 		self.rect = self.image.get_rect(topleft = pos)
-
-		self.fog_surf = pygame.Surface((self.zone.zone_size))
-		self.bloom_surf = pygame.image.load(bloom_surf_path).convert_alpha()
-		self.bloom_rect = self.bloom_surf.get_rect()
-
-	def draw(self, screen):
-		self.fog_surf.fill(self.colour)
-		self.bloom_rect.topleft = (0,0) - self.zone.rendered_sprites.offset
-		self.fog_surf.blit(self.bloom_surf, self.bloom_rect)
-		screen.blit(self.fog_surf, (0,0), special_flags = pygame.BLEND_MULT)
+		self.z = z
 
 class FadeSurf(pygame.sprite.Sprite):
 	def __init__(self, game, zone, groups, pos, alpha = 255, z = LAYERS['foreground']):
