@@ -122,6 +122,7 @@ class CreateZone:
 				if obj.name == 'post_left': Object(self.zone.game, self.zone, [self.zone.block_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
 				if obj.name == 'post_left_right': Object(self.zone.game, self.zone, [self.zone.block_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
 				if obj.name == 'post_middle': Object(self.zone.game, self.zone, [self.zone.block_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
+				if obj.name == 'radio_shack_bottom': Object(self.zone.game, self.zone, [self.zone.block_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
 
 
 		if 'doors' in self.layers:
@@ -169,6 +170,8 @@ class CreateZone:
 		for sprite in self.zone.health_sprites:
 			Shadow(self.zone.game, self.zone, [self.zone.updated_sprites, self.zone.rendered_sprites], (sprite.hitbox.midbottom), LAYERS['particles'], sprite, 'medium')
 		for sprite in self.zone.juice_sprites:
+			Shadow(self.zone.game, self.zone, [self.zone.updated_sprites, self.zone.rendered_sprites], (sprite.hitbox.midbottom), LAYERS['particles'], sprite, 'medium')
+		for sprite in self.zone.key_sprites:
 			Shadow(self.zone.game, self.zone, [self.zone.updated_sprites, self.zone.rendered_sprites], (sprite.hitbox.midbottom), LAYERS['particles'], sprite, 'medium')
 		for sprite in self.zone.gun_pickup_sprites:
 			Shadow(self.zone.game, self.zone, [self.zone.updated_sprites, self.zone.rendered_sprites], (sprite.hitbox.midbottom), LAYERS['particles'], sprite, 'medium')
