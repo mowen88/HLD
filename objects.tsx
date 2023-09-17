@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.5" tiledversion="1.7.2" name="objects" tilewidth="48" tileheight="48" tilecount="25" columns="0">
+<tileset version="1.5" tiledversion="1.7.2" name="objects" tilewidth="48" tileheight="48" tilecount="32" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0">
   <image width="48" height="48" source="objects/big tree.png"/>
@@ -75,5 +75,26 @@
  </tile>
  <tile id="26">
   <image width="48" height="32" source="objects/radio_shack_bottom.png"/>
+ </tile>
+ <tile id="27">
+  <image width="24" height="24" source="assets/attackable_terrain/box/0.png"/>
+ </tile>
+ <tile id="28">
+  <image width="24" height="24" source="assets/attackable_terrain/tall box/0.png"/>
+ </tile>
+ <tile id="29">
+  <image width="24" height="24" source="assets/attackable_terrain/wide box/0.png"/>
+ </tile>
+ <tile id="30">
+  <image width="24" height="24" source="assets/attackable_terrain/white box/0.png"/>
+ </tile>
+ <tile id="31">
+  <image width="24" height="24" source="assets/attackable_terrain/box 2/0.png"/>
+ </tile>
+ <tile id="32">
+  <image width="24" height="24" source="assets/attackable_terrain/open box/0.png"/>
+ </tile>
+ <tile id="33">
+  <image width="24" height="24" source="assets/attackable_terrain/small box/0.png"/>
  </tile>
 </tileset>
