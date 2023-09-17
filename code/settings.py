@@ -47,7 +47,7 @@ COMPLETED_DATA = {'cutscenes': [],
 				  'bosses_defeated':[]}
 
 GUN_DATA = {
-	'Nogun':{'cost': 0, 'damage': 0, 'cooldown': 0, 'knockback': 0},
+	'nogun':{'cost': 0, 'damage': 0, 'cooldown': 0, 'knockback': 0},
 	'pistol':{'cost': 11, 'damage': 1, 'cooldown': 10, 'knockback': 1},
 	'railgun':{'cost': 33, 'damage': 4, 'cooldown': 100, 'knockback': 2},
 	'shotgun':{'cost': 22, 'damage': 5, 'cooldown': 60, 'knockback': 2},

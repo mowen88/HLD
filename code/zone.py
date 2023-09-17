@@ -4,7 +4,7 @@ from settings import *
 from state import State
 from camera import Camera
 from create_zone import CreateZone
-from particles import Shadow, Flash, Explosion
+from particles import Shadow, DashDust, Flash, Explosion
 from sprites import Sword, Gun, Bullet, ShotgunShell, Grenade, Beam
 from cutscenes.cutscene_manager import Cutscene, CollectionCutscene
 from ui import UI
@@ -82,6 +82,10 @@ class Zone(State):
 
 	def create_flash(self, pos, colour, size):
 		self.flash = Flash(self.game, self, [self.updated_sprites, self.rendered_sprites], pos, colour, size, LAYERS['particles'])
+
+	def create_dash_dust(self):
+		if self.player.dashing:
+			DashDust(self.game, self, [self.updated_sprites, self.rendered_sprites], self.player.hitbox.midbottom, LAYERS['particles'])
 
 	def create_melee(self):
 		self.melee_sprite = Sword(self.game, self, [self.updated_sprites, self.rendered_sprites], self.player.hitbox.center, LAYERS['player'], '../assets/weapons/sword')
@@ -234,6 +238,7 @@ class Zone(State):
 
 	def update(self, dt):
 		if self.player.z == LAYERS['player']:
+			self.create_dash_dust()
 			self.activate_platforms(dt)
 			self.activate_barriers()
 			self.activate_cutscene()
@@ -268,8 +273,8 @@ class Zone(State):
 		self.fade_surf.draw(screen)
 
 
-		self.game.render_text(str(round(self.game.clock.get_fps(), 2)), WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.1))
-		#self.game.render_text(self.player.vel, WHITE, self.game.small_font, RES/2)
-		self.game.render_text(COMPLETED_DATA['guns'], WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.9))
+		# self.game.render_text(str(round(self.game.clock.get_fps(), 2)), WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.1))
+		# #self.game.render_text(self.player.vel, WHITE, self.game.small_font, RES/2)
+		# self.game.render_text(COMPLETED_DATA['guns'], WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.9))
 		
 		

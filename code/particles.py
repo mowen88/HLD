@@ -56,6 +56,25 @@ class Shadow(Particle):
 		else:
 			self.image.set_alpha(0)
 
+class DashDust(Particle):
+	def __init__(self, game, zone, groups, pos, z = LAYERS['foreground']):
+		super().__init__(game, zone, groups, pos, z)
+
+		self.zone = zone
+		self.z = z
+		self.pos = pos
+		self.alpha = 255
+		self.image = pygame.image.load('../assets/particles/dust.png').convert_alpha()
+		self.rect = self.image.get_rect(center = self.pos)
+
+	def update(self, dt):
+
+		self.alpha -= 15 * dt
+		if self.alpha < 0:
+			self.kill()
+
+		self.image.set_alpha(self.alpha)
+
 class Flash(Particle):
 	def __init__(self, game, zone, groups, pos, colour, size, z = LAYERS['foreground']):
 		super().__init__(game, zone, groups, pos, z)

@@ -49,7 +49,7 @@ class Idle:
 			if npc.zone.get_distance_direction_and_angle(npc.hitbox.center, npc.zone.player.hitbox.center - npc.zone.rendered_sprites.offset)[0] < npc.pursue_radius:
 				return Move(npc)
 		else:
-			return Knockback(npc)
+			return Death(npc)
 
 	def update(self, dt, npc):
 		npc.animate('idle', 0.2 * dt)
@@ -69,7 +69,7 @@ class Move:
 			if npc.zone.get_distance_direction_and_angle(npc.hitbox.center, npc.zone.player.hitbox.center - npc.zone.rendered_sprites.offset)[0] < npc.attack_radius:
 				return Telegraphing(npc)
 		else:
-			return Knockback(npc)
+			return Death(npc)
 
 	def update(self, dt, npc):
 		npc.acc = pygame.math.Vector2()
@@ -100,7 +100,7 @@ class Telegraphing:
 			elif self.timer < 0:
 				return Jump(npc, self.attack_direction)
 		else:
-			return Knockback(npc)
+			return Death(npc)
 
 	def update(self, dt, npc):
 		if not npc.invincible:
@@ -132,7 +132,7 @@ class Jump:
 			elif npc.zone.get_distance_direction_and_angle(npc.hitbox.center, npc.zone.player.hitbox.center - npc.zone.rendered_sprites.offset)[0] > npc.pursue_radius:
 				return Move(npc)
 		else:
-			return Knockback(npc)
+			return Death(npc)
 
 	def update(self, dt, npc):
 		
@@ -160,7 +160,7 @@ class Landing:
 			if self.timer < 0:
 				return Idle(npc)
 		else:
-			return Knockback(npc)
+			return Death(npc)
 
 	def update(self, dt, npc):
 
@@ -202,13 +202,33 @@ class Knockback:
 	def update(self, dt, npc):
 		
 		npc.physics(dt)
-		npc.animate('death', 0.2 * dt, False)
+		npc.animate('death', 0.15 * dt, False)
 		if self.current_direction == 'left': npc.image = pygame.transform.flip(npc.image, True, False)
 	
 		npc.acc = pygame.math.Vector2()
 		self.knockback_speed -= 0.05 * dt
 		if npc.vel.magnitude() != 0: npc.vel = npc.vel.normalize() * self.knockback_speed
 		if npc.vel.magnitude() < 0.1: npc.vel = pygame.math.Vector2()
+
+class Death:
+	def __init__(self, npc):
+		npc.frame_index = 0
+		self.current_direction = self.get_direction(npc)
+
+	def get_direction(self, npc):
+		if npc.hitbox.centerx < npc.zone.player.hitbox.centerx: direction = 'left'
+		else: direction = 'right'
+		return direction
+
+	def state_logic(self, npc):
+		pass
+
+	def update(self, dt, npc):
+		if self.current_direction == 'left': 
+			npc.image = pygame.transform.flip(npc.image, True, False)
+
+		npc.vel = pygame.math.Vector2()
+		npc.animate('death', 0.15 * dt, False)
 
 class FallDeath:
 	def __init__(self, npc):
