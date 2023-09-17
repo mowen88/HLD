@@ -50,19 +50,20 @@ class UI:
 				box *= self.offset
 
 	def boss_health_display(self, screen):
+		offset = 8
 		if self.zone.boss is not None: 
 			if self.zone.boss.name not in COMPLETED_DATA['bosses_defeated']:
 
-				health_bar_width = self.zone.boss.max_health * self.offset
+				health_bar_width = self.zone.boss.max_health * offset
 				start_x = (WIDTH - health_bar_width)//2
 
 				for box in range(self.zone.boss.max_health):
 					if self.zone.boss.alive:
-						pygame.draw.rect(screen, BLACK, (start_x + box * self.offset, HEIGHT - 20, 10, 10), border_radius=2)
+						pygame.draw.rect(screen, BLACK, (start_x + box * offset, HEIGHT - 10, 5, 5), border_radius=2)
 						for box in range(self.zone.boss.health):
 							if box < self.zone.boss.health:
-								box *= self.offset
-								pygame.draw.rect(screen, PINK, (start_x + box, HEIGHT - 20, 10, 10), border_radius=2)
+								box *= offset
+								pygame.draw.rect(screen, ENEMY_DATA[self.zone.boss.name]['colour'], (start_x + box, HEIGHT - 10, 5, 5), border_radius=2)
 
 	def flash_icon(self):
 		if self.zone.player.invincible:

@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="20" height="48" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="36">
+<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="20" height="48" tilewidth="16" tileheight="16" infinite="0" nextlayerid="13" nextobjectid="49">
  <editorsettings>
   <export target="radio_shack.csv" format="csv"/>
  </editorsettings>
  <tileset firstgid="1" source="../../tilesets/rockface.tsx"/>
  <tileset firstgid="16" source="../../tilesets/void.tsx"/>
  <tileset firstgid="17" source="../../objects.tsx"/>
+ <imagelayer id="2" name="floor">
+  <image source="floor.png" width="320" height="768"/>
+ </imagelayer>
+ <imagelayer id="4" name="foreground_pic">
+  <image source="foreground.png" width="320" height="768"/>
+ </imagelayer>
  <layer id="3" name="walls" width="20" height="48">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -49,11 +55,11 @@
 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,
 1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,
-1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,
-1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1,
-1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+1,1,1,1,1,0,0,0,1,0,0,1,1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,
+0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
@@ -140,8 +146,21 @@
   <object id="34" name="medium tree" gid="19" x="32.6667" y="293" width="32" height="32"/>
   <object id="35" name="tall tree" gid="22" x="106.667" y="287" width="16" height="32"/>
  </objectgroup>
+ <objectgroup id="11" name="triggers"/>
  <objectgroup id="7" name="collectibles">
-  <object id="26" name="key_0" gid="26" x="161" y="591" width="16" height="16"/>
+  <object id="26" name="key_0" gid="26" x="160" y="720" width="16" height="16"/>
+ </objectgroup>
+ <objectgroup id="10" name="entities">
+  <object id="36" name="boss1" x="231" y="608.333">
+   <point/>
+  </object>
+ </objectgroup>
+ <objectgroup id="12" name="barriers">
+  <object id="41" name="barrier" x="172" y="464"/>
+  <object id="43" name="barrier" x="132" y="464"/>
+  <object id="44" name="barrier" x="152" y="648"/>
+  <object id="46" name="0" x="96" y="496" width="128" height="32"/>
+  <object id="48" name="barrier" x="152" y="464"/>
  </objectgroup>
  <objectgroup id="5" name="entries">
   <object id="1" name="3" x="26.3333" y="228.667">
@@ -151,10 +170,4 @@
  <objectgroup id="6" name="exits">
   <object id="3" name="3" x="-16" y="192" width="16" height="96"/>
  </objectgroup>
- <imagelayer id="4" name="foreground_pic">
-  <image source="foreground.png" width="320" height="768"/>
- </imagelayer>
- <imagelayer id="2" name="floor">
-  <image source="floor.png" width="320" height="768"/>
- </imagelayer>
 </map>

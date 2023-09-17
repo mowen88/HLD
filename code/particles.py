@@ -45,7 +45,10 @@ class Shadow(Particle):
 				self.image.set_alpha(0)
 			else:
 				self.image.set_alpha(80)
-				self.rect = self.image.get_rect(center = (self.sprite.hitbox.midbottom[0], self.sprite.hitbox.midbottom[1] + self.rect.height))
+				if self.sprite in self.zone.boss_sprites:
+					self.rect = self.image.get_rect(center = (self.sprite.hitbox.midbottom[0], self.sprite.hitbox.midbottom[1] + self.rect.height * 0.7))
+				else:
+					self.rect = self.image.get_rect(center = (self.sprite.hitbox.midbottom[0], self.sprite.hitbox.midbottom[1] + self.rect.height))
 
 		elif self.sprite.alive:
 			self.image.set_alpha(80)

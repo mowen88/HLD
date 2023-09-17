@@ -20,7 +20,7 @@ class Boss1(NPC):
 		self.pursue_radius = self.data['pursue_radius']
 		self.telegraphing_time = self.data['telegraphing_time']
 
-		self.image = pygame.Surface((32, 32))
+		self.image = pygame.Surface((40, 40))
 		self.rect = self.image.get_rect(center = pos)
 		self.pos = pygame.math.Vector2(self.rect.center)
 		self.hitbox = self.rect.copy().inflate(-self.rect.width * 0.5, -self.rect.height * 0.7)
@@ -105,7 +105,7 @@ class Telegraphing:
 	def update(self, dt, npc):
 		if not npc.invincible:
 			self.timer -= dt
-		npc.animate('telegraphing', 0.4 * dt)
+		npc.animate('telegraphing', 0.15 * dt, False)
 
 class Jump:
 	def __init__(self, npc, attack_direction):
@@ -127,7 +127,7 @@ class Jump:
 					return FallDeath(npc)
 				else: 
 					npc.dashing = False
-					return Landing(npc)
+					return Idle(npc)
 
 			elif npc.zone.get_distance_direction_and_angle(npc.hitbox.center, npc.zone.player.hitbox.center - npc.zone.rendered_sprites.offset)[0] > npc.pursue_radius:
 				return Move(npc)
@@ -137,14 +137,17 @@ class Jump:
 	def update(self, dt, npc):
 		
 		npc.physics(dt)
-		npc.animate('jumping', 0.4 * dt, False)
+		npc.animate('jumping', 0.2 * dt, False)
 
 		self.timer -= dt
 
 		npc.acc = pygame.math.Vector2()
 		self.lunge_speed -= 0.05 * dt
-		if npc.vel.magnitude() != 0: npc.vel = npc.vel.normalize() * self.lunge_speed
-		if npc.vel.magnitude() < 0.1: npc.vel = pygame.math.Vector2()
+		if npc.vel.magnitude() < 0.1: 
+			npc.vel = pygame.math.Vector2()
+		else:
+			npc.vel = npc.vel.normalize() * self.lunge_speed
+			npc.zone.player.enemy_attacking_logic()
 
 class Landing:
 	def __init__(self, npc):
