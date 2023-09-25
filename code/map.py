@@ -80,24 +80,24 @@ class Map(State):
 				self.zone.cutscene_running = False
 				self.exit_state()
 				
-
 	def scroll_logic(self, dt):
+
 		keys = pygame.key.get_pressed()
 
 		for zone in self.zone_sprites:
 			if zone != self.marker:
-				if self.player.rect.centerx > self.map_rect.left:
-					if keys[pygame.K_RIGHT]: self.offset.x -= 0.1
-					elif keys[pygame.K_LEFT]: self.offset.x += 0.1
-					else: self.offset.x = 0
-					if keys[pygame.K_DOWN]: self.offset.y -= 0.1
-					elif keys[pygame.K_UP]: self.offset.y += 0.1
-					else: self.offset.y = 0
+				#if self.player.rect.centerx > self.map_rect.left:
+				if keys[pygame.K_RIGHT]: self.offset.x = -1
+				elif keys[pygame.K_LEFT]: self.offset.x = 1
+				else: self.offset.x = 0
+				if keys[pygame.K_DOWN]: self.offset.y = -1
+				elif keys[pygame.K_UP]: self.offset.y = 1
+				else: self.offset.y = 0	
 
-					zone.pos += self.offset * dt
-					zone.rect.center = zone.pos
+				zone.pos += self.offset
+				zone.rect.center = zone.pos
 
-					if self.offset.magnitude() > 0: self.offset = self.offset.normalize()
+				if self.offset.magnitude() > 0: self.offset = self.offset.normalize()
 
 	def update(self, dt):
 		self.fade(dt)

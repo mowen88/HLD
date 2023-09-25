@@ -78,9 +78,12 @@ MAP_DATA = {
 	'garden':{'pos': (30,10)},
 	'dungeon':{'pos': (60,20)},
 	'datacentre':{'pos': (0,20)},
-	'crashsite':{'pos': (-20,-20)},
-	'scene_2':{'pos': (-50,-50)},
-	'boss_room_1':{'pos': (-50,-50)},
+	# actual maps start here !!!
+	'crashsite':{'pos': (0,0)},
+	'scene_2':{'pos': (-40,0)},
+	'first_dungeon':{'pos': (-40,30)},
+	'dungeon_exit':{'pos': (-60,54)},
+	'radio_shack':{'pos': (-30,60)}
 }
 
 DIALOGUE = {

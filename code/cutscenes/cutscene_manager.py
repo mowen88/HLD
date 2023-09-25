@@ -26,7 +26,7 @@ class CollectionCutscene(State):
 		self.frames = self.game.get_folder_images(self.number)
 		self.frame_index = 0
 		self.image = self.frames[self.frame_index]
-		self.rect = self.image.get_rect(center = RES/2)
+		self.rect = self.image.get_rect(midbottom = self.zone.target.rect.midtop - self.zone.rendered_sprites.offset)
 
 	def blackbar_logic(self, dt):
 		if not self.opening:
@@ -79,6 +79,7 @@ class CollectionCutscene(State):
 
 		screen.blit(self.image, self.rect)
 		self.image.set_alpha(self.alpha)
+		self.rect = self.image.get_rect(midbottom = self.zone.target.rect.midtop - self.zone.rendered_sprites.offset)
 
 class Cutscene(State):
 	def __init__(self, game, zone, number):

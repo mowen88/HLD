@@ -92,11 +92,11 @@ class Move:
 		player.acc = pygame.math.Vector2()
 
 		# y direction increment acceleration
-		if player.direction['down']: player.acc.y += 0.15
-		elif player.direction['up']: player.acc.y -= 0.15
+		if player.direction['down']: player.acc.y = 0.15
+		elif player.direction['up']: player.acc.y = -0.15
 		# x direction increment acceleration
-		if player.direction['right']: player.acc.x += 0.15
-		elif player.direction['left']: player.acc.x -= 0.15
+		if player.direction['right']: player.acc.x = 0.15
+		elif player.direction['left']: player.acc.x = -0.15
 
 		player.physics(dt)
 		player.animate(self.direction, 0.2 * dt)

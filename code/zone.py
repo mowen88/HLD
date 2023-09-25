@@ -174,7 +174,7 @@ class Zone(State):
 					self.create_flash(sprite.rect.center, PINK, 5)
 					COMPLETED_DATA['keys'].append(sprite.name)
 					self.cutscene_running = True
-					CollectionCutscene(self.game, self, f"../assets/ui_images/juice_collected/").enter_state()
+					CollectionCutscene(self.game, self, f"../assets/ui_images/key_collected/").enter_state()
 					sprite.alive = False
 					sprite.kill()
 
@@ -183,7 +183,7 @@ class Zone(State):
 					self.create_flash(sprite.rect.center, PINK, 5)
 					COMPLETED_DATA['guns'].append(sprite.name)
 					self.cutscene_running = True
-					CollectionCutscene(self.game, self, f"../assets/ui_images/juice_collected/").enter_state()
+					CollectionCutscene(self.game, self, f"../assets/ui_images/{sprite.name}_collected/").enter_state()
 					sprite.alive = False
 					sprite.kill()
 					self.player.gun = COMPLETED_DATA['guns'][PLAYER_DATA['gun_index']]
@@ -274,7 +274,7 @@ class Zone(State):
 
 
 		# self.game.render_text(str(round(self.game.clock.get_fps(), 2)), WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.1))
-		# #self.game.render_text(self.player.vel, WHITE, self.game.small_font, RES/2)
+		self.game.render_text(self.player.vel, WHITE, self.game.small_font, RES/2)
 		# self.game.render_text(COMPLETED_DATA['guns'], WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.9))
 		
 		
