@@ -68,8 +68,9 @@ ZONE_DATA = {
 	'crashsite':{'bg_colour': LIGHT_GREEN,'1':'garden', '2':'dungeon', '3':'scene_2'},
 	'scene_2':{'bg_colour': LIGHT_GREEN,'1':'garden', '2':'first_dungeon', '3':'crashsite'},
 	'first_dungeon':{'bg_colour': BLACK, '1': 'dungeon_exit', '2': 'scene_2', '3':'datacentre'},
-	'dungeon_exit':{'bg_colour': BLACK, '1': 'first_dungeon', '2': 'riviera', '3':'radio_shack'},
-	'radio_shack':{'bg_colour': BLACK, '1': 'first_dungeon', '2': 'riviera', '3':'dungeon_exit'},
+	'dungeon_exit':{'bg_colour': BLACK, '1': 'first_dungeon', '2': 'pool', '3':'radio_shack'},
+	'radio_shack':{'bg_colour': BLACK, '1': 'first_dungeon', '2': 'pool', '3':'dungeon_exit'},
+	'pool':{'bg_colour': BLACK, '1': 'apothecary', '2': 'dungeon_exit', '3':'crashsite'},
 	
 	'boss_room_1':{'bg_colour': YELLOW, '1': 'garden', '2': 'dungeon', '3':'garden'}
 }
@@ -83,7 +84,8 @@ MAP_DATA = {
 	'scene_2':{'pos': (-40,0)},
 	'first_dungeon':{'pos': (-40,30)},
 	'dungeon_exit':{'pos': (-60,54)},
-	'radio_shack':{'pos': (-30,60)}
+	'radio_shack':{'pos': (-30,60)},
+	'pool':{'pos': (-60,0)}
 }
 
 DIALOGUE = {

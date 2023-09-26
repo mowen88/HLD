@@ -49,6 +49,10 @@ class Camera(pygame.sprite.Group):
 			self.camera_lag = 80
 			self.move_to([0,-HALF_WIDTH])
 
+		elif target[1] < 250 and self.zone.name == 'pool':
+			self.camera_lag = 80
+			self.move_to([0,0])
+
 		elif self.zone.cutscene_running or self.zone.target.dashing:
 			self.camera_lag = 50
 		else:

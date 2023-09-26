@@ -202,7 +202,6 @@ class Game:
         self.timer.update(dt)
         self.stack[-1].update(dt)
 
-
     def draw(self, screen): 
         #scaled_screen = pygame.transform.scale(self.screen, (self.window.get_size()))
         self.stack[-1].draw(screen)

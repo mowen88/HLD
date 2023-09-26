@@ -188,6 +188,14 @@ class AnimatedObject(pygame.sprite.Sprite):
 	def update(self, dt):
 		self.animate(0.2 * dt)
 
+class Water(AnimatedObject):
+	def __init__(self, game, zone, groups, pos, z, path):
+		super().__init__(game, zone, groups, pos, z, path)
+		self.rect = self.image.get_rect(topleft = pos)
+
+	def update(self, dt):
+		self.animate(0.15 * dt)
+
 class Platform(AnimatedObject):
 	def __init__(self, game, zone, groups, pos, z, path, number, duration):
 		super().__init__(game, zone, groups, pos, z, path)

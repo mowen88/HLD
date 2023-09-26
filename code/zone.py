@@ -273,8 +273,8 @@ class Zone(State):
 		self.fade_surf.draw(screen)
 
 
-		# self.game.render_text(str(round(self.game.clock.get_fps(), 2)), WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.1))
-		self.game.render_text(self.player.vel, WHITE, self.game.small_font, RES/2)
+		self.game.render_text(str(round(self.game.clock.get_fps(), 2)), WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.1))
+		#self.game.render_text(self.player.vel, WHITE, self.game.small_font, RES/2)
 		# self.game.render_text(COMPLETED_DATA['guns'], WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.9))
 		
 		
