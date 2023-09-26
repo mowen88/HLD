@@ -17,7 +17,7 @@ class NPC(pygame.sprite.Sprite):
 		self.knocked_back = False
 		self.knockback_direction = (0,0)
 		self.alive = True
-		self.animations = {'idle':[], 'telegraphing':[], 'death':[], 'jumping':[], 'landing':[]}
+		self.animations = {'idle':[], 'run':[], 'telegraphing':[], 'death':[], 'jumping':[], 'landing':[]}
 
 		if self.name: self.import_imgs()
 		self.animation_type = 'loop'

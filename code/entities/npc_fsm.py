@@ -49,7 +49,7 @@ class Move:
 		npc.acc += npc.zone.get_distance_direction_and_angle(npc.hitbox.center, npc.zone.player.hitbox.center - npc.zone.rendered_sprites.offset)[1] * npc.speed
 
 		npc.physics(dt)
-		npc.animate('idle', 0.2 * dt)
+		npc.animate('run', 0.2 * dt)
 		npc.direction = npc.get_direction()
 
 class Evade:
@@ -118,7 +118,7 @@ class Telegraphing:
 	def update(self, dt, npc):
 		if not npc.invincible:
 			self.timer -= dt
-		npc.animate('telegraphing', 0.4 * dt)
+		npc.animate('telegraphing', 0.2 * dt, False)
 
 class Attack:
 	def __init__(self, npc, attack_direction):
