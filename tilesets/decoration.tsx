@@ -17,7 +17,7 @@
   <image width="16" height="16" source="../decoration/grass.png"/>
  </tile>
  <tile id="5">
-  <image width="16" height="16" source="../decoration/water_1/0.png"/>
+  <image width="16" height="16" source="../decoration/water_1/00.png"/>
  </tile>
  <tile id="6">
   <image width="16" height="16" source="../decoration/waterfall/0.png"/>
