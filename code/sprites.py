@@ -419,6 +419,29 @@ class Bullet(AnimatedObject):
 		self.pos += self.vel * dt
 		self.rect.center = self.pos
 
+class EnemyBullet(AnimatedObject):
+	def __init__(self, game, zone, groups, pos, z, path, sprite):
+		super().__init__(game, zone, groups, pos, z, path)
+
+		self.speed = 3
+		self.sprite = sprite
+		self.vel = self.zone.get_distance_direction_and_angle(self.sprite.rect.center, self.zone.player.rect.center - self.zone.rendered_sprites.offset)[1] * self.speed
+		self.vel = self.vel.rotate(random.randrange(-10, 10))
+		self.pos = pygame.math.Vector2(self.rect.center)
+		self.damage = 1
+		self.knockback_power = 1
+
+	def collide(self):
+		for sprite in self.zone.block_sprites:
+			if self.rect.colliderect(sprite.hitbox):
+				self.kill()
+
+	def update(self, dt):
+		self.collide()
+		self.animate(0.25 * dt)
+		self.pos += self.vel * dt
+		self.rect.center = self.pos
+
 class ShotgunShell(Bullet):
 	def __init__(self, game, zone, groups, pos, z, path):
 		super().__init__(game, zone, groups, pos, z, path)

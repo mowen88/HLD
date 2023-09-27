@@ -1,4 +1,4 @@
-import math
+import math, random
 from settings import *
 from entities.NPCs import NPC
 from entities.player_fsm import Idle
@@ -128,6 +128,26 @@ class Player(NPC):
 					if self.zone.melee_sprite: 
 						self.zone.melee_sprite.kill()
 
+	def bullet_hit_player_logic(self):
+		for sprite in self.zone.enemy_bullet_sprites:
+			if self.zone.melee_sprite:
+				if self.zone.melee_sprite.rect.colliderect(sprite.rect) and self.zone.melee_sprite.frame_index  == 0:
+					sprite.vel *= -1
+					sprite.vel = sprite.vel.rotate(random.randrange(-10, 10))
+					self.zone.enemy_bullet_sprites.remove(sprite)
+					self.zone.player_bullet_sprites.add(sprite)
+
+			elif self.hitbox.colliderect(sprite.rect):
+				self.reduce_health(sprite.damage)
+				self.screenshaking = True
+				self.invincible = True
+				sprite.kill()
+				if self.zone.melee_sprite: 
+					self.zone.melee_sprite.kill()
+
+			# if got deflect ability...
+			
+
 	def reduce_health(self, amount):
 		if not self.invincible:
 			self.game.current_health -= amount
@@ -147,6 +167,7 @@ class Player(NPC):
 
 	def update(self, dt):
 		self.invincibility(dt)
+		self.bullet_hit_player_logic()
 		self.attack_timer_logic(dt)
 		self.dash_timer_logic(dt)
 		self.guns_out_timer_logic(dt)

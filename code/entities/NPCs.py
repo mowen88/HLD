@@ -16,6 +16,7 @@ class NPC(pygame.sprite.Sprite):
 		self.invincile_time = 6
 		self.knocked_back = False
 		self.knockback_direction = (0,0)
+		self.knockback_speed = 2
 		self.alive = True
 		self.animations = {'idle':[], 'run':[], 'telegraphing':[], 'death':[], 'jumping':[], 'landing':[]}
 

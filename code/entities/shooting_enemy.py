@@ -70,9 +70,7 @@ class Roam:
 
 	def state_logic(self, npc):
 		if npc.alive:
-
 			npc.explosion_damage_logic()
-
 			if self.timer < 0:
 				return Idle(npc)
 
@@ -104,14 +102,12 @@ class Aim:
 	def state_logic(self, npc):
 		if npc.alive:
 			npc.explosion_damage_logic()
-
 			if self.timer < 0:
-				###
+				npc.zone.create_enemy_bullet(npc)
 				return Evade(npc)
 
 			if npc.knocked_back:
 				return Knockback(npc)
-
 		else:
 			return Knockback(npc)
 
@@ -123,12 +119,12 @@ class Evade:
 	def __init__(self, npc):
 		npc.frame_index = 0
 		self.timer = random.randrange(30, 60)
-		self.random_direction = random.randrange(3,4)
+		self.random_direction = random.randrange(3,4) # dot product left or right
 
 	def state_logic(self, npc):
 		if npc.alive:
-
 			npc.explosion_damage_logic()
+
 			if npc.knocked_back:
 				return Knockback(npc)
 
@@ -143,8 +139,11 @@ class Evade:
 		self.timer -= dt
 		npc.acc = pygame.math.Vector2()
 		
-		npc.acc += npc.zone.get_distance_direction_and_angle(npc.hitbox.center, npc.zone.player.hitbox.center - npc.zone.rendered_sprites.offset)\
-		[self.random_direction] * npc.speed
+		if npc.zone.get_distance_direction_and_angle(npc.hitbox.center, npc.zone.player.hitbox.center - npc.zone.rendered_sprites.offset)[0] < npc.attack_radius:
+			npc.acc += npc.zone.get_distance_direction_and_angle(npc.hitbox.center, npc.zone.player.hitbox.center - npc.zone.rendered_sprites.offset)[1] * npc.speed *-1
+		else:
+			npc.acc += npc.zone.get_distance_direction_and_angle(npc.hitbox.center, npc.zone.player.hitbox.center - npc.zone.rendered_sprites.offset)\
+			[self.random_direction] * npc.speed
 
 		npc.physics(dt)
 		npc.animate('idle', 0.2 * dt)
