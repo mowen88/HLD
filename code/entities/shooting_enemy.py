@@ -17,7 +17,9 @@ class Musketeer(NPC):
 		self.pursue_radius = self.data['pursue_radius']
 		self.telegraphing_time = self.data['telegraphing_time']
 
-		self.zone.create_enemy_gun(self.rect.center, self)
+		self.aim_anlge = 0
+		self.aiming = False
+		self.zone.create_enemy_gun(self, self.aim_anlge)
 
 	def state_logic(self):
 		new_state = self.state.state_logic(self)
@@ -32,55 +34,90 @@ class Musketeer(NPC):
 			if self.vel.x > 0: self.image = pygame.transform.flip(self.image, True, False)
 
 class Idle:
-	def __init__(npc, self):
+	def __init__(self, npc):
+		npc.aiming = False
 		npc.frame_index = 0
+		self.timer = random.randrange(60, 180)
 
 	def state_logic(self, npc):
 		if npc.alive:
-
 			npc.explosion_damage_logic()
+
+			if self.timer < 0:
+				return Roam(npc)
+
 			if npc.knocked_back:
 				return Knockback(npc)
 
 			if npc.zone.get_distance_direction_and_angle(npc.hitbox.center, npc.zone.player.hitbox.center - npc.zone.rendered_sprites.offset)[0] < npc.pursue_radius:
-				return Move(npc)
+				npc.aiming = True
+				return Aim(npc)
 		else:
 			return Knockback(npc)
 
 	def update(self, dt, npc):
+		self.timer -= dt
 		npc.animate('idle', 0.2 * dt)
 
-class Move:
+class Roam:
 	def __init__(self, npc):
 		npc.frame_index = 0
+		self.timer = random.randrange(30, 120)
+		self.direction = self.get_random_direction()
+
+	def get_random_direction(self):
+		return random.choice([-1, 1])
 
 	def state_logic(self, npc):
 		if npc.alive:
 
 			npc.explosion_damage_logic()
 
-			if npc.knocked_back:
-				return Knockback(npc)
-
-			if npc.zone.melee_sprite or npc.zone.gun_sprite:
-				return Evade(npc)
-
-			if npc.zone.get_distance_direction_and_angle(npc.hitbox.center, npc.zone.player.hitbox.center - npc.zone.rendered_sprites.offset)[0] > npc.pursue_radius:
+			if self.timer < 0:
 				return Idle(npc)
 
-			if npc.zone.get_distance_direction_and_angle(npc.hitbox.center, npc.zone.player.hitbox.center - npc.zone.rendered_sprites.offset)[0] < npc.attack_radius:
-				return Telegraphing(npc)
+			if npc.zone.get_distance_direction_and_angle(npc.hitbox.center, npc.zone.player.hitbox.center - npc.zone.rendered_sprites.offset)[0] < npc.pursue_radius:
+				npc.aiming = True
+				return Aim(npc)
+
 		else:
 			return Knockback(npc)
 
 	def update(self, dt, npc):
+
+		self.timer -= dt
+
 		npc.acc = pygame.math.Vector2()
 		
-		npc.acc += npc.zone.get_distance_direction_and_angle(npc.hitbox.center, npc.zone.player.hitbox.center - npc.zone.rendered_sprites.offset)[1] * npc.speed
+		npc.acc.x += self.direction * npc.speed
+		npc.acc.y += self.direction * npc.speed * 0.5
 
 		npc.physics(dt)
 		npc.animate('run', 0.2 * dt)
 		npc.direction = npc.get_direction()
+
+class Aim:
+	def __init__(self, npc):
+		npc.frame_index = 0
+		self.timer = 30
+
+	def state_logic(self, npc):
+		if npc.alive:
+			npc.explosion_damage_logic()
+
+			if self.timer < 0:
+				###
+				return Evade(npc)
+
+			if npc.knocked_back:
+				return Knockback(npc)
+
+		else:
+			return Knockback(npc)
+
+	def update(self, dt, npc):
+		self.timer -= dt
+		npc.animate('idle', 0.2 * dt)
 
 class Evade:
 	def __init__(self, npc):
@@ -96,13 +133,8 @@ class Evade:
 				return Knockback(npc)
 
 			if self.timer <= 0:
-				return Move(npc)
-
-			if npc.zone.get_distance_direction_and_angle(npc.hitbox.center, npc.zone.player.hitbox.center - npc.zone.rendered_sprites.offset)[0] > npc.pursue_radius:
 				return Idle(npc)
 
-			if npc.zone.get_distance_direction_and_angle(npc.hitbox.center, npc.zone.player.hitbox.center - npc.zone.rendered_sprites.offset)[0] < npc.attack_radius:
-				return Telegraphing(npc)
 		else:
 			return Knockback(npc)
 
@@ -117,127 +149,6 @@ class Evade:
 		npc.physics(dt)
 		npc.animate('idle', 0.2 * dt)
 		npc.direction = npc.get_direction()
-
-
-
-class Telegraphing:
-	def __init__(self, npc):
-		npc.frame_index = 0
-		self.timer = npc.telegraphing_time
-		self.attack_direction = pygame.math.Vector2(npc.zone.player.rect.center - npc.zone.rendered_sprites.offset)
-
-	def state_logic(self, npc):
-		if npc.alive:
-
-			npc.explosion_damage_logic()
-			if npc.knocked_back:
-				return Knockback(npc)
-
-			if npc.zone.get_distance_direction_and_angle(npc.hitbox.center, npc.zone.player.hitbox.center - npc.zone.rendered_sprites.offset)[0] > npc.pursue_radius:
-				return Move(npc)
-
-			if self.timer > npc.telegraphing_time/2:
-				self.attack_direction = pygame.math.Vector2(npc.zone.player.rect.center - npc.zone.rendered_sprites.offset)
-			elif self.timer < 0 and npc.zone.player.dashing:
-				return Idle(npc)
-			elif self.timer < 0:
-				return Attack(npc, self.attack_direction)
-		else:
-			return Knockback(npc)
-
-	def update(self, dt, npc):
-		if not npc.invincible:
-			self.timer -= dt
-		npc.animate('telegraphing', 0.2 * dt, False)
-
-class Attack:
-	def __init__(self, npc, attack_direction):
-		self.timer = 40
-		npc.dashing = True
-		npc.frame_index = 0
-		self.lunge_speed = npc.lunge_speed
-		self.get_current_direction = attack_direction #npc.zone.player.rect.center - npc.zone.rendered_sprites.offset
-		npc.vel = npc.zone.get_distance_direction_and_angle(npc.hitbox.center, self.get_current_direction)[1] * self.lunge_speed
-		npc.angle = npc.zone.get_distance_direction_and_angle(npc.hitbox.center, self.get_current_direction)[2]
-
-	def state_logic(self, npc):
-		if npc.alive:
-
-			npc.explosion_damage_logic()
-			if npc.knocked_back:
-				return Knockback(npc)
-
-			if self.timer < 0 or npc.vel.magnitude() < 0.1:
-				if npc.get_collide_list(npc.zone.void_sprites):
-					npc.dashing = False
-					npc.on_ground = False
-					return FallDeath(npc)
-				else: 
-					npc.dashing = False
-					return Idle(npc)
-
-			elif npc.zone.get_distance_direction_and_angle(npc.hitbox.center, npc.zone.player.hitbox.center - npc.zone.rendered_sprites.offset)[0] > npc.pursue_radius:
-				return Move(npc)
-		else:
-			return Knockback(npc)
-
-	def update(self, dt, npc):
-		
-		npc.physics(dt)
-		npc.animate('idle', 0.2 * dt, False)
-
-		self.timer -= dt
-
-		npc.acc = pygame.math.Vector2()
-		self.lunge_speed -= 0.05 * dt
-		if npc.vel.magnitude() > 0.5: npc.zone.player.enemy_attacking_logic()
-		if npc.vel.magnitude() != 0: npc.vel = npc.vel.normalize() * self.lunge_speed
-		if npc.vel.magnitude() < 0.1: npc.vel = pygame.math.Vector2()
-
-class Jump:
-	def __init__(self, npc, attack_direction):
-
-		self.gravity = 0.2
-		npc.vel.y = 5
-
-		self.timer = 40
-		npc.dashing = True
-		npc.frame_index = 0
-		self.lunge_speed = npc.lunge_speed
-		self.get_current_direction = attack_direction #npc.zone.player.rect.center - npc.zone.rendered_sprites.offset
-		npc.vel = npc.zone.get_distance_direction_and_angle(npc.hitbox.center, self.get_current_direction)[1] * self.lunge_speed
-		npc.angle = npc.zone.get_distance_direction_and_angle(npc.hitbox.center, self.get_current_direction)[2]
-
-	def state_logic(self, npc):
-		if npc.alive:
-			if self.timer < 0 or npc.vel.magnitude() < 0.1:
-				if npc.get_collide_list(npc.zone.void_sprites):
-					npc.dashing = False
-					npc.on_ground = False
-					return FallDeath(npc)
-				else: 
-					npc.dashing = False
-					return Idle(npc)
-
-			elif npc.zone.get_distance_direction_and_angle(npc.hitbox.center, npc.zone.player.hitbox.center - npc.zone.rendered_sprites.offset)[0] > npc.pursue_radius:
-				return Move(npc)
-		else:
-			return Knockback(npc)
-
-	def update(self, dt, npc):
-		
-		npc.physics(dt)
-		npc.animate('idle', 0.2 * dt, False)
-
-		self.timer -= dt
-
-		npc.zone.player.enemy_attacking_logic()
-
-		npc.acc = pygame.math.Vector2()
-		self.lunge_speed -= 0.05 * dt
-		npc.vel.y += self.gravity
-		if npc.vel.magnitude() != 0: npc.vel = npc.vel.normalize() * self.lunge_speed
-		if npc.vel.magnitude() < 0.1: npc.vel = pygame.math.Vector2()
 
 class Knockback:
 	def __init__(self, npc):

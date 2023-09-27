@@ -164,7 +164,7 @@ class Gun(Object):
 		else: self.rect = self.image.get_rect(center = (self.zone.player.rect.centerx, self.zone.player.rect.centery - 1))
 
 class EnemyGun(Object):
-	def __init__(self, game, zone, groups, pos, z, surf, sprite):
+	def __init__(self, game, zone, groups, pos, z, surf, sprite, aim_angle):
 		super().__init__(game, zone, groups, pos, z, surf)
 
 		self.zone = zone
@@ -174,18 +174,29 @@ class EnemyGun(Object):
 		self.image = self.original_image
 		self.flipped_image = pygame.transform.flip(self.original_image, True, False)
 		self.rect = self.image.get_rect(center = pos)
-		self.angle = self.zone.get_distance_direction_and_angle(self.sprite.hitbox.center, self.zone.player.hitbox.center - self.zone.rendered_sprites.offset)[2]
+		self.angle = aim_angle
 
 	def rotate(self):
-		self.angle = self.angle % 45
-		self.angle = self.zone.get_distance_direction_and_angle(self.sprite.hitbox.center, self.zone.player.hitbox.center - self.zone.rendered_sprites.offset)[2]
-		if self.angle >= 180: self.image = pygame.transform.rotate(self.flipped_image, -self.angle)
-		else: self.image = pygame.transform.rotate(self.original_image, -self.angle)
+		if self.sprite.aiming:
+			self.angle = self.angle % 45
+			self.angle = self.zone.get_distance_direction_and_angle(self.sprite.hitbox.center, self.zone.player.hitbox.center - self.zone.rendered_sprites.offset)[2]
+		
+		elif self.sprite.vel.x > 0:
+			self.angle = 270
+		else:
+			self.angle = 90
+
+		if self.angle >= 180:
+			self.image = pygame.transform.rotate(self.flipped_image, -self.angle)
+		else:
+			self.image = pygame.transform.rotate(self.original_image, -self.angle)
 
 	def update(self, dt):
 		self.rotate()
-		if 90 < self.angle < 270: self.rect = self.image.get_rect(center = (self.sprite.rect.centerx, self.sprite.rect.centery + 1))
-		else: self.rect = self.image.get_rect(center = (self.sprite.rect.centerx, self.sprite.rect.centery - 1))
+		self.rect = self.image.get_rect(center = (self.sprite.rect.center))
+
+		if not self.sprite.alive:
+			self.kill()
 
 class AnimatedObject(pygame.sprite.Sprite):
 	def __init__(self, game, zone, groups, pos, z, path):

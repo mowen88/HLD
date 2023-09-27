@@ -95,8 +95,8 @@ class Zone(State):
 	def create_gun(self):
 		self.gun_sprite = Gun(self.game, self, [self.updated_sprites, self.rendered_sprites], self.player.hitbox.center, LAYERS['player'], pygame.image.load(f'../assets/weapons/{self.player.gun}.png').convert_alpha())
 
-	def create_enemy_gun(self, pos, sprite):
-		EnemyGun(self.game, self, [self.enemy_gun_sprites, self.updated_sprites, self.rendered_sprites], pos, LAYERS['player'], pygame.image.load(f'../assets/weapons/enemy_rifle/0.png').convert_alpha(), sprite)
+	def create_enemy_gun(self, sprite, aim_angle):
+		EnemyGun(self.game, self, [self.enemy_gun_sprites, self.updated_sprites, self.rendered_sprites], sprite.rect.center, LAYERS['player'], pygame.image.load(f'../assets/weapons/enemy_rifle/0.png').convert_alpha(), sprite, aim_angle)
 
 	def create_player_bullet(self):
 		self.bullet = Bullet(self.game, self, [self.player_bullet_sprites, self.updated_sprites, self.rendered_sprites], self.player.hitbox.center, LAYERS['player'], f'../assets/weapons/{self.player.gun}_bullet')
@@ -287,7 +287,7 @@ class Zone(State):
 
 
 		self.game.render_text(str(round(self.game.clock.get_fps(), 2)), WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.1))
-		#self.game.render_text(self.player.vel, WHITE, self.game.small_font, RES/2)
+		self.game.render_text(self.musketeer.state, WHITE, self.game.small_font, RES/2)
 		# self.game.render_text(COMPLETED_DATA['guns'], WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.9))
 		
 		
