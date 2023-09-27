@@ -8,7 +8,7 @@ Water, Barrier, Door, Platform, Void, Collectible, Gun, Sword, Tree, Beam, Attac
 from particles import Particle, Shadow
 from entities.player import Player
 from entities.NPCs import Warrior, Mercenary
-from entities.enemy import Grunt, Hound
+from entities.enemy import Grunt, Hound, Pincer
 from entities.shooting_enemy import Musketeer
 from entities.boss1 import Boss1
 
@@ -58,6 +58,7 @@ class CreateZone:
 				#enemies
 				if obj.name == 'grunt': self.zone.grunt = Grunt(self.zone.game, self.zone, [self.zone.enemy_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.name)
 				if obj.name == 'hound': self.zone.hound = Hound(self.zone.game, self.zone, [self.zone.enemy_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.name)
+				if obj.name == 'pincer': self.zone.pincer = Pincer(self.zone.game, self.zone, [self.zone.enemy_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.name)
 				if obj.name == 'musketeer': self.zone.musketeer = Musketeer(self.zone.game, self.zone, [self.zone.enemy_sprites, self.zone.shooting_enemy_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.name)
 				#NPCs
 				if obj.name == 'warrior': self.zone.warrior = Warrior(self.zone.game, self.zone, [self.zone.npc_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.name)

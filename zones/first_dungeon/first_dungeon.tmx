@@ -98,7 +98,7 @@
 </data>
  </layer>
  <objectgroup id="4" name="entities">
-  <object id="52" name="grunt" x="264" y="324.333">
+  <object id="52" name="hound" x="264" y="324.333">
    <point/>
   </object>
   <object id="53" name="mercenary" x="392" y="165.75">
@@ -110,7 +110,7 @@
   <object id="82" name="musketeer" x="222" y="295.5">
    <point/>
   </object>
-  <object id="84" name="hound" x="392.5" y="290">
+  <object id="84" name="pincer" x="392.5" y="290">
    <point/>
   </object>
  </objectgroup>
@@ -140,28 +140,28 @@
  </objectgroup>
  <objectgroup id="12" name="barriers"/>
  <objectgroup id="13" name="objects">
-  <object id="55" name="box" gid="77" x="339" y="190.5" width="24" height="24"/>
-  <object id="56" name="white box" gid="80" x="353.5" y="178.5" width="24" height="24"/>
-  <object id="57" name="tall box" gid="78" x="356" y="203.5" width="24" height="24"/>
+  <object id="55" name="box" gid="77" x="343" y="190.5" width="24" height="24"/>
+  <object id="56" name="white box" gid="80" x="357.5" y="178.5" width="24" height="24"/>
+  <object id="57" name="tall box" gid="78" x="360" y="203.5" width="24" height="24"/>
   <object id="58" name="wide box" gid="79" x="405" y="161.5" width="24" height="24"/>
   <object id="59" name="wide box" gid="79" x="31" y="97" width="24" height="24"/>
   <object id="60" name="box 2" gid="81" x="293.5" y="372" width="24" height="24"/>
   <object id="61" name="white box" gid="80" x="22.5" y="72" width="24" height="24"/>
-  <object id="62" name="open box" gid="82" x="330.5" y="184.5" width="24" height="24"/>
+  <object id="62" name="open box" gid="82" x="334.5" y="184.5" width="24" height="24"/>
   <object id="63" name="open box" gid="82" x="408" y="207.5" width="24" height="24"/>
   <object id="64" name="open box" gid="82" x="111" y="79" width="24" height="24"/>
   <object id="66" name="box" gid="77" x="24.5" y="295" width="24" height="24"/>
   <object id="67" name="open box" gid="82" x="41" y="303" width="24" height="24"/>
   <object id="68" name="wide box" gid="79" x="32" y="86" width="24" height="24"/>
-  <object id="70" name="wide box" gid="79" x="213" y="374" width="24" height="24"/>
+  <object id="70" name="wide box" gid="79" x="202" y="377.5" width="24" height="24"/>
   <object id="71" name="wide box" gid="79" x="204" y="364" width="24" height="24"/>
   <object id="72" name="white box" gid="80" x="501.5" y="270.5" width="24" height="24"/>
   <object id="73" name="white box" gid="80" x="520.5" y="276" width="24" height="24"/>
   <object id="74" name="white box" gid="80" x="95" y="74" width="24" height="24"/>
   <object id="75" name="white box" gid="80" x="35.875" y="72.5" width="24" height="24"/>
   <object id="76" name="small box" gid="83" x="100" y="90" width="24" height="24"/>
-  <object id="78" name="small box" gid="83" x="13.2273" y="90.0455" width="24" height="24"/>
-  <object id="79" name="small box" gid="83" x="328.75" y="169.5" width="24" height="24"/>
+  <object id="78" name="small box" gid="83" x="20.2273" y="109.545" width="24" height="24"/>
+  <object id="79" name="small box" gid="83" x="332.75" y="169.5" width="24" height="24"/>
   <object id="80" name="small box" gid="83" x="509.5" y="285.75" width="24" height="24"/>
   <object id="81" name="small box" gid="83" x="53" y="298.75" width="24" height="24"/>
  </objectgroup>

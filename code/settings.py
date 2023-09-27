@@ -56,7 +56,9 @@ GUN_DATA = {
 ENEMY_DATA = {
 	'grunt':{'speed': 0.1, 'lunge_speed': 2,'damage': 1, 'health': 3, 'telegraphing_time': 40, 'attack_radius': 30, 'pursue_radius': 110},
 	'hound':{'speed': 0.2, 'lunge_speed': 3, 'damage': 1, 'health': 2, 'telegraphing_time': 15, 'attack_radius': 60, 'pursue_radius': 90},
+	'pincer':{'speed': 0.2, 'lunge_speed': 3, 'damage': 1, 'health': 2, 'telegraphing_time': 15, 'attack_radius': 60, 'pursue_radius': 90},
 	'musketeer':{'speed': 0.05, 'lunge_speed': 1, 'damage': 1, 'health': 2, 'telegraphing_time': 60, 'attack_radius': 90, 'pursue_radius': 120},
+
 	 #bosses
 	'boss1':{'colour': YELLOW, 'speed': 0.1, 'lunge_speed': 2, 'damage': 1, 'health': 15, 'telegraphing_time': 40, 'attack_radius': 50, 'pursue_radius': 120}
 }
