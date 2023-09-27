@@ -134,6 +134,12 @@ class Tree(Object):
 		
 		self.hitbox = self.rect.copy().inflate(-self.rect.width *0.05, -self.rect.height *0.3)
 
+class Post(Object):
+	def __init__(self, game, zone, groups, pos, z, surf):
+		super().__init__(game, zone, groups, pos, z, surf)
+		
+		self.hitbox = self.rect.copy().inflate(-self.rect.width *0.4, -self.rect.height *0.45)
+
 class Gun(Object):
 	def __init__(self, game, zone, groups, pos, z, surf):
 		super().__init__(game, zone, groups, pos, z, surf)
@@ -156,6 +162,30 @@ class Gun(Object):
 		self.rotate()
 		if 90 < self.angle < 270: self.rect = self.image.get_rect(center = (self.zone.player.rect.centerx, self.zone.player.rect.centery + 1))
 		else: self.rect = self.image.get_rect(center = (self.zone.player.rect.centerx, self.zone.player.rect.centery - 1))
+
+class EnemyGun(Object):
+	def __init__(self, game, zone, groups, pos, z, surf, sprite):
+		super().__init__(game, zone, groups, pos, z, surf)
+
+		self.zone = zone
+		self.sprite = sprite
+		self.z = z
+		self.original_image = surf
+		self.image = self.original_image
+		self.flipped_image = pygame.transform.flip(self.original_image, True, False)
+		self.rect = self.image.get_rect(center = pos)
+		self.angle = self.zone.get_distance_direction_and_angle(self.sprite.hitbox.center, self.zone.player.hitbox.center - self.zone.rendered_sprites.offset)[2]
+
+	def rotate(self):
+		self.angle = self.angle % 45
+		self.angle = self.zone.get_distance_direction_and_angle(self.sprite.hitbox.center, self.zone.player.hitbox.center - self.zone.rendered_sprites.offset)[2]
+		if self.angle >= 180: self.image = pygame.transform.rotate(self.flipped_image, -self.angle)
+		else: self.image = pygame.transform.rotate(self.original_image, -self.angle)
+
+	def update(self, dt):
+		self.rotate()
+		if 90 < self.angle < 270: self.rect = self.image.get_rect(center = (self.sprite.rect.centerx, self.sprite.rect.centery + 1))
+		else: self.rect = self.image.get_rect(center = (self.sprite.rect.centerx, self.sprite.rect.centery - 1))
 
 class AnimatedObject(pygame.sprite.Sprite):
 	def __init__(self, game, zone, groups, pos, z, path):
@@ -365,6 +395,7 @@ class Bullet(AnimatedObject):
 		self.vel = self.vel.rotate(random.randrange(-10, 10))
 		self.pos = pygame.math.Vector2(self.rect.center)
 		self.damage = GUN_DATA[self.zone.player.gun]['damage']
+		self.knockback_power = GUN_DATA[self.zone.player.gun]['knockback']
 
 	def collide(self):
 		for sprite in self.zone.block_sprites:
@@ -385,8 +416,10 @@ class ShotgunShell(Bullet):
 		self.vel = self.zone.get_distance_direction_and_angle(self.rect.center, pygame.mouse.get_pos())[1] * self.speed
 		self.vel = self.vel.rotate(random.randrange(-10, 10))
 		self.pos = pygame.math.Vector2(self.rect.center)
-		self.damage = GUN_DATA[self.zone.player.gun]['damage']
 		self.size = 0
+
+		self.damage = GUN_DATA[self.zone.player.gun]['damage']
+		self.knockback_power = GUN_DATA[self.zone.player.gun]['knockback']
 
 	def collide(self):
 		hits = pygame.sprite.spritecollide(self, self.zone.block_sprites, False, pygame.sprite.collide_rect_ratio(0.6))
@@ -507,7 +540,8 @@ class Beam(AnimatedObject):
 
 		self.alpha = 255
 		self.fade_speed = fade_speed
-		self.damage = 3
+		self.damage = GUN_DATA[self.zone.player.gun]['damage']
+		self.knockback_power = GUN_DATA[self.zone.player.gun]['knockback']
 
 	def animate(self, animation_speed):
 		self.frame_index += animation_speed

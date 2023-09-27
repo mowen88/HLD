@@ -10,16 +10,13 @@ class Grunt(NPC):
 
 		self.speed = self.data['speed']
 		self.lunge_speed = self.data['lunge_speed']
-		self.knockback_speed = self.data['knockback_speed']
 		self.health = self.data['health']
 		self.damage = self.data['damage']
 		self.attack_radius = self.data['attack_radius']
 		self.pursue_radius = self.data['pursue_radius']
 		self.telegraphing_time = self.data['telegraphing_time']
 
-
 	def update(self, dt):
-		self.explosion_damage_logic()
 		self.invincibility(dt)
 		if not self.zone.cutscene_running: self.state_logic()
 		self.state.update(dt, self)
@@ -32,7 +29,6 @@ class Hound(Grunt):
 
 		self.speed = self.data['speed']
 		self.lunge_speed = self.data['lunge_speed']
-		self.knockback_speed = self.data['knockback_speed']
 		self.health = self.data['health']
 		self.damage = self.data['damage']
 		self.attack_radius = self.data['attack_radius']

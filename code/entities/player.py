@@ -108,6 +108,7 @@ class Player(NPC):
 					if not target.invincible and target.alive:
 						target.invincible = True
 						self.add_subtract_juice(11, 'add')
+						target.knockback_speed = 1.5
 						target.health -= 1
 						if target.health <= 0:
 							target.knockback_direction = self.rect.center

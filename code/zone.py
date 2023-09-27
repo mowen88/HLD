@@ -5,7 +5,7 @@ from state import State
 from camera import Camera
 from create_zone import CreateZone
 from particles import Shadow, DashDust, Flash, Explosion
-from sprites import Sword, Gun, Bullet, ShotgunShell, Grenade, Beam
+from sprites import Sword, Gun, EnemyGun, Bullet, ShotgunShell, Grenade, Beam
 from cutscenes.cutscene_manager import Cutscene, CollectionCutscene
 from ui import UI
 from map import Map
@@ -47,6 +47,8 @@ class Zone(State):
 		self.barrier_activator_sprites = pygame.sprite.Group()
 		self.void_sprites = pygame.sprite.Group()
 		self.enemy_sprites = pygame.sprite.Group()
+		self.shooting_enemy_sprites = pygame.sprite.Group()
+		self.enemy_gun_sprites = pygame.sprite.Group()
 		self.boss_sprites = pygame.sprite.Group()
 		self.npc_sprites = pygame.sprite.Group()
 		self.attackable_sprites = pygame.sprite.Group()
@@ -93,6 +95,9 @@ class Zone(State):
 	def create_gun(self):
 		self.gun_sprite = Gun(self.game, self, [self.updated_sprites, self.rendered_sprites], self.player.hitbox.center, LAYERS['player'], pygame.image.load(f'../assets/weapons/{self.player.gun}.png').convert_alpha())
 
+	def create_enemy_gun(self, pos, sprite):
+		EnemyGun(self.game, self, [self.enemy_gun_sprites, self.updated_sprites, self.rendered_sprites], pos, LAYERS['player'], pygame.image.load(f'../assets/weapons/enemy_rifle/0.png').convert_alpha(), sprite)
+
 	def create_player_bullet(self):
 		self.bullet = Bullet(self.game, self, [self.player_bullet_sprites, self.updated_sprites, self.rendered_sprites], self.player.hitbox.center, LAYERS['player'], f'../assets/weapons/{self.player.gun}_bullet')
 
@@ -104,7 +109,6 @@ class Zone(State):
 
 	def create_explosion(self, pos, damage, knockback_power):
 		Explosion(self.game, self, [self.explosion_sprites, self.updated_sprites, self.rendered_sprites], pos, LAYERS['player'], f'../assets/particles/explosion', damage, knockback_power)
-
 
 	def create_railgun_beam(self):
 		angle = math.atan2(pygame.mouse.get_pos()[1]-self.player.hitbox.centery + self.rendered_sprites.offset[1], pygame.mouse.get_pos()[0]-self.player.hitbox.centerx + self.rendered_sprites.offset[0])
@@ -131,13 +135,22 @@ class Zone(State):
 			for bullet in self.player_bullet_sprites:
 				if bullet.rect.colliderect(target.hitbox):
 					if not target.invincible and target.alive:
+
+						# this is to make sure the railgun beam only hurts once when its alpha is at max 255
 						if not hasattr(bullet, 'alpha') or (hasattr(bullet, 'alpha') and bullet.alpha >= 255):
+							target.invincible = True
 							target.health -= bullet.damage
+							target.knockback_speed = bullet.knockback_power
+
+							# if shotgun, go through sprites
 							if bullet not in self.shotgun_shell_sprites:
 								bullet.kill()
-							target.invincible = True
+
+							# only knockback if the damage is high enough
 							if bullet.damage > 3:
 								target.get_knockback(self.player)
+
+							# if target is dead
 							if target.health <= 0:
 								target.get_knockback(self.player)
 								target.invincible = False

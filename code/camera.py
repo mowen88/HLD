@@ -47,9 +47,9 @@ class Camera(pygame.sprite.Group):
 
 		if target[1] < 190 and self.zone.name == 'scene_2':
 			self.camera_lag = 80
-			self.move_to([0,-HALF_WIDTH])
+			self.move_to([HALF_WIDTH,-HALF_WIDTH])
 
-		elif target[1] < 256 and self.zone.name == 'pool':
+		elif target[1] < 256 and target[1] > HALF_HEIGHT and self.zone.name == 'pool':
 			self.camera_lag = 80
 			self.move_to([0,0])
 

@@ -89,7 +89,6 @@ class Evade:
 		npc.direction = npc.get_direction()
 
 
-
 class Telegraphing:
 	def __init__(self, npc):
 		npc.frame_index = 0

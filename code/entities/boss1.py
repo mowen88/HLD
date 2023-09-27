@@ -7,12 +7,10 @@ class Boss1(NPC):
 		super().__init__(game, zone, groups, pos, z, name)
 
 		self.state = Idle(self)
-
 		self.data = ENEMY_DATA[name]
 
 		self.speed = self.data['speed']
 		self.lunge_speed = self.data['lunge_speed']
-		self.knockback_speed = self.data['knockback_speed']
 		self.health = self.data['health']
 		self.max_health = self.health
 		self.damage = self.data['damage']
@@ -173,42 +171,6 @@ class Landing:
 		npc.animate('landing', 0.2 * dt, False)
 		npc.acc = pygame.math.Vector2()
 	
-
-class Knockback:
-	def __init__(self, npc):
-		
-		self.frame_index = 0
-		self.current_direction = self.get_direction(npc)
-		self.knockback_speed = npc.knockback_speed
-		self.get_current_direction = npc.knockback_direction - npc.zone.rendered_sprites.offset #npc.zone.player.rect.center - npc.zone.rendered_sprites.offset
-		npc.vel = npc.zone.get_distance_direction_and_angle(npc.hitbox.center, self.get_current_direction)[1] * self.knockback_speed *-1
-		npc.angle = npc.zone.get_distance_direction_and_angle(npc.hitbox.center, self.get_current_direction)[2]
-
-	def get_direction(self, npc):
-		if npc.hitbox.centerx < npc.zone.player.hitbox.centerx: direction = 'left'
-		else: direction = 'right'
-		return direction
-
-	def state_logic(self, npc):
-
-		if npc.vel.magnitude() < 0.1:
-			if npc.get_collide_list(npc.zone.void_sprites):
-				npc.dashing = False
-				npc.on_ground = False
-				return FallDeath(npc)
-			else:
-				npc.vel = pygame.math.Vector2()
-
-	def update(self, dt, npc):
-		
-		npc.physics(dt)
-		npc.animate('death', 0.15 * dt, False)
-		if self.current_direction == 'left': npc.image = pygame.transform.flip(npc.image, True, False)
-	
-		npc.acc = pygame.math.Vector2()
-		self.knockback_speed -= 0.05 * dt
-		if npc.vel.magnitude() != 0: npc.vel = npc.vel.normalize() * self.knockback_speed
-		if npc.vel.magnitude() < 0.1: npc.vel = pygame.math.Vector2()
 
 class Death:
 	def __init__(self, npc):
