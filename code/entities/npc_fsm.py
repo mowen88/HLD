@@ -153,7 +153,7 @@ class Attack:
 	def update(self, dt, npc):
 		
 		npc.physics(dt)
-		npc.animate('idle', 0.2 * dt, False)
+		npc.animate('attack', 0.2 * dt, False)
 
 		self.timer -= dt
 
@@ -254,7 +254,7 @@ class Knockback:
 
 class FallDeath:
 	def __init__(self, npc):
-		self.frame_index = 0
+		npc.frame_index = 0
 		self.timer = 55
 
 	def state_logic(self, npc):
@@ -264,7 +264,7 @@ class FallDeath:
 			npc.kill()
 			
 	def update(self, dt, npc):
-		npc.animate('telegraphing', 0.4 * dt, False)
+		npc.animate('fall', 0.3 * dt, False)
 		self.timer -= dt
 		if self.timer > 0:
 			npc.z = LAYERS['BG2']

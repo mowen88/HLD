@@ -16,6 +16,7 @@ class Grunt(NPC):
 		self.pursue_radius = self.data['pursue_radius']
 		self.telegraphing_time = self.data['telegraphing_time']
 
+
 	def update(self, dt):
 		self.invincibility(dt)
 		if not self.zone.cutscene_running: self.state_logic()
@@ -35,7 +36,8 @@ class Hound(Grunt):
 		self.pursue_radius = self.data['pursue_radius']
 		self.telegraphing_time = self.data['telegraphing_time']
 
-		self.image = pygame.Surface((16, 16))
+
+		self.image = pygame.Surface((20, 20))
 		self.rect = self.image.get_rect(center = pos)
 		self.pos = pygame.math.Vector2(self.rect.center)
 		self.hitbox = self.rect.copy().inflate(-self.rect.width * 0.5, -self.rect.height * 0.7)

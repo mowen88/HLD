@@ -292,7 +292,7 @@ class Zone(State):
 
 		self.game.render_text(str(round(self.game.clock.get_fps(), 2)), WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.1))
 		
-		#self.game.render_text(self.musketeer.state, WHITE, self.game.small_font, RES/2)
+		self.game.render_text(self.hound.state, WHITE, self.game.small_font, RES/2)
 		# self.game.render_text(COMPLETED_DATA['guns'], WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.9))
 		
 		
