@@ -56,7 +56,7 @@ GUN_DATA = {
 ENEMY_DATA = {
 	'grunt':{'speed': 0.1, 'lunge_speed': 2,'damage': 1, 'health': 3, 'telegraphing_time': 40, 'attack_radius': 30, 'pursue_radius': 110},
 	'hound':{'speed': 0.2, 'lunge_speed': 3, 'damage': 1, 'health': 2, 'telegraphing_time': 15, 'attack_radius': 60, 'pursue_radius': 90},
-	'pincer':{'speed': 0.2, 'lunge_speed': 3, 'damage': 1, 'health': 2, 'telegraphing_time': 15, 'attack_radius': 60, 'pursue_radius': 90},
+	'pincer':{'speed': 0.2, 'lunge_speed': 2, 'damage': 1, 'health': 2, 'telegraphing_time': 15, 'attack_radius': 60, 'pursue_radius': 90},
 	'musketeer':{'speed': 0.05, 'lunge_speed': 1, 'damage': 1, 'health': 2, 'telegraphing_time': 60, 'attack_radius': 90, 'pursue_radius': 120},
 
 	 #bosses
@@ -74,6 +74,7 @@ ZONE_DATA = {
 	'dungeon_exit':{'bg_colour': BLACK, '1': 'first_dungeon', '2': 'pool', '3':'radio_shack'},
 	'radio_shack':{'bg_colour': BLACK, '1': 'first_dungeon', '2': 'pool', '3':'dungeon_exit'},
 	'pool':{'bg_colour': BLACK, '1': 'apothecary', '2': 'dungeon_exit', '3':'crashsite'},
+	'apothecary':{'bg_colour': BLACK, '1': 'pool', '2': 'crossroads', '3':'heading_north'},
 	
 	'boss_room_1':{'bg_colour': YELLOW, '1': 'garden', '2': 'dungeon', '3':'garden'}
 }
@@ -88,7 +89,8 @@ MAP_DATA = {
 	'first_dungeon':{'pos': (-40,30)},
 	'dungeon_exit':{'pos': (-60,54)},
 	'radio_shack':{'pos': (-30,60)},
-	'pool':{'pos': (-60,0)}
+	'pool':{'pos': (-60,0)},
+	'apothecary':{'pos': (-60,0)}
 }
 
 DIALOGUE = {

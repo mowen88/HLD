@@ -182,8 +182,8 @@ class OptionsMenu(MainMenu):
 		super().__init__(game)
 
 		self.buttons = {
-				'SFX': [(HALF_WIDTH, HALF_HEIGHT - self.padding), 'main_menu'],
-				'Music': [(HALF_WIDTH, HALF_HEIGHT), 'main_menu'],
+				'SFX (not available)': [(HALF_WIDTH, HALF_HEIGHT - self.padding), 'main_menu'],
+				'Music (not available)': [(HALF_WIDTH, HALF_HEIGHT), 'main_menu'],
 				'Back': [(HALF_WIDTH, HALF_HEIGHT + self.padding), 'main_menu']
 				}
 

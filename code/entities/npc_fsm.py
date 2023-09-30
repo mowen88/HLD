@@ -212,7 +212,7 @@ class Knockback:
 	def __init__(self, npc):
 
 		npc.dashing = True
-		self.frame_index = 0
+		npc.frame_index = 0
 		self.timer = 100
 		self.current_direction = self.get_direction(npc)
 		self.knockback_speed = npc.knockback_speed

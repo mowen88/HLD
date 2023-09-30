@@ -7,13 +7,13 @@ class Idle:
 		self.direction = direction
 
 	def fall(self, player):
-		return FallDeath(self.direction)
+		return FallDeath(player, self.direction)
 
 	def state_logic(self, player):
 		keys = pygame.key.get_pressed()
 
 		if not player.on_ground:
-			return FallDeath(self.direction)
+			return FallDeath(player, self.direction)
 
 		if ACTIONS['g']:
 			player.zone.create_player_grenade()
@@ -54,7 +54,7 @@ class Move:
 
 		if player.get_collide_list(player.zone.void_sprites):
 			player.on_ground = False
-			return FallDeath(self.direction)
+			return FallDeath(player, self.direction)
 
 		if ACTIONS['g']:
 			player.zone.create_player_grenade()
@@ -125,10 +125,11 @@ class Dash:
 	def state_logic(self, player):
 
 		if self.timer < 0:
+			
 			if player.get_collide_list(player.zone.void_sprites):
 				player.dashing = False
 				player.on_ground = False
-				return FallDeath(self.direction)
+				return FallDeath(player, self.direction)
 			else: 
 				player.dashing = False
 				player.on_platform = False
@@ -143,9 +144,12 @@ class Dash:
 
 		player.acc = pygame.math.Vector2()
 		self.lunge_speed -= 0.25 * dt
+
 		
-		if self.timer < 0: player.vel = pygame.math.Vector2()	
-		elif player.vel.magnitude() != 0: player.vel = player.vel.normalize() * self.lunge_speed
+		if self.timer < 0:
+			player.vel = pygame.math.Vector2()	
+		elif player.vel.magnitude() != 0:
+			player.vel = player.vel.normalize() * self.lunge_speed
 		
 class Attack:
 	def __init__(self, player, direction):
@@ -275,10 +279,15 @@ class Heal:
 		player.animate(self.direction + '_heal', 0.2 * dt, 'end')
 
 class FallDeath:
-	def __init__(self, direction):
+	def __init__(self, player, direction):
 		self.frame_index = 0
 		self.direction = direction
 		self.timer = 55
+
+		if player.respawn_location[1] > player.rect.centery:
+			player.z = LAYERS['BG1'] 
+		else:
+			player.z = LAYERS['particles'] 
 
 	def state_logic(self, player):
 		if self.timer <= 0: 
@@ -299,10 +308,9 @@ class FallDeath:
 
 		self.timer -= dt
 		if self.timer > 0:
-			player.z = LAYERS['BG1']
+			# player.z = LAYERS['BG1']
 			if self.timer < 15: 
 				player.zone.screenshaking = True
-
 			player.vel.y += 0.5 * dt
 			player.pos += player.vel
 			player.hitbox.centery = player.pos.y

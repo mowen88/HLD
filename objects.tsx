@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.5" tiledversion="1.7.2" name="objects" tilewidth="48" tileheight="48" tilecount="32" columns="0">
+<tileset version="1.5" tiledversion="1.7.2" name="objects" tilewidth="48" tileheight="48" tilecount="34" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0">
   <image width="48" height="48" source="objects/big tree.png"/>
@@ -96,5 +96,11 @@
  </tile>
  <tile id="33">
   <image width="24" height="24" source="assets/attackable_terrain/small box/0.png"/>
+ </tile>
+ <tile id="34">
+  <image width="16" height="16" source="objects/post_down.png"/>
+ </tile>
+ <tile id="35">
+  <image width="16" height="16" source="objects/post_down_middle.png"/>
  </tile>
 </tileset>
