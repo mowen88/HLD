@@ -183,3 +183,14 @@ class Mercenary(NPC):
 	def update(self, dt):
 		self.animate('idle', 0.2 * dt, 'loop')
 
+class FallenSoldier(NPC):
+	def __init__(self, game, zone, groups, pos, z, name):
+		super().__init__(game, zone, groups, pos, z, name)
+
+		self.mask = pygame.mask.from_surface(self.image)
+		self.mask_image = self.mask.to_surface()
+		self.mask_image.set_colorkey((0, 0, 0))
+
+	def update(self, dt):
+		self.animate('idle', 0.15 * dt, 'loop')
+

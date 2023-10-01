@@ -17,8 +17,8 @@ class Dialogue(State):
         self.opening = True
 
         # text box variables
-        self.box_colour = GREY
-        self.text_colour = WHITE
+        self.box_colour = BLACK
+        self.text_colour = YELLOW
         self.box_width = 0
         self.center = (self.sprite.rect.centerx - self.offset.x, self.sprite.rect.top - 25 - self.offset.y)
         self.target_width = TILESIZE * 10

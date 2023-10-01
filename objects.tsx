@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.5" tiledversion="1.7.2" name="objects" tilewidth="48" tileheight="48" tilecount="34" columns="0">
+<tileset version="1.5" tiledversion="1.7.2" name="objects" tilewidth="48" tileheight="48" tilecount="39" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0">
   <image width="48" height="48" source="objects/big tree.png"/>
@@ -102,5 +102,20 @@
  </tile>
  <tile id="35">
   <image width="16" height="16" source="objects/post_down_middle.png"/>
+ </tile>
+ <tile id="36">
+  <image width="32" height="48" source="objects/big_chamber.png"/>
+ </tile>
+ <tile id="37">
+  <image width="16" height="32" source="objects/small_chamber.png"/>
+ </tile>
+ <tile id="38">
+  <image width="16" height="32" source="objects/lab_computer.png"/>
+ </tile>
+ <tile id="39">
+  <image width="16" height="32" source="objects/lab_computer_2.png"/>
+ </tile>
+ <tile id="40">
+  <image width="32" height="16" source="objects/lab_table.png"/>
  </tile>
 </tileset>

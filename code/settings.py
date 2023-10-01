@@ -94,13 +94,16 @@ MAP_DATA = {
 }
 
 DIALOGUE = {
-			0: [['Dude, where the hell are','you going ?'],
-				['Sorry pal, gotta go!','Places to go....','People to see....']], 
-			1: [['This is more dialogue for','a second cutscene.','Tell me if it worked ?'], 
-				['How do you expect me to','hear you from there ?']],
-			2: [['I am on my bike and loving it!', 'Whatcha think?'], 
-				['Anyway. . . '],
-				["It's time to get outta here!"]]
+   
+			0: [['Are you the one they sent','to hunt and decommission', 'the rogue android?'],
+				['Or are you?....', 'Oh, it is you...'],
+				['Down there are the labs where', 'they are turning animals', 'into androids.'],
+				['but they seem to have all', 'gone crazy !'],
+				['I left my blaster in there.', 'finding it should make,', 'your life easier.'],
+				['Good luck !', 'my friend...', 'my leader...']],
+			1: [['We are struggling to','contain them now !'],
+				['I think the rogue android','has found a way to hack','into the mainframe'],
+				['It has connected all the', 'experimental android creatures!']],
 			}
 
 LAYERS = {

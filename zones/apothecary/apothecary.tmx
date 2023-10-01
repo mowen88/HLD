@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="40" height="36" tilewidth="16" tileheight="16" infinite="0" nextlayerid="9" nextobjectid="165">
+<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="40" height="36" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="167">
  <editorsettings>
   <export target="apothecary.csv" format="csv"/>
  </editorsettings>
@@ -96,7 +96,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,11,11,11,11,11,11,11,11,11,0,0,0,11,11,11,11,11,11,11,11,11,11,11
 </data>
  </layer>
- <objectgroup id="8" name="objects">
+ <objectgroup id="8" name="objects" visible="0">
   <object id="6" name="water_1" gid="73" x="160" y="208" width="16" height="16"/>
   <object id="18" name="waterfall" gid="74" x="96" y="144" width="16" height="16"/>
   <object id="19" name="waterfall" gid="74" x="112" y="144" width="16" height="16"/>
@@ -191,6 +191,14 @@
   <object id="162" name="post_down" gid="109" x="416" y="290" width="16" height="16"/>
   <object id="163" name="post_down_middle" gid="110" x="384" y="258" width="16" height="16"/>
   <object id="164" name="post_down_middle" gid="110" x="240" y="258" width="16" height="16"/>
+ </objectgroup>
+ <objectgroup id="9" name="entities">
+  <object id="165" name="apothecary" x="566" y="298.667">
+   <point/>
+  </object>
+ </objectgroup>
+ <objectgroup id="10" name="collectibles">
+  <object id="166" name="health_0" gid="81" x="600" y="318" width="10" height="10"/>
  </objectgroup>
  <objectgroup id="6" name="entries">
   <object id="1" name="1" x="439.682" y="24.7476">

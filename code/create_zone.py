@@ -7,7 +7,7 @@ from sprites import Bloom, BG, Cloud, FadeSurf, Collider, Exit, Decoration, Obje
 Water, Barrier, Door, Platform, Void, Collectible, Gun, Sword, Tree, Beam, AttackableTerrain
 from particles import Particle, Shadow
 from entities.player import Player
-from entities.NPCs import Warrior, Mercenary
+from entities.NPCs import FallenSoldier, Warrior, Mercenary
 from entities.enemy import Grunt, Hound, Pincer
 from entities.shooting_enemy import Musketeer
 from entities.boss1 import Boss1
@@ -61,8 +61,12 @@ class CreateZone:
 				if obj.name == 'pincer': self.zone.pincer = Pincer(self.zone.game, self.zone, [self.zone.enemy_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.name)
 				if obj.name == 'musketeer': self.zone.musketeer = Musketeer(self.zone.game, self.zone, [self.zone.enemy_sprites, self.zone.shooting_enemy_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.name)
 				#NPCs
-				if obj.name == 'warrior': self.zone.warrior = Warrior(self.zone.game, self.zone, [self.zone.npc_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.name)
+				if obj.name == 'apothecary': self.zone.warrior = Warrior(self.zone.game, self.zone, [self.zone.npc_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.name)
+				if obj.name == 'warrior': Warrior(self.zone.game, self.zone, [self.zone.npc_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.name)
 				if obj.name == 'mercenary': self.zone.mercenary = Mercenary(self.zone.game, self.zone, [self.zone.npc_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.name)
+				if obj.name == 'fallen_soldier': self.zone.fallen_soldier = FallenSoldier(self.zone.game, self.zone, [self.zone.npc_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.name)
+				if obj.name == 'vertus': self.zone.vertus = Mercenary(self.zone.game, self.zone, [self.zone.npc_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.name)
+				if obj.name == 'scientist': self.zone.scientist = Mercenary(self.zone.game, self.zone, [self.zone.npc_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.name)
 				#bosses
 				if obj.name == 'boss1' and obj.name not in COMPLETED_DATA['bosses_defeated']: self.zone.boss = Boss1(self.zone.game, self.zone, [self.zone.boss_sprites, self.zone.enemy_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.name)
 
@@ -141,6 +145,11 @@ class CreateZone:
 				if obj.name == 'post_down_middle': Post(self.zone.game, self.zone, [self.zone.block_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
 
 				if obj.name == 'radio_shack_bottom': Post(self.zone.game, self.zone, [self.zone.block_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
+				if obj.name == 'big_chamber': Post(self.zone.game, self.zone, [self.zone.block_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
+				if obj.name == 'small_chamber': Post(self.zone.game, self.zone, [self.zone.block_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
+				if obj.name == 'lab_table': Post(self.zone.game, self.zone, [self.zone.block_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
+				if obj.name == 'lab_computer': Post(self.zone.game, self.zone, [self.zone.block_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
+				if obj.name == 'lab_computer_2': Post(self.zone.game, self.zone, [self.zone.block_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
 
 		if 'doors' in self.layers:
 			for obj in tmx_data.get_layer_by_name('doors'):
@@ -178,7 +187,14 @@ class CreateZone:
 		# create shadows for player and NPCs
 		Shadow(self.zone.game, self.zone, [self.zone.updated_sprites, self.zone.rendered_sprites], (self.zone.player.hitbox.midbottom), LAYERS['particles'], self.zone.player, 'medium')
 		for sprite in self.zone.npc_sprites:
-			Shadow(self.zone.game, self.zone, [self.zone.updated_sprites, self.zone.rendered_sprites], (sprite.hitbox.midbottom), LAYERS['particles'], sprite, 'medium')
+			if hasattr(self.zone, 'fallen_soldier'):
+				if not sprite == self.zone.fallen_soldier:
+					Shadow(self.zone.game, self.zone, [self.zone.updated_sprites, self.zone.rendered_sprites], (sprite.hitbox.midbottom), LAYERS['particles'], sprite, 'medium')
+				else:
+					pass
+			else:
+				Shadow(self.zone.game, self.zone, [self.zone.updated_sprites, self.zone.rendered_sprites], (sprite.hitbox.midbottom), LAYERS['particles'], sprite, 'medium')
+
 		for sprite in self.zone.enemy_sprites:
 			if sprite in self.zone.boss_sprites:
 				Shadow(self.zone.game, self.zone, [self.zone.updated_sprites, self.zone.rendered_sprites], (sprite.hitbox.midbottom), LAYERS['particles'], sprite, 'big')
