@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="20" height="24" tilewidth="16" tileheight="16" infinite="0" nextlayerid="8" nextobjectid="56">
+ <editorsettings>
+  <export target="crossroads.csv" format="csv"/>
+ </editorsettings>
+ <tileset firstgid="1" source="../../tilesets/walls1.tsx"/>
+ <tileset firstgid="37" source="../../tilesets/rockface.tsx"/>
+ <tileset firstgid="52" source="../../objects.tsx"/>
+ <tileset firstgid="94" source="../../tilesets/decoration.tsx"/>
+ <layer id="1" name="walls" width="20" height="24">
+  <data encoding="csv">
+40,37,37,37,37,37,37,37,37,37,37,37,37,37,37,40,0,0,0,0,
+40,37,37,37,37,37,37,37,37,37,37,37,37,37,40,40,0,0,0,0,
+40,46,44,45,37,37,9,0,0,0,9,37,37,42,46,40,40,0,0,0,
+40,51,49,50,46,37,3,0,0,0,3,37,45,47,51,49,40,0,0,0,
+40,40,40,0,51,43,9,0,0,0,9,44,50,0,0,0,40,0,0,0,
+0,0,40,0,0,48,3,0,0,0,3,49,0,0,0,0,40,0,0,0,
+0,0,40,0,0,0,0,0,0,0,0,0,0,0,0,40,40,0,0,0,
+0,0,40,0,0,0,0,0,0,0,0,0,0,0,0,40,40,40,40,40,
+0,0,40,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,40,
+0,0,40,40,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+40,40,40,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,40,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,40,40,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,40,40,
+40,40,40,40,40,0,0,0,0,0,0,0,0,0,0,0,0,0,40,40,
+0,0,0,0,40,0,0,0,0,0,0,0,0,0,0,0,0,0,0,40,
+0,0,0,0,40,40,0,0,0,0,0,0,0,0,0,0,0,0,0,40,
+0,0,0,0,0,40,0,0,40,40,0,0,0,0,0,0,0,0,0,40,
+0,0,0,0,0,40,40,40,40,40,40,0,0,0,0,0,0,0,40,40,
+0,0,0,0,0,0,0,0,0,0,40,40,0,0,0,0,0,0,40,0,
+0,0,0,0,0,0,0,0,0,0,0,40,40,0,0,0,0,40,40,0
+</data>
+ </layer>
+ <layer id="2" name="void" width="20" height="24">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <imagelayer id="5" name="floor">
+  <image source="floor.png" width="320" height="384"/>
+ </imagelayer>
+ <imagelayer id="6" name="foreground">
+  <image source="foreground.png" width="320" height="384"/>
+ </imagelayer>
+ <objectgroup id="7" name="objects">
+  <object id="13" name="big tree" gid="52" x="85" y="323.583" width="48" height="48"/>
+  <object id="14" name="medium tree" gid="54" x="121.174" y="312.03" width="32" height="32"/>
+  <object id="15" name="medium tree 2" gid="66" x="168.659" y="329.803" width="32" height="32"/>
+  <object id="16" name="medium tree" gid="54" x="183.909" y="359.205" width="32" height="32"/>
+  <object id="17" name="medium tree 3" gid="67" x="249.795" y="276.182" width="32" height="32"/>
+  <object id="19" name="small tree" gid="56" x="248.174" y="142.705" width="16" height="16"/>
+  <object id="20" name="tall tree" gid="57" x="266.507" y="143.886" width="16" height="32"/>
+  <object id="21" name="small tree" gid="56" x="275.97" y="248.091" width="16" height="16"/>
+  <object id="22" name="tall tree" gid="57" x="290.03" y="240.09" width="16" height="32"/>
+  <object id="23" name="medium tree 2" gid="66" x="295.591" y="163.045" width="32" height="32"/>
+  <object id="24" name="medium tree 3" gid="67" x="267.455" y="338.727" width="32" height="32"/>
+  <object id="25" name="tall tree" gid="57" x="308" y="232.909" width="16" height="32"/>
+  <object id="26" name="tall tree" gid="57" x="278" y="307.818" width="16" height="32"/>
+  <object id="27" name="medium tree 2" gid="66" x="-4.83717" y="196.693" width="32" height="32"/>
+  <object id="28" name="medium tree" gid="54" x="33.5038" y="190.974" width="32" height="32"/>
+  <object id="29" name="tall tree" gid="57" x="22.0833" y="200.958" width="16" height="32"/>
+  <object id="30" name="big tree" gid="52" x="30.5" y="89.5" width="48" height="48"/>
+  <object id="31" name="medium tree 2" gid="66" x="47.25" y="141.25" width="32" height="32"/>
+  <object id="33" name="fountain" gid="93" x="144" y="240" width="32" height="56"/>
+  <object id="35" name="big tree" gid="52" x="245.291" y="63.167" width="48" height="48"/>
+  <object id="36" name="grass 5" gid="97" x="169.208" y="136.5" width="16" height="16"/>
+  <object id="37" name="grass 3" gid="95" x="96.9585" y="214" width="16" height="16"/>
+  <object id="38" name="grass 4" gid="96" x="122.208" y="177" width="16" height="16"/>
+  <object id="39" name="grass 2" gid="94" x="205.458" y="145.25" width="16" height="16"/>
+  <object id="42" name="grass" gid="98" x="185.5" y="152.75" width="16" height="16"/>
+  <object id="43" name="grass 5" gid="97" x="227.104" y="227.875" width="16" height="16"/>
+  <object id="44" name="grass" gid="98" x="254.146" y="220.625" width="16" height="16"/>
+  <object id="45" name="grass 4" gid="96" x="214.25" y="297.75" width="16" height="16"/>
+  <object id="46" name="grass 4" gid="96" x="224" y="315.5" width="16" height="16"/>
+  <object id="47" name="grass 5" gid="97" x="84.5" y="241.75" width="16" height="16"/>
+  <object id="48" name="grass" gid="98" x="192" y="242" width="16" height="16"/>
+  <object id="49" name="grass" gid="98" x="184.25" y="217.75" width="16" height="16"/>
+  <object id="50" name="grass" gid="98" x="132.25" y="252.5" width="16" height="16"/>
+  <object id="51" name="blue flower" gid="53" x="169" y="212.5" width="24" height="24"/>
+  <object id="52" name="blue flower" gid="53" x="183.5" y="226.75" width="24" height="24"/>
+  <object id="53" name="blue flower" gid="53" x="189.5" y="210" width="24" height="24"/>
+  <object id="54" name="blue flower" gid="53" x="162" y="268.75" width="24" height="24"/>
+  <object id="55" name="blue flower" gid="53" x="174" y="280.5" width="24" height="24"/>
+ </objectgroup>
+ <objectgroup id="3" name="entries">
+  <object id="9" name="4" x="34.4142" y="232.139">
+   <point/>
+  </object>
+  <object id="10" name="2" x="294.085" y="192.72">
+   <point/>
+  </object>
+  <object id="11" name="1" x="240.899" y="354.779">
+   <point/>
+  </object>
+  <object id="12" name="3" x="136.137" y="90.4727">
+   <point/>
+  </object>
+ </objectgroup>
+ <objectgroup id="4" name="exits">
+  <object id="2" name="3" x="96" y="16" width="80" height="32"/>
+  <object id="3" name="1" x="208" y="384" width="64" height="32"/>
+  <object id="4" name="2" x="320" y="144" width="48" height="80"/>
+  <object id="7" name="4" x="-48" y="192" width="48" height="64"/>
+ </objectgroup>
+</map>

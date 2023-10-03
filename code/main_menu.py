@@ -10,7 +10,7 @@ class Intro(State):
 		State.__init__(self, game)
 
 		self.game = game
-		self.timer = 60
+		self.timer = 50
 
 		# logo
 		self.logo_surf = pygame.image.load('../assets/pygame_logo.png').convert_alpha()

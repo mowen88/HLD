@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="40" height="36" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="167">
+<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="40" height="36" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="185">
  <editorsettings>
   <export target="apothecary.csv" format="csv"/>
  </editorsettings>
@@ -32,8 +32,8 @@
 0,0,0,0,0,0,0,0,0,67,67,67,67,67,67,67,67,67,67,67,67,67,67,67,67,67,0,0,0,67,67,67,67,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,67,67,67,67,67,67,67,67,67,67,67,67,67,67,67,67,67,0,0,0,0,67,67,67,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,67,67,67,67,67,67,67,67,0,0,0,0,0,0,0,0,67,67,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,67,67,67,67,67,67,67,0,0,0,0,0,0,0,0,0,0,67,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,67,67,67,67,67,67,67,0,0,0,0,0,0,0,0,0,0,67,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,67,67,67,67,67,67,67,0,0,0,0,0,0,0,0,0,67,67,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,67,67,67,67,67,67,67,0,0,0,0,0,0,0,0,0,67,67,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,67,67,67,67,67,67,67,67,0,0,0,0,0,0,0,0,67,67,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,67,67,67,67,67,67,67,67,0,0,0,67,67,67,67,67,67,67,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,67,67,67,67,67,67,67,67,0,0,0,67,67,67,67,67,67,67,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -96,7 +96,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,11,11,11,11,11,11,11,11,11,0,0,0,11,11,11,11,11,11,11,11,11,11,11
 </data>
  </layer>
- <objectgroup id="8" name="objects" visible="0">
+ <objectgroup id="8" name="objects">
   <object id="6" name="water_1" gid="73" x="160" y="208" width="16" height="16"/>
   <object id="18" name="waterfall" gid="74" x="96" y="144" width="16" height="16"/>
   <object id="19" name="waterfall" gid="74" x="112" y="144" width="16" height="16"/>
@@ -160,18 +160,13 @@
   <object id="115" name="post_middle" gid="100" x="432" y="354" width="16" height="16"/>
   <object id="116" name="post_right" gid="99" x="416" y="354" width="16" height="16"/>
   <object id="117" name="post_down_middle" gid="110" x="416" y="338" width="16" height="16"/>
-  <object id="127" name="post_down" gid="109" x="384" y="250" width="16" height="16"/>
-  <object id="129" name="post" gid="96" x="384" y="274" width="16" height="16"/>
   <object id="130" name="post_left" gid="98" x="368" y="290" width="16" height="16"/>
-  <object id="131" name="post_left" gid="98" x="368" y="236" width="16" height="16"/>
-  <object id="132" name="post_left_right" gid="97" x="336" y="236" width="16" height="16"/>
+  <object id="132" name="post_left_right" gid="97" x="312" y="236" width="16" height="16"/>
   <object id="133" name="post_middle" gid="100" x="352" y="236" width="16" height="16"/>
-  <object id="134" name="post_middle" gid="100" x="320" y="236" width="16" height="16"/>
+  <object id="134" name="post_middle" gid="100" x="336" y="236" width="16" height="16"/>
   <object id="135" name="post_right" gid="99" x="256" y="236" width="16" height="16"/>
-  <object id="136" name="post_left_right" gid="97" x="288" y="236" width="16" height="16"/>
   <object id="137" name="post_middle" gid="100" x="272" y="236" width="16" height="16"/>
-  <object id="138" name="post_middle" gid="100" x="304" y="236" width="16" height="16"/>
-  <object id="139" name="post_left_right" gid="97" x="336" y="290" width="16" height="16"/>
+  <object id="138" name="post_middle" gid="100" x="288" y="236" width="16" height="16"/>
   <object id="140" name="post_middle" gid="100" x="352" y="290" width="16" height="16"/>
   <object id="141" name="post_middle" gid="100" x="320" y="290" width="16" height="16"/>
   <object id="143" name="post_right" gid="99" x="304" y="290" width="16" height="16"/>
@@ -189,8 +184,20 @@
   <object id="160" name="post_down" gid="109" x="416" y="322" width="16" height="16"/>
   <object id="161" name="post_down_middle" gid="110" x="416" y="306" width="16" height="16"/>
   <object id="162" name="post_down" gid="109" x="416" y="290" width="16" height="16"/>
-  <object id="163" name="post_down_middle" gid="110" x="384" y="258" width="16" height="16"/>
   <object id="164" name="post_down_middle" gid="110" x="240" y="258" width="16" height="16"/>
+  <object id="172" name="post_left" gid="98" x="368" y="236" width="16" height="16"/>
+  <object id="173" name="post_down_middle" gid="110" x="368" y="274" width="16" height="16"/>
+  <object id="174" name="post_down_middle" gid="110" x="368" y="258.375" width="16" height="16"/>
+  <object id="175" name="post_down_middle" gid="110" x="368" y="243" width="16" height="16"/>
+  <object id="176" name="post_middle" gid="100" x="336" y="290" width="16" height="16"/>
+  <object id="177" name="post_middle" gid="100" x="301" y="236" width="16" height="16"/>
+  <object id="178" name="post_middle" gid="100" x="323" y="236" width="16" height="16"/>
+  <object id="179" name="fountain" gid="116" x="464" y="304" width="32" height="48"/>
+  <object id="180" name="blue flower" gid="76" x="504.5" y="308" width="24" height="24"/>
+  <object id="181" name="blue flower" gid="76" x="494.5" y="285.25" width="24" height="24"/>
+  <object id="182" name="blue flower" gid="76" x="514.5" y="320" width="24" height="24"/>
+  <object id="183" name="blue flower" gid="76" x="452.5" y="292" width="24" height="24"/>
+  <object id="184" name="blue flower" gid="76" x="455.5" y="312" width="24" height="24"/>
  </objectgroup>
  <objectgroup id="9" name="entities">
   <object id="165" name="apothecary" x="566" y="298.667">
@@ -204,8 +211,16 @@
   <object id="1" name="1" x="439.682" y="24.7476">
    <point/>
   </object>
+  <object id="168" name="2" x="31" y="191.667">
+   <point/>
+  </object>
+  <object id="169" name="3" x="441" y="556.667">
+   <point/>
+  </object>
  </objectgroup>
  <objectgroup id="7" name="exits">
   <object id="2" name="1" x="400" y="-32" width="80" height="32"/>
+  <object id="167" name="2" x="-16" y="160" width="32" height="80"/>
+  <object id="170" name="3" x="400" y="576" width="128" height="32"/>
  </objectgroup>
 </map>

@@ -229,6 +229,13 @@ class AnimatedObject(pygame.sprite.Sprite):
 	def update(self, dt):
 		self.animate(0.2 * dt)
 
+class Fountain(AnimatedObject):
+	def __init__(self, game, zone, groups, pos, z, path):
+		super().__init__(game, zone, groups, pos, z, path)
+
+		self.rect = self.image.get_rect(topleft = pos)
+		self.hitbox = self.rect.copy().inflate(-self.rect.width * 0.1,-self.rect.height * 0.4)
+
 class Water(AnimatedObject):
 	def __init__(self, game, zone, groups, pos, z, path):
 		super().__init__(game, zone, groups, pos, z, path)

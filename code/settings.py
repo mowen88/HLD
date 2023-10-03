@@ -74,7 +74,8 @@ ZONE_DATA = {
 	'dungeon_exit':{'bg_colour': BLACK, '1': 'first_dungeon', '2': 'pool', '3':'radio_shack'},
 	'radio_shack':{'bg_colour': BLACK, '1': 'first_dungeon', '2': 'pool', '3':'dungeon_exit'},
 	'pool':{'bg_colour': BLACK, '1': 'apothecary', '2': 'dungeon_exit', '3':'crashsite'},
-	'apothecary':{'bg_colour': BLACK, '1': 'pool', '2': 'crossroads', '3':'heading_north'},
+	'apothecary':{'bg_colour': BLACK, '1':'pool', '2':'crossroads', '3':'crossroads'},
+	'crossroads':{'bg_colour': BLACK, '1':'down', '2':'right', '3':'apothecary', '4':'left'},
 	
 	'boss_room_1':{'bg_colour': YELLOW, '1': 'garden', '2': 'dungeon', '3':'garden'}
 }
@@ -97,13 +98,16 @@ DIALOGUE = {
    
 			0: [['Are you the one they sent','to hunt and decommission', 'the rogue android?'],
 				['Or are you?....', 'Oh, it is you...'],
-				['Down there are the labs where', 'they are turning animals', 'into androids.'],
+				['Down there are the labs', 'where they are turning', 'animals into androids.'],
 				['but they seem to have all', 'gone crazy !'],
 				['I left my blaster in there.', 'finding it should make,', 'your life easier.'],
 				['Good luck !', 'my friend...', 'my leader...']],
 			1: [['We are struggling to','contain them now !'],
-				['I think the rogue android','has found a way to hack','into the mainframe'],
-				['It has connected all the', 'experimental android creatures!']],
+				['I think the rogue android','has found a way to hack','into the mainframe.'],
+				['It has connected all the', 'experimental android creatures !'],
+				['This will cause havoc !', 'The rogue android must be', 'expedited from the colony !']],
+			2: [['Hey! Are you the one','they have sent to help ?'],
+				['Take this device.','It will help you','navigate the colony.']]
 			}
 
 LAYERS = {

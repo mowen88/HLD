@@ -36,23 +36,42 @@ class Sequences:
 		elif number == 1:
 
 			if self.cutscene.int_time == 120:
-				self.cutscene.create_dialogue(self.cutscene.zone.vertus, 0, 60)
+				self.cutscene.create_dialogue(self.cutscene.zone.scientist, 0, 60)
 			elif self.cutscene.int_time == 300:
-				self.cutscene.create_dialogue(self.cutscene.zone.scientist, 1, 80)
+				self.cutscene.create_dialogue(self.cutscene.zone.scientist_2, 1, 80)
 			elif self.cutscene.int_time == 500:
-				self.cutscene.create_dialogue(self.cutscene.zone.scientist, 2, 80)
+				self.cutscene.create_dialogue(self.cutscene.zone.scientist_2, 2, 80)
+			elif self.cutscene.int_time == 700:
+				self.cutscene.create_dialogue(self.cutscene.zone.scientist, 3, 80)
 
 			if self.cutscene.timer < 100:
 				self.cutscene.target = pygame.math.Vector2(self.cutscene.zone.target.rect.center)
 
 			elif self.cutscene.timer < 300:
-				self.cutscene.target = pygame.math.Vector2(self.cutscene.zone.vertus.rect.center)
-
-			elif self.cutscene.timer < 500:
 				self.cutscene.target = pygame.math.Vector2(self.cutscene.zone.scientist.rect.center)
 
-			elif self.cutscene.timer < 800:
+			elif self.cutscene.timer < 700:
+				self.cutscene.target = pygame.math.Vector2(self.cutscene.zone.scientist_2.rect.center)
+
+			elif self.cutscene.timer < 1000:
 				self.cutscene.target = pygame.math.Vector2(self.cutscene.zone.scientist.rect.center)
+			else:
+				self.cutscene.target = pygame.math.Vector2(self.cutscene.zone.target.rect.center)
+				self.cutscene.opening = False
+
+		elif number == 2:
+
+			if self.cutscene.int_time == 120:
+				self.cutscene.create_dialogue(self.cutscene.zone.scientist, 0, 60)
+			elif self.cutscene.int_time == 300:
+				self.cutscene.create_dialogue(self.cutscene.zone.scientist_2, 1, 80)
+
+			if self.cutscene.timer < 100:
+				self.cutscene.target = pygame.math.Vector2(self.cutscene.zone.target.rect.center)
+
+			elif self.cutscene.timer < 600:
+				self.cutscene.target = pygame.math.Vector2(self.cutscene.zone.scientist.rect.center)
+
 			else:
 				self.cutscene.target = pygame.math.Vector2(self.cutscene.zone.target.rect.center)
 				self.cutscene.opening = False

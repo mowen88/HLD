@@ -4,7 +4,7 @@ from settings import *
 from pytmx.util_pygame import load_pygame
 from map import Map
 from sprites import Bloom, BG, Cloud, FadeSurf, Collider, Exit, Decoration, Object, Post, Pillar, AnimatedObject, \
-Water, Barrier, Door, Platform, Void, Collectible, Gun, Sword, Tree, Beam, AttackableTerrain
+Fountain, Water, Barrier, Door, Platform, Void, Collectible, Gun, Sword, Tree, Beam, AttackableTerrain
 from particles import Particle, Shadow
 from entities.player import Player
 from entities.NPCs import FallenSoldier, Warrior, Mercenary
@@ -46,6 +46,15 @@ class CreateZone:
 			for obj in tmx_data.get_layer_by_name('cutscenes'):
 				if obj.name == '0': Collider([self.zone.cutscene_sprites, self.zone.updated_sprites], (obj.x, obj.y, obj.width, obj.height), obj.name)
 				if obj.name == '1': Collider([self.zone.cutscene_sprites, self.zone.updated_sprites], (obj.x, obj.y, obj.width, obj.height), obj.name)
+				if obj.name == '2': Collider([self.zone.cutscene_sprites, self.zone.updated_sprites], (obj.x, obj.y, obj.width, obj.height), obj.name)
+				if obj.name == '3': Collider([self.zone.cutscene_sprites, self.zone.updated_sprites], (obj.x, obj.y, obj.width, obj.height), obj.name)
+				if obj.name == '4': Collider([self.zone.cutscene_sprites, self.zone.updated_sprites], (obj.x, obj.y, obj.width, obj.height), obj.name)
+				if obj.name == '5': Collider([self.zone.cutscene_sprites, self.zone.updated_sprites], (obj.x, obj.y, obj.width, obj.height), obj.name)
+				if obj.name == '6': Collider([self.zone.cutscene_sprites, self.zone.updated_sprites], (obj.x, obj.y, obj.width, obj.height), obj.name)
+				if obj.name == '7': Collider([self.zone.cutscene_sprites, self.zone.updated_sprites], (obj.x, obj.y, obj.width, obj.height), obj.name)
+				if obj.name == '8': Collider([self.zone.cutscene_sprites, self.zone.updated_sprites], (obj.x, obj.y, obj.width, obj.height), obj.name)
+				if obj.name == '9': Collider([self.zone.cutscene_sprites, self.zone.updated_sprites], (obj.x, obj.y, obj.width, obj.height), obj.name)
+				if obj.name == '10': Collider([self.zone.cutscene_sprites, self.zone.updated_sprites], (obj.x, obj.y, obj.width, obj.height), obj.name)
 
 		if 'exits' in self.layers:
 			for obj in tmx_data.get_layer_by_name('exits'):
@@ -65,8 +74,8 @@ class CreateZone:
 				if obj.name == 'warrior': Warrior(self.zone.game, self.zone, [self.zone.npc_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.name)
 				if obj.name == 'mercenary': self.zone.mercenary = Mercenary(self.zone.game, self.zone, [self.zone.npc_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.name)
 				if obj.name == 'fallen_soldier': self.zone.fallen_soldier = FallenSoldier(self.zone.game, self.zone, [self.zone.npc_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.name)
-				if obj.name == 'vertus': self.zone.vertus = Mercenary(self.zone.game, self.zone, [self.zone.npc_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.name)
 				if obj.name == 'scientist': self.zone.scientist = Mercenary(self.zone.game, self.zone, [self.zone.npc_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.name)
+				if obj.name == 'scientist_2': self.zone.scientist_2 = Mercenary(self.zone.game, self.zone, [self.zone.npc_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.name)
 				#bosses
 				if obj.name == 'boss1' and obj.name not in COMPLETED_DATA['bosses_defeated']: self.zone.boss = Boss1(self.zone.game, self.zone, [self.zone.boss_sprites, self.zone.enemy_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.name)
 
@@ -126,6 +135,7 @@ class CreateZone:
 				if obj.name == 'open box': AttackableTerrain(self.zone.game, self.zone, [self.zone.block_sprites, self.zone.attackable_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], f'../assets/attackable_terrain/{obj.name}')
 				if obj.name == 'white box': AttackableTerrain(self.zone.game, self.zone, [self.zone.block_sprites, self.zone.attackable_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], f'../assets/attackable_terrain/{obj.name}')
 				if obj.name == 'small box': AttackableTerrain(self.zone.game, self.zone, [self.zone.block_sprites, self.zone.attackable_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], f'../assets/attackable_terrain/{obj.name}')
+				if obj.name == 'fountain': Fountain(self.zone.game, self.zone, [self.zone.block_sprites, self.zone.block_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], f'../animated_objects/{obj.name}')
 
 				if obj.name == 'blue tree': Tree(self.zone.game, self.zone, [self.zone.block_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
 				if obj.name == 'big tree': Tree(self.zone.game, self.zone, [self.zone.block_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.image)
