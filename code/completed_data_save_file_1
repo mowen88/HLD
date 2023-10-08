@@ -1,1 +1,1 @@
-{"cutscenes": [], "visited_zones": ["crashsite", "scene_2", "garden", "first_dungeon", "boss_room_1", "dungeon_exit", "datacentre", "radio_shack", "pool"], "guns": ["railgun", "pistol", "shotgun"], "health": [], "juice": [], "keys": [], "bosses_defeated": []}
+{"cutscenes": [2], "visited_zones": ["crashsite", "scene_2", "garden", "first_dungeon", "boss_room_1", "dungeon_exit", "datacentre", "radio_shack", "pool"], "guns": ["railgun", "pistol", "shotgun"], "health": [], "juice": [], "keys": [], "bosses_defeated": []}

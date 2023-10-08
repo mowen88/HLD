@@ -4,7 +4,7 @@ from settings import *
 from pytmx.util_pygame import load_pygame
 from map import Map
 from sprites import Bloom, BG, Cloud, FadeSurf, Collider, Exit, Decoration, Object, Post, Pillar, AnimatedObject, \
-Fountain, Water, Barrier, Door, Platform, Void, Collectible, Gun, Sword, Tree, Beam, AttackableTerrain
+MovingBlock, Fountain, Water, Barrier, Door, Platform, Void, Collectible, Gun, Sword, Tree, Beam, AttackableTerrain
 from particles import Particle, Shadow
 from entities.player import Player
 from entities.NPCs import FallenSoldier, Warrior, Mercenary
@@ -64,6 +64,8 @@ class CreateZone:
 
 		if 'entities' in self.layers:
 			for obj in tmx_data.get_layer_by_name('entities'):
+				if obj.name == '100': MovingBlock(self.zone.game, self.zone, [self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], f'../animated_objects/block')
+
 				#enemies
 				if obj.name == 'grunt': self.zone.grunt = Grunt(self.zone.game, self.zone, [self.zone.enemy_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.name)
 				if obj.name == 'hound': self.zone.hound = Hound(self.zone.game, self.zone, [self.zone.enemy_sprites, self.zone.updated_sprites, self.zone.rendered_sprites], (obj.x, obj.y), LAYERS['player'], obj.name)
@@ -206,10 +208,11 @@ class CreateZone:
 				Shadow(self.zone.game, self.zone, [self.zone.updated_sprites, self.zone.rendered_sprites], (sprite.hitbox.midbottom), LAYERS['particles'], sprite, 'medium')
 
 		for sprite in self.zone.enemy_sprites:
-			if sprite in self.zone.boss_sprites:
-				Shadow(self.zone.game, self.zone, [self.zone.updated_sprites, self.zone.rendered_sprites], (sprite.hitbox.midbottom), LAYERS['particles'], sprite, 'big')
-			else:
-				Shadow(self.zone.game, self.zone, [self.zone.updated_sprites, self.zone.rendered_sprites], (sprite.hitbox.midbottom), LAYERS['particles'], sprite, 'medium')
+			if sprite.shadow:
+				if sprite in self.zone.boss_sprites:
+					Shadow(self.zone.game, self.zone, [self.zone.updated_sprites, self.zone.rendered_sprites], (sprite.hitbox.midbottom), LAYERS['particles'], sprite, 'big')
+				else:
+					Shadow(self.zone.game, self.zone, [self.zone.updated_sprites, self.zone.rendered_sprites], (sprite.hitbox.midbottom), LAYERS['particles'], sprite, 'medium')
 
 		for sprite in self.zone.health_sprites:
 			Shadow(self.zone.game, self.zone, [self.zone.updated_sprites, self.zone.rendered_sprites], (sprite.hitbox.midbottom), LAYERS['particles'], sprite, 'medium')

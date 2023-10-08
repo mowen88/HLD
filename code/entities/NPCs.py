@@ -3,12 +3,13 @@ from settings import *
 from entities.npc_fsm import Idle
 
 class NPC(pygame.sprite.Sprite):
-	def __init__(self, game, zone, groups, pos, z, name):
+	def __init__(self, game, zone, groups, pos, z, name, shadow=True):
 		super().__init__(groups)
 		self.game = game
 		self.zone = zone
 		self.z = z
 		self.name = name
+		self.shadow = shadow
 
 		self.state = Idle('idle')
 		self.invincible = False
