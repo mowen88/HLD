@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="20" height="36" tilewidth="16" tileheight="16" infinite="0" nextlayerid="13" nextobjectid="112">
+ <editorsettings>
+  <export target="trap_1.csv" format="csv"/>
+ </editorsettings>
+ <tileset firstgid="1" source="../../tilesets/rockface.tsx"/>
+ <tileset firstgid="16" source="../../tilesets/walls1.tsx"/>
+ <tileset firstgid="52" source="../../tilesets/void.tsx"/>
+ <tileset firstgid="53" source="../../objects.tsx"/>
+ <tileset firstgid="96" source="../../tilesets/decoration.tsx"/>
+ <imagelayer id="7" name="bg">
+  <image source="bg.png" width="320" height="576"/>
+ </imagelayer>
+ <imagelayer id="8" name="floor">
+  <image source="floor.png" width="320" height="576"/>
+ </imagelayer>
+ <imagelayer id="9" name="foreground">
+  <image source="foreground.png" width="320" height="576"/>
+ </imagelayer>
+ <layer id="1" name="void" width="20" height="36" offsetx="0" offsety="16">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,52,52,52,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,52,52,52,52,52,52,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,52,52,52,52,52,52,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,52,52,52,52,52,52,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,52,52,52,52,52,52,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,52,52,52,52,52,52,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,52,52,52,52,52,52,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,52,52,52,52,52,52,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,52,52,52,52,52,52,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,52,52,52,52,52,52,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,52,52,52,52,52,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,52,52,52,52,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,52,52,52,52,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <layer id="2" name="walls" width="20" height="36">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,0,0,0,0,
+0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,4,0,0,0,0,
+0,0,0,4,5,5,5,5,5,5,5,5,5,5,5,4,0,0,0,0,
+0,0,0,4,5,5,5,5,5,5,5,5,5,5,5,4,0,0,0,0,
+4,0,0,4,0,0,0,0,0,0,0,0,0,0,0,4,0,0,0,0,
+4,10,6,4,0,0,0,0,0,0,0,0,0,0,0,4,9,10,8,9,
+4,15,11,4,0,0,0,0,0,0,0,0,0,0,0,4,14,15,13,14,
+4,0,0,0,0,0,5,5,0,0,0,5,5,0,0,0,0,0,0,4,
+4,0,0,45,0,0,5,5,0,0,0,5,5,0,0,45,0,0,0,4,
+4,0,0,45,0,0,5,5,5,5,5,5,5,0,0,45,0,0,0,4,
+4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,
+4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,
+4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,
+4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,
+4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,
+4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,
+4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,
+4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+3,3,3,3,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+3,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+3,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+3,3,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,3,0,0,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,3,0,3,3,3,3,3,3,3,3,3,3,0,0,0,0,0,3,
+0,0,3,3,3,0,0,0,0,0,0,0,0,3,0,0,0,0,3,3,
+0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,0,3,3,
+0,0,0,0,0,0,0,0,0,0,0,0,0,3,3,3,3,3,3,3,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <objectgroup id="10" name="objects">
+  <object id="31" name="post" gid="74" x="236" y="220" width="16" height="16"/>
+  <object id="32" name="post" gid="74" x="196" y="220" width="16" height="16"/>
+  <object id="33" name="post" gid="74" x="92" y="220" width="16" height="16"/>
+  <object id="34" name="post" gid="74" x="52" y="220" width="16" height="16"/>
+  <object id="35" name="post_down_middle" gid="88" x="236" y="204" width="16" height="16"/>
+  <object id="36" name="post_down_middle" gid="88" x="196" y="204" width="16" height="16"/>
+  <object id="37" name="post_down_middle" gid="88" x="92" y="204" width="16" height="16"/>
+  <object id="38" name="post_down_middle" gid="88" x="52" y="204" width="16" height="16"/>
+  <object id="40" name="post_down_middle" gid="88" x="236" y="194" width="16" height="16"/>
+  <object id="41" name="post_down_middle" gid="88" x="196" y="194" width="16" height="16"/>
+  <object id="42" name="post_down_middle" gid="88" x="92" y="194" width="16" height="16"/>
+  <object id="43" name="post_down_middle" gid="88" x="52" y="194" width="16" height="16"/>
+  <object id="47" name="post_left" gid="76" x="196" y="147" width="16" height="16"/>
+  <object id="48" name="post_right" gid="77" x="172" y="147" width="16" height="16"/>
+  <object id="49" name="post_middle" gid="78" x="184" y="147" width="16" height="16"/>
+  <object id="50" name="post_left" gid="76" x="116" y="147" width="16" height="16"/>
+  <object id="51" name="post_right" gid="77" x="92" y="147" width="16" height="16"/>
+  <object id="52" name="post_middle" gid="78" x="104" y="147" width="16" height="16"/>
+  <object id="53" name="post_right" gid="77" x="125" y="180" width="16" height="16"/>
+  <object id="54" name="post_left" gid="76" x="163" y="180" width="16" height="16"/>
+  <object id="55" name="post_middle" gid="78" x="141" y="180" width="16" height="16"/>
+  <object id="56" name="post_middle" gid="78" x="147" y="180" width="16" height="16"/>
+  <object id="58" name="medium tree" gid="55" x="42.924" y="428.363" width="32" height="32"/>
+  <object id="59" name="medium tree" gid="55" x="47.091" y="319.697" width="32" height="32"/>
+  <object id="60" name="medium tree 2" gid="67" x="64.091" y="374.363" width="32" height="32"/>
+  <object id="62" name="medium tree 3" gid="68" x="98.591" y="373.697" width="32" height="32"/>
+  <object id="63" name="medium tree 2" gid="67" x="78.909" y="361.637" width="32" height="32"/>
+  <object id="64" name="grass 3" gid="97" x="113.591" y="288.363" width="16" height="16"/>
+  <object id="65" name="big tree" gid="53" x="110.5" y="397" width="48" height="48"/>
+  <object id="66" name="tall tree" gid="58" x="286.5" y="281" width="16" height="32"/>
+  <object id="67" name="small tree 2" gid="57" x="297.167" y="288.667" width="16" height="16"/>
+  <object id="68" name="grass 3" gid="97" x="263.166" y="285.334" width="16" height="16"/>
+  <object id="69" name="tall tree" gid="58" x="168" y="445.5" width="16" height="32"/>
+  <object id="71" name="medium tree" gid="55" x="142" y="457.5" width="32" height="32"/>
+  <object id="80" name="small_bust" gid="69" x="48" y="162" width="16" height="32"/>
+  <object id="81" name="small_bust" gid="69" x="240" y="162" width="16" height="32"/>
+  <object id="82" name="grass 3" gid="97" x="77" y="257.5" width="16" height="16"/>
+  <object id="83" name="grass 4" gid="98" x="177.5" y="279" width="16" height="16"/>
+  <object id="84" name="grass 5" gid="99" x="152.5" y="304.5" width="16" height="16"/>
+  <object id="85" name="grass 3" gid="97" x="175.5" y="324" width="16" height="16"/>
+  <object id="86" name="grass" gid="100" x="227.5" y="261" width="16" height="16"/>
+  <object id="87" name="grass 4" gid="98" x="230" y="289.5" width="16" height="16"/>
+  <object id="88" name="grass 4" gid="98" x="185.5" y="269" width="16" height="16"/>
+  <object id="89" name="grass" gid="100" x="159.25" y="379" width="16" height="16"/>
+  <object id="90" name="grass 5" gid="99" x="37.25" y="289.5" width="16" height="16"/>
+  <object id="91" name="grass 5" gid="99" x="45.75" y="284.25" width="16" height="16"/>
+  <object id="92" name="grass 5" gid="99" x="86.6875" y="394.375" width="16" height="16"/>
+  <object id="93" name="grass 5" gid="99" x="95.1875" y="389.125" width="16" height="16"/>
+  <object id="108" name="medium tree" gid="55" x="-12.3333" y="370" width="32" height="32"/>
+  <object id="109" name="medium tree" gid="55" x="22" y="361" width="32" height="32"/>
+ </objectgroup>
+ <objectgroup id="11" name="collectibles">
+  <object id="14" name="key_1" gid="62" x="152" y="168" width="16" height="16"/>
+ </objectgroup>
+ <objectgroup id="3" name="entities">
+  <object id="94" name="pincer" x="124" y="254.667">
+   <point/>
+  </object>
+  <object id="95" name="hound" x="161.333" y="246.667">
+   <point/>
+  </object>
+  <object id="96" name="musketeer" x="153.667" y="216.333">
+   <point/>
+  </object>
+  <object id="97" name="grunt" x="103" y="259">
+   <point/>
+  </object>
+  <object id="98" name="pincer" x="209.333" y="264">
+   <point/>
+  </object>
+ </objectgroup>
+ <objectgroup id="12" name="barriers">
+  <object id="99" name="0" x="144" y="320" width="96" height="32"/>
+  <object id="101" name="barrier" gid="63" x="160" y="400" width="16" height="32"/>
+  <object id="105" name="barrier" gid="63" x="184" y="400" width="16" height="32"/>
+  <object id="111" name="barrier" gid="63" x="208" y="400" width="16" height="32"/>
+ </objectgroup>
+ <objectgroup id="4" name="images">
+  <object id="1" name="bg" x="0" y="0">
+   <point/>
+  </object>
+  <object id="3" name="floor" x="0" y="0">
+   <point/>
+  </object>
+  <object id="4" name="foreground" x="0" y="0">
+   <point/>
+  </object>
+ </objectgroup>
+ <objectgroup id="5" name="entries">
+  <object id="5" name="2" x="35.4607" y="376.306">
+   <point/>
+  </object>
+ </objectgroup>
+ <objectgroup id="6" name="exits">
+  <object id="6" name="2" x="-32" y="320" width="48" height="96"/>
+ </objectgroup>
+</map>

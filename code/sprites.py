@@ -228,37 +228,6 @@ class AnimatedObject(pygame.sprite.Sprite):
 	def update(self, dt):
 		self.animate(0.2 * dt)
 
-class MovingBlock(AnimatedObject):
-	def __init__(self, game, zone, groups, pos, z, path, speed=1):
-		super().__init__(game, zone, groups, pos, z, path)
-
-		self.direction = -1
-		self.speed = speed
-		self.vel = pygame.math.Vector2()
-		self.pos = pygame.math.Vector2(self.rect.topleft)
-		self.rect = self.image.get_rect(topleft = pos)
-
-	def update(self, dt):
-
-		self.animate(0.15 * dt)
-
-		self.vel.y = self.direction
-
-		self.pos.y += self.vel.y * dt
-		self.rect.topleft = self.pos
-
-		for sprite in self.zone.block_sprites:
-			if sprite.rect.colliderect(self.rect):
-
-				self.vel *= -1
-				
-				self.rect.topleft = self.hitbox.topleft
-				self.pos.y = self.hitbox.top
-
-				
-
-		print(self.direction)
-
 class Fountain(AnimatedObject):
 	def __init__(self, game, zone, groups, pos, z, path):
 		super().__init__(game, zone, groups, pos, z, path)

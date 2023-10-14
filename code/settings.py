@@ -75,7 +75,8 @@ ZONE_DATA = {
 	'radio_shack':{'bg_colour': BLACK, '1': 'first_dungeon', '2': 'pool', '3':'dungeon_exit'},
 	'pool':{'bg_colour': BLACK, '1': 'apothecary', '2': 'dungeon_exit', '3':'crashsite'},
 	'apothecary':{'bg_colour': BLACK, '1':'pool', '2':'crossroads', '3':'crossroads'},
-	'crossroads':{'bg_colour': BLACK, '1':'down', '2':'right', '3':'apothecary', '4':'left'},
+	'crossroads':{'bg_colour': BLACK, '1':'down', '2':'trap_1', '3':'apothecary', '4':'left'},
+	'trap_1':{'bg_colour': BLACK, '2':'crossroads'},
 	
 	'boss_room_1':{'bg_colour': YELLOW, '1': 'garden', '2': 'dungeon', '3':'garden'}
 }

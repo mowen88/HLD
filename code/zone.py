@@ -42,6 +42,7 @@ class Zone(State):
 		self.cutscene_sprites = pygame.sprite.Group()
 		self.exit_sprites = pygame.sprite.Group()
 		self.block_sprites = pygame.sprite.Group()
+		self.moving_block_sprites = pygame.sprite.Group()
 		self.platform_sprites = pygame.sprite.Group()
 		self.trigger_sprites = pygame.sprite.Group()
 		self.barrier_sprites = pygame.sprite.Group()
@@ -290,9 +291,9 @@ class Zone(State):
 		self.fade_surf.draw(screen)
 
 
-		#self.game.render_text(str(round(self.game.clock.get_fps(), 2)), WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.1))
+		self.game.render_text(str(round(self.game.clock.get_fps(), 2)), WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.1))
 		
-		#self.game.render_text(self.hound.state, WHITE, self.game.small_font, RES/2)
+		#self.game.render_text(self.player.state, WHITE, self.game.small_font, RES/2)
 		# self.game.render_text(COMPLETED_DATA['guns'], WHITE, self.game.small_font, (WIDTH * 0.5, HEIGHT * 0.9))
 		
 		

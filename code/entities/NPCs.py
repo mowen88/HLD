@@ -112,6 +112,7 @@ class NPC(pygame.sprite.Sprite):
 				self.rect.centery = self.hitbox.centery
 				self.pos.y = self.hitbox.centery
 
+
 	def get_collide_list(self, group): 
 		hitlist = []
 		for sprite in group:

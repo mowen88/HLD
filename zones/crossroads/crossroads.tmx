@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="20" height="24" tilewidth="16" tileheight="16" infinite="0" nextlayerid="8" nextobjectid="56">
+<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="20" height="24" tilewidth="16" tileheight="16" infinite="0" nextlayerid="9" nextobjectid="60">
  <editorsettings>
   <export target="crossroads.csv" format="csv"/>
  </editorsettings>
  <tileset firstgid="1" source="../../tilesets/walls1.tsx"/>
  <tileset firstgid="37" source="../../tilesets/rockface.tsx"/>
  <tileset firstgid="52" source="../../objects.tsx"/>
- <tileset firstgid="94" source="../../tilesets/decoration.tsx"/>
+ <tileset firstgid="95" source="../../tilesets/decoration.tsx"/>
  <layer id="1" name="walls" width="20" height="24">
   <data encoding="csv">
 40,37,37,37,37,37,37,37,37,37,37,37,37,37,37,40,0,0,0,0,
@@ -35,7 +35,7 @@
 0,0,0,0,0,0,0,0,0,0,0,40,40,0,0,0,0,40,40,0
 </data>
  </layer>
- <layer id="2" name="void" width="20" height="24">
+ <layer id="2" name="void" width="20" height="24" offsetx="0" offsety="16">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -63,6 +63,14 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
+ <objectgroup id="8" name="images">
+  <object id="58" name="floor" x="0" y="0">
+   <point/>
+  </object>
+  <object id="59" name="foreground" x="0" y="0">
+   <point/>
+  </object>
+ </objectgroup>
  <imagelayer id="5" name="floor">
   <image source="floor.png" width="320" height="384"/>
  </imagelayer>
@@ -90,19 +98,19 @@
   <object id="31" name="medium tree 2" gid="66" x="47.25" y="141.25" width="32" height="32"/>
   <object id="33" name="fountain" gid="93" x="144" y="240" width="32" height="56"/>
   <object id="35" name="big tree" gid="52" x="245.291" y="63.167" width="48" height="48"/>
-  <object id="36" name="grass 5" gid="97" x="169.208" y="136.5" width="16" height="16"/>
-  <object id="37" name="grass 3" gid="95" x="96.9585" y="214" width="16" height="16"/>
-  <object id="38" name="grass 4" gid="96" x="122.208" y="177" width="16" height="16"/>
-  <object id="39" name="grass 2" gid="94" x="205.458" y="145.25" width="16" height="16"/>
-  <object id="42" name="grass" gid="98" x="185.5" y="152.75" width="16" height="16"/>
-  <object id="43" name="grass 5" gid="97" x="227.104" y="227.875" width="16" height="16"/>
-  <object id="44" name="grass" gid="98" x="254.146" y="220.625" width="16" height="16"/>
-  <object id="45" name="grass 4" gid="96" x="214.25" y="297.75" width="16" height="16"/>
-  <object id="46" name="grass 4" gid="96" x="224" y="315.5" width="16" height="16"/>
-  <object id="47" name="grass 5" gid="97" x="84.5" y="241.75" width="16" height="16"/>
-  <object id="48" name="grass" gid="98" x="192" y="242" width="16" height="16"/>
-  <object id="49" name="grass" gid="98" x="184.25" y="217.75" width="16" height="16"/>
-  <object id="50" name="grass" gid="98" x="132.25" y="252.5" width="16" height="16"/>
+  <object id="36" name="grass 5" gid="98" x="169.208" y="136.5" width="16" height="16"/>
+  <object id="37" name="grass 3" gid="96" x="96.9585" y="214" width="16" height="16"/>
+  <object id="38" name="grass 4" gid="97" x="122.208" y="177" width="16" height="16"/>
+  <object id="39" name="grass 2" gid="95" x="205.458" y="145.25" width="16" height="16"/>
+  <object id="42" name="grass" gid="99" x="185.5" y="152.75" width="16" height="16"/>
+  <object id="43" name="grass 5" gid="98" x="227.104" y="227.875" width="16" height="16"/>
+  <object id="44" name="grass" gid="99" x="254.146" y="220.625" width="16" height="16"/>
+  <object id="45" name="grass 4" gid="97" x="214.25" y="297.75" width="16" height="16"/>
+  <object id="46" name="grass 4" gid="97" x="224" y="315.5" width="16" height="16"/>
+  <object id="47" name="grass 5" gid="98" x="84.5" y="241.75" width="16" height="16"/>
+  <object id="48" name="grass" gid="99" x="192" y="242" width="16" height="16"/>
+  <object id="49" name="grass" gid="99" x="184.25" y="217.75" width="16" height="16"/>
+  <object id="50" name="grass" gid="99" x="132.25" y="252.5" width="16" height="16"/>
   <object id="51" name="blue flower" gid="53" x="169" y="212.5" width="24" height="24"/>
   <object id="52" name="blue flower" gid="53" x="183.5" y="226.75" width="24" height="24"/>
   <object id="53" name="blue flower" gid="53" x="189.5" y="210" width="24" height="24"/>
